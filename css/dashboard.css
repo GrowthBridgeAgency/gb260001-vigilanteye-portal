@@ -1,38 +1,47 @@
 /* ==========================================================================
-   Customer Dashboard Layout
+   Customer Dashboard Layout (Dark Bento Theme)
    ========================================================================== */
 .dashboard-wrapper {
   display: flex;
   min-height: 100vh;
+  background-color: var(--bg-main);
+  color: var(--text-main);
 }
 
 /* Sidebar Component */
 .dashboard-sidebar {
-  width: 250px;
-  background-color: var(--primary-color);
-  color: #fff;
+  width: 260px;
+  background-color: #080808;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
 }
 
 .dashboard-sidebar .brand {
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
   font-size: 1.25rem;
-  font-weight: bold;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-family-headline);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #fff;
 }
 
 .dashboard-sidebar nav a {
   display: block;
-  padding: 1rem 1.5rem;
-  color: #cbd5e1;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1.2rem 1.5rem;
+  color: #9ca3af;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  transition: var(--transition);
 }
 
 .dashboard-sidebar nav a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.03);
   color: #fff;
-  text-decoration: none;
+  padding-left: 2rem;
 }
 
 /* Main Content Area */
@@ -40,41 +49,54 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-main);
 }
 
 /* Header Component */
 .dashboard-header {
-  background-color: #fff;
-  padding: 1rem 2rem;
+  background-color: transparent;
+  padding: 1.5rem 3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-header .user-info {
+  font-family: var(--font-family);
+  color: #d1d5db;
+}
+
+.dashboard-header .btn {
+  padding: 0.5rem 1.5rem;
 }
 
 .dashboard-content {
-  padding: 2rem;
+  padding: 3rem;
   flex: 1;
+  overflow-y: auto;
 }
 
-/* Cards & Tables */
-.card {
-  background-color: var(--bg-card);
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  margin-bottom: 1.5rem;
-}
-
+/* Data Tables */
 .data-table {
   width: 100%;
   border-collapse: collapse;
+  color: #e5e7eb;
 }
 
 .data-table th, .data-table td {
-  padding: 1rem;
+  padding: 1.25rem 1rem;
   text-align: left;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.data-table th {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.data-table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.02);
 }

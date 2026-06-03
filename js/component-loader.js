@@ -21,11 +21,22 @@ async function loadComponent(elementId, componentPath) {
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     element.innerHTML = html;
+    
+    if (elementId === 'navbar-placeholder' && window.updateNavigationUI) {
+      window.updateNavigationUI();
+    }
   } catch (error) {
     console.error(`Error loading component ${componentPath}:`, error);
     element.innerHTML = `<p>Error loading component.</p>`;
   }
 }
 
-// Dynamically load auth module to enforce route protection across all pages
-import('/js/auth.js').catch(err => console.error("Failed to load auth module:", err));
+// Dynamically load core modules sequentially:
+// 1. auth.js (Route protection)
+// 2. user-context.js (Populate globals like window.currentUser)
+import('/js/auth.js')
+  .then(() => import('/js/user-context.js'))
+  .catch(err => console.error("Failed to load core modules:", err));
+
+// Inject Global Theme Switcher
+import('/js/theme-switcher.js').catch(err => console.error("Failed to load theme switcher:", err));

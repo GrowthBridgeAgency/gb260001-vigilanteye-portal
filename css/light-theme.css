@@ -1,0 +1,184 @@
+/* ==========================================================================
+   VigilantEye - Light Theme Overrides
+   ========================================================================== */
+
+/* Theme Toggle FAB */
+.theme-toggle-fab {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.05);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy transition */
+}
+
+.theme-toggle-fab:hover {
+  transform: translateY(-8px) scale(1.1) rotate(10deg);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(255,255,255,0.1);
+}
+
+body[data-theme="light"] .theme-toggle-fab {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  color: #0f172a;
+}
+
+body[data-theme="light"] .theme-toggle-fab:hover {
+  background: #f8fafc;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  transform: translateY(-8px) scale(1.1) rotate(-10deg);
+}
+
+/* ==========================================================================
+   Light Theme Variable Resets & Overrides
+   ========================================================================== */
+body[data-theme="light"] {
+  --bg-main: #f8fafc;
+  --bg-alt: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --primary-color: #000000;
+  --secondary-color: #f1f5f9;
+  --tertiary-color: #e2e8f0;
+  --accent-color: #0f172a;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* Cards & Glassmorphism */
+body[data-theme="light"] .card, 
+body[data-theme="light"] .glass-card-dark {
+  background: radial-gradient(circle at top left, #ffffff 0%, #f1f5f9 100%);
+  border-color: rgba(0,0,0,0.05);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+}
+
+body[data-theme="light"] .card::after, 
+body[data-theme="light"] .glass-card-dark::after {
+  background: linear-gradient(to top, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0) 100%);
+}
+
+body[data-theme="light"] .hero-section {
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f8fafc 100%);
+  border-color: rgba(0,0,0,0.05);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.04);
+}
+
+/* Override Inline Whites from Dark Mode */
+body[data-theme="light"] [style*="color: #fff"], 
+body[data-theme="light"] [style*="color: var(--text-main)"] {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+/* Convert Dark Transparencies to Light Transparencies */
+body[data-theme="light"] [style*="rgba(255,255,255,0.03)"], 
+body[data-theme="light"] [style*="rgba(255,255,255,0.05)"], 
+body[data-theme="light"] [style*="rgba(255,255,255,0.1)"] {
+  background: rgba(0,0,0,0.02) !important;
+  border-color: rgba(0,0,0,0.06) !important;
+}
+
+/* Typography Overrides */
+body[data-theme="light"] h1, 
+body[data-theme="light"] h2, 
+body[data-theme="light"] h3, 
+body[data-theme="light"] h4 {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+body[data-theme="light"] p {
+  color: #64748b !important;
+}
+
+/* Buttons */
+body[data-theme="light"] .btn-primary {
+  background: #0f172a; 
+  color: #ffffff !important; 
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(15,23,42,0.2);
+}
+body[data-theme="light"] .btn-primary:hover {
+  background: #000000;
+}
+
+body[data-theme="light"] .btn-outline, 
+body[data-theme="light"] .btn-secondary, 
+body[data-theme="light"] .btn-outline-dark {
+  background: rgba(0,0,0,0.03); 
+  color: #0f172a !important; 
+  border-color: rgba(0,0,0,0.1);
+}
+
+body[data-theme="light"] .btn-outline:hover, 
+body[data-theme="light"] .btn-secondary:hover {
+  background: rgba(0,0,0,0.06); 
+  color: #000000 !important;
+}
+
+/* Header / Navbar */
+body[data-theme="light"] .main-navbar {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom-color: rgba(0,0,0,0.05);
+}
+
+body[data-theme="light"] .main-navbar .nav-link, 
+body[data-theme="light"] .main-navbar .brand-logo, 
+body[data-theme="light"] .main-navbar .brand-logo span {
+  color: #0f172a !important;
+}
+
+/* Footer */
+body[data-theme="light"] .main-footer {
+  background: #ffffff; 
+  border-top-color: rgba(0,0,0,0.05);
+}
+body[data-theme="light"] .footer-title { color: #0f172a !important; }
+
+/* Dashboard Resets */
+body[data-theme="light"] .dashboard-sidebar { 
+  background: #ffffff; 
+  border-right: 1px solid rgba(0,0,0,0.06); 
+}
+body[data-theme="light"] .dashboard-sidebar .brand, 
+body[data-theme="light"] .dashboard-sidebar nav a { 
+  color: #0f172a !important; 
+  border-bottom-color: rgba(0,0,0,0.04); 
+}
+body[data-theme="light"] .dashboard-sidebar nav a:hover,
+body[data-theme="light"] .dashboard-sidebar nav a.active { 
+  background: rgba(0,0,0,0.03); 
+  border-left-color: #0f172a;
+}
+body[data-theme="light"] .dashboard-header { 
+  border-bottom-color: rgba(0,0,0,0.06); 
+}
+body[data-theme="light"] .data-table th, 
+body[data-theme="light"] .data-table td { 
+  border-bottom-color: rgba(0,0,0,0.04); 
+  color: #0f172a; 
+}
+
+/* SVG Icons - Force to dark */
+body[data-theme="light"] .icon-placeholder svg,
+body[data-theme="light"] [style*="color: var(--primary-color)"] svg,
+body[data-theme="light"] [style*="color: var(--accent-color)"] svg {
+  stroke: #0f172a !important;
+}
