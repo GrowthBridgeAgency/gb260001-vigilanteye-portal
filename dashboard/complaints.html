@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Complaints | VigilantEye</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-wrapper">
+    <!-- Sidebar Placeholder -->
+    <div id="customer-sidebar-placeholder"></div>
+
+    <main class="dashboard-main">
+      <!-- Header Placeholder -->
+      <div id="customer-header-placeholder"></div>
+
+      <div class="dashboard-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h1>My Complaints</h1>
+          <button class="btn">Raise New Complaint</button>
+        </div>
+        <div class="card">
+          <!-- Future Complaint Table -->
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Ticket No.</th>
+                <th>Issue</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4">Loading complaints...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/component-loader.js"></script>
+  <script src="/js/complaints.js"></script>
+</body>
+</html>

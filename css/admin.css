@@ -1,0 +1,35 @@
+/* ==========================================================================
+   Admin Dashboard Specific Overrides
+   ========================================================================== */
+/* The admin dashboard will inherit from dashboard.css, but we can override colors or layouts here */
+
+.admin-sidebar {
+  background-color: #0f172a; /* Darker theme for admin */
+}
+
+.admin-sidebar nav a {
+  color: #94a3b8;
+}
+
+.admin-sidebar nav a:hover,
+.admin-sidebar nav a.active {
+  background-color: #1e293b;
+  color: #fff;
+  border-left: 4px solid var(--secondary-color);
+}
+
+.admin-header {
+  border-bottom: 2px solid var(--secondary-color);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-pending { background-color: #fef3c7; color: #92400e; }
+.status-progress { background-color: #e0f2fe; color: #0369a1; }
+.status-resolved { background-color: #dcfce3; color: #166534; }
