@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Invoices | VigilantEye Admin</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="dashboard-wrapper">
+    <div id="admin-sidebar-placeholder"></div>
+    <main class="dashboard-main">
+      <div id="admin-header-placeholder"></div>
+      <div class="dashboard-content">
+        <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+          <h1>Manage Invoices</h1>
+          <button class="btn">Generate Invoice</button>
+        </div>
+        <div class="card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Invoice No.</th>
+                <th>Customer</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="5">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="/js/component-loader.js"></script>
+  <script src="/js/invoices.js"></script>
+</body>
+</html>
