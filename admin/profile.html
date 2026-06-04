@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Profile & Settings | VigilantEye</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .profile-grid { grid-template-columns: 1fr; }
+    }
+    
+    .progress-bar-bg {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      height: 10px;
+      width: 100%;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    .progress-bar-fill {
+      background: var(--primary-color);
+      height: 100%;
+      transition: width 0.5s ease;
+    }
+    
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 4px;
+    }
+    @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    .readonly-field {
+      background: rgba(0,0,0,0.2);
+      padding: 0.75rem 1rem;
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255,255,255,0.05);
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .activity-item:last-child { border-bottom: none; }
+  </style>
+</head>
+<body>
+  <div class="dashboard-wrapper">
+    <div id="admin-sidebar-placeholder"></div>
+    <main class="dashboard-main">
+      <div id="admin-header-placeholder"></div>
+
+      <div class="dashboard-content">
+        <h1 style="margin-bottom: 0.5rem;">Profile & Account Settings</h1>
+        <p style="color: var(--text-muted); margin-bottom: 2rem;">Manage your administrator profile and platform security.</p>
+
+        <div class="profile-grid">
+          
+          <!-- LEFT COLUMN -->
+          <div>
+            <!-- Profile Completion -->
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0;">Profile Completion</h3>
+                <span id="completion-text" style="font-weight:bold; color:var(--primary-color);">
+                  <div class="skeleton" style="width:40px; height:20px;"></div>
+                </span>
+              </div>
+              <div class="progress-bar-bg">
+                <div id="completion-bar" class="progress-bar-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- Edit Profile -->
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <h3 style="margin: 0 0 1rem 0;">Personal Information</h3>
+              <form id="profile-form">
+                <div class="form-group">
+                  <label>Full Name</label>
+                  <input type="text" id="prof_name" class="form-control" required placeholder="Loading...">
+                </div>
+                <div class="form-group">
+                  <label>Phone Number (Optional)</label>
+                  <input type="tel" id="prof_phone" class="form-control" placeholder="Enter phone number">
+                </div>
+                <button type="submit" class="btn btn-primary" id="btn-save-profile" style="width:100%; margin-top:0.5rem;">Save Changes</button>
+              </form>
+            </div>
+
+            <!-- Security / Password -->
+            <div class="card">
+              <h3 style="margin: 0 0 1rem 0;">Password Management</h3>
+              <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1rem;">Update your admin account password. Must be at least 8 characters long.</p>
+              <form id="password-form">
+                <div class="form-group">
+                  <label>New Password</label>
+                  <input type="password" id="sec_password" class="form-control" required minlength="8" placeholder="Enter new password">
+                </div>
+                <div class="form-group">
+                  <label>Confirm Password</label>
+                  <input type="password" id="sec_confirm" class="form-control" required minlength="8" placeholder="Confirm new password">
+                </div>
+                <button type="submit" class="btn btn-outline" id="btn-save-password" style="width:100%; margin-top:0.5rem; border-color:var(--primary-color); color:var(--primary-color);">Update Password</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN -->
+          <div>
+            <!-- Account Security Section (Read Only) -->
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
+                <h3 style="margin:0;">Account Security Details</h3>
+              </div>
+              
+              <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.25rem;">Account Email</div>
+              <div id="read_email" class="readonly-field"><div class="skeleton" style="width:200px; height:18px;"></div></div>
+
+              <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.25rem;">Account Role</div>
+              <div id="read_role" class="readonly-field" style="text-transform:capitalize;"><div class="skeleton" style="width:100px; height:18px;"></div></div>
+
+              <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.25rem;">Account Created</div>
+              <div id="read_since" class="readonly-field"><div class="skeleton" style="width:150px; height:18px;"></div></div>
+            </div>
+
+            <!-- Admin Activity Summary -->
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <h3 style="margin: 0 0 1rem 0;">Platform Overview</h3>
+              <div class="grid-2" id="summary-grid">
+                <div><div class="skeleton" style="width:100%; height:40px;"></div></div>
+                <div><div class="skeleton" style="width:100%; height:40px;"></div></div>
+                <div><div class="skeleton" style="width:100%; height:40px;"></div></div>
+                <div><div class="skeleton" style="width:100%; height:40px;"></div></div>
+              </div>
+            </div>
+
+            <!-- Quick Navigation -->
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <h3 style="margin: 0 0 1rem 0;">Quick Navigation</h3>
+              <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                <a href="/admin/dashboard.html" class="btn btn-outline" style="font-size:0.85rem; padding:0.4rem 0.8rem;">Dashboard Analytics</a>
+                <a href="/admin/customers.html" class="btn btn-outline" style="font-size:0.85rem; padding:0.4rem 0.8rem;">Customers</a>
+                <a href="/admin/products.html" class="btn btn-outline" style="font-size:0.85rem; padding:0.4rem 0.8rem;">Products</a>
+                <a href="/admin/complaints.html" class="btn btn-outline" style="font-size:0.85rem; padding:0.4rem 0.8rem;">Complaints</a>
+                <a href="/admin/invoices.html" class="btn btn-outline" style="font-size:0.85rem; padding:0.4rem 0.8rem;">Invoices</a>
+              </div>
+            </div>
+
+            <!-- Recent Platform Activity -->
+            <div class="card">
+              <h3 style="margin: 0 0 1rem 0;">Recent Platform Activity</h3>
+              <div id="timeline-container">
+                <div class="skeleton" style="height:50px; width:100%; margin-bottom:0.5rem;"></div>
+                <div class="skeleton" style="height:50px; width:100%; margin-bottom:0.5rem;"></div>
+                <div class="skeleton" style="height:50px; width:100%;"></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <script src="/js/component-loader.js"></script>
+  <script type="module" src="/js/toast.js"></script>
+  <script type="module" src="/js/admin-profile.js"></script>
+</body>
+</html>

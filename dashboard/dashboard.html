@@ -6,27 +6,178 @@
   <title>Customer Dashboard | VigilantEye</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
+  <style>
+    /* Dashboard Specific Styles */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 1024px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
+    
+    .health-score-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    
+    .health-excellent { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #22c55e; }
+    .health-good { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; }
+    .health-attention { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+    .health-critical { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 4px;
+    }
+    @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    .activity-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .activity-item:last-child { border-bottom: none; }
+    
+    .alert-card {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .alert-warning { background: rgba(245, 158, 11, 0.1); border: 1px solid #f59e0b; }
+    .alert-danger { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; }
+  </style>
 </head>
 <body>
   <div class="dashboard-wrapper">
-    <!-- Sidebar Placeholder -->
     <div id="customer-sidebar-placeholder"></div>
-
     <main class="dashboard-main">
-      <!-- Header Placeholder -->
       <div id="customer-header-placeholder"></div>
 
       <div class="dashboard-content">
-        <h1>Dashboard Overview</h1>
-        <div class="card">
-          <h3>Welcome Back!</h3>
-          <p>Here you can view your installed products, check warranties, and track complaints.</p>
+        <!-- Welcome & Health Score -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 2rem; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h1 style="margin:0;">Dashboard Overview</h1>
+            <p style="margin: 0.25rem 0 0 0; color: var(--text-muted);">Welcome back! Here's your complete security system status.</p>
+            <div id="health-score-container">
+              <div class="skeleton" style="width: 150px; height: 32px; border-radius: 20px; margin-top: 0.5rem;"></div>
+            </div>
+          </div>
+          
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <a href="/dashboard/complaints.html" class="btn btn-primary" style="font-size:0.85rem;">Raise Complaint</a>
+            <a href="/dashboard/products.html" class="btn btn-outline" style="font-size:0.85rem;">View Products</a>
+            <a href="/dashboard/invoices.html" class="btn btn-outline" style="font-size:0.85rem;">Pay Invoices</a>
+          </div>
         </div>
+
+        <!-- Review Reminder (Hidden by default) -->
+        <div id="review-reminder" class="card" style="display:none; background: linear-gradient(90deg, rgba(59,130,246,0.1), rgba(16,185,129,0.1)); border-color: var(--primary-color); margin-bottom: 2rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h3 style="margin:0 0 0.5rem 0; color:#fff;">Share Your Experience!</h3>
+              <p style="margin:0; color:var(--text-muted); font-size:0.9rem;">You haven't left a review yet. Your feedback helps us improve.</p>
+            </div>
+            <a href="/dashboard/reviews.html" class="btn btn-secondary">Go To Reviews</a>
+          </div>
+        </div>
+
+        <!-- Customer Snapshot -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <h3 style="margin:0 0 1rem 0; font-size:1rem; color:var(--text-main);">Customer Snapshot</h3>
+          <div class="grid-4" id="snapshot-grid">
+            <div>
+              <div class="skeleton" style="width: 50%; height: 14px; margin-bottom: 0.5rem;"></div>
+              <div class="skeleton" style="width: 80%; height: 20px;"></div>
+            </div>
+            <div>
+              <div class="skeleton" style="width: 50%; height: 14px; margin-bottom: 0.5rem;"></div>
+              <div class="skeleton" style="width: 80%; height: 20px;"></div>
+            </div>
+            <div>
+              <div class="skeleton" style="width: 50%; height: 14px; margin-bottom: 0.5rem;"></div>
+              <div class="skeleton" style="width: 80%; height: 20px;"></div>
+            </div>
+            <div>
+              <div class="skeleton" style="width: 50%; height: 14px; margin-bottom: 0.5rem;"></div>
+              <div class="skeleton" style="width: 80%; height: 20px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8 KPI Cards -->
+        <div class="kpi-grid" id="kpi-container">
+          <!-- Skeletons x 8 -->
+          <div class="metric-card"><div class="skeleton" style="height:15px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:30px; width:40%;"></div></div>
+          <div class="metric-card"><div class="skeleton" style="height:15px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:30px; width:40%;"></div></div>
+          <div class="metric-card"><div class="skeleton" style="height:15px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:30px; width:40%;"></div></div>
+          <div class="metric-card"><div class="skeleton" style="height:15px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:30px; width:40%;"></div></div>
+          <div class="metric-card"><div class="skeleton" style="height:15px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:30px; width:40%;"></div></div>
+          <div class="metric-card"><div class="skeleton" style="height:15px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:30px; width:40%;"></div></div>
+          <div class="metric-card"><div class="skeleton" style="height:15px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:30px; width:40%;"></div></div>
+          <div class="metric-card"><div class="skeleton" style="height:15px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:30px; width:40%;"></div></div>
+        </div>
+
+        <div class="grid-2" style="align-items: start;">
+          <!-- Left Column -->
+          <div>
+            <!-- AMC & Warranty Alerts -->
+            <div class="card" style="margin-bottom: 2rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <h3 style="margin:0;">Action Required: Expirations</h3>
+                <a href="/dashboard/amc.html" style="font-size:0.85rem; color:var(--primary-color);">View All</a>
+              </div>
+              <div id="alerts-container">
+                <div class="skeleton" style="height:60px; width:100%; margin-bottom:0.5rem;"></div>
+                <div class="skeleton" style="height:60px; width:100%;"></div>
+              </div>
+            </div>
+
+            <!-- Products Preview -->
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <h3 style="margin:0;">My Hardware Overview</h3>
+                <a href="/dashboard/products.html" style="font-size:0.85rem; color:var(--primary-color);">View Details</a>
+              </div>
+              <div id="products-preview-container">
+                <div class="skeleton" style="height:80px; width:100%; margin-bottom:0.5rem;"></div>
+                <div class="skeleton" style="height:80px; width:100%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div>
+            <!-- Recent Activity Timeline -->
+            <div class="card">
+              <h3 style="margin:0 0 1rem 0;">Recent Activity Feed</h3>
+              <div id="activity-container">
+                <div class="skeleton" style="height:50px; width:100%; margin-bottom:0.5rem;"></div>
+                <div class="skeleton" style="height:50px; width:100%; margin-bottom:0.5rem;"></div>
+                <div class="skeleton" style="height:50px; width:100%; margin-bottom:0.5rem;"></div>
+                <div class="skeleton" style="height:50px; width:100%; margin-bottom:0.5rem;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </main>
   </div>
 
   <script src="/js/component-loader.js"></script>
-  <script src="/js/dashboard.js"></script>
+  <script type="module" src="/js/dashboard.js"></script>
 </body>
 </html>
