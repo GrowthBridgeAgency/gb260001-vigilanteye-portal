@@ -7,36 +7,224 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
   <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    /* Metric Cards */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .metric-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .metric-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #fff;
+      font-family: var(--font-family-headline);
+    }
+    .metric-accent { color: var(--primary-color); }
+    .metric-success { color: #86efac; }
+    .metric-warning { color: #fcd34d; }
+
+    /* Technician Profile Layout */
+    .tech-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .tech-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--primary-color);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .tech-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .tech-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .tech-name { font-weight: 600; color: #fff; }
+    .tech-spec { font-size: 0.8rem; color: var(--text-muted); }
+    
+    /* Stats Layout in Table */
+    .tech-stats {
+      display: flex;
+      gap: 0.75rem;
+    }
+    .stat-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .stat-badge .num { font-weight: 600; font-size: 0.9rem; }
+    .stat-badge .lbl { font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); }
+    
+    .stat-badge.open .num { color: #7dd3fc; }
+    .stat-badge.progress .num { color: #fcd34d; }
+
+    /* Light Theme Adjustments */
+    body[data-theme="light"] .metric-card { background: #fff; border-color: rgba(0,0,0,0.05); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    body[data-theme="light"] .metric-value, body[data-theme="light"] .tech-name { color: #000; }
+    body[data-theme="light"] .stat-badge { background: #f8fafc; border-color: #e2e8f0; }
+  </style>
 </head>
 <body>
   <div class="dashboard-wrapper">
     <div id="admin-sidebar-placeholder"></div>
     <main class="dashboard-main">
       <div id="admin-header-placeholder"></div>
+      
       <div class="dashboard-content">
-        <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
-          <h1>Manage Technicians</h1>
-          <button class="btn">Add Technician</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+          <h1 style="margin: 0;">Technicians</h1>
+          <button class="btn btn-primary" onclick="window.openManageModal()">+ Add Technician</button>
         </div>
-        <div class="card">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Mobile</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td colspan="4">Loading...</td></tr>
-            </tbody>
-          </table>
+
+        <!-- Dashboard Summary -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-title">Total Technicians</div>
+            <div class="metric-value" id="metric-total">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Active Technicians</div>
+            <div class="metric-value metric-success" id="metric-active">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Inactive Technicians</div>
+            <div class="metric-value" id="metric-inactive" style="color: #fca5a5;">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Active Assignments</div>
+            <div class="metric-value metric-warning" id="metric-assignments">0</div>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div style="padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
+            <input type="text" id="search-input" class="form-control" placeholder="Search name, mobile, email, specialization..." style="width: 350px; margin: 0;">
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="technicians-table">
+              <thead>
+                <tr>
+                  <th>Technician</th>
+                  <th>Contact Info</th>
+                  <th>Status</th>
+                  <th>Complaint Metrics</th>
+                  <th style="width: 100px; text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="technicians-tbody">
+                <tr><td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading technicians...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </main>
   </div>
+
+  <!-- MANAGE TECHNICIAN MODAL -->
+  <div class="modal-overlay" id="manage-modal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h2 id="manage-modal-title">Add Technician</h2>
+        <button class="modal-close" onclick="window.closeModal('manage-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="manage-form">
+          <input type="hidden" id="manage_id">
+          
+          <div class="grid-2" style="gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div>
+              <label>Full Name *</label>
+              <input type="text" id="manage_name" class="form-control" required placeholder="John Doe">
+            </div>
+            <div>
+              <label>Mobile Number *</label>
+              <input type="text" id="manage_mobile" class="form-control" required placeholder="+91 XXXXX XXXXX">
+            </div>
+          </div>
+
+          <div class="grid-2" style="gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div>
+              <label>Email Address</label>
+              <input type="email" id="manage_email" class="form-control" placeholder="john@example.com">
+            </div>
+            <div>
+              <label>Specialization *</label>
+              <input type="text" id="manage_specialization" class="form-control" required placeholder="CCTV, Networking, Access Control">
+            </div>
+          </div>
+
+          <div>
+            <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+              <input type="checkbox" id="manage_active" checked style="width: 18px; height: 18px; accent-color: var(--primary-color);">
+              <span style="font-weight: 500;">Technician is Active (Available for assignments)</span>
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="window.closeModal('manage-modal')">Cancel</button>
+        <button class="btn btn-primary" id="btn-save-manage">Save Technician</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE MODAL -->
+  <div class="modal-overlay" id="delete-modal">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+      <div class="modal-body" style="padding: 2.5rem 1.5rem;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" style="margin-bottom: 1rem;"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+        <h2 style="margin:0 0 1rem 0; font-size: 1.25rem;">Delete Technician?</h2>
+        <p style="margin:0 0 1.5rem 0; color:var(--text-muted);">This action cannot be undone. You can only delete technicians who do not have any active complaints assigned.</p>
+        <input type="hidden" id="delete_id">
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+          <button class="btn btn-outline" onclick="window.closeModal('delete-modal')">Cancel</button>
+          <button class="btn" id="btn-confirm-delete" style="background:#ef4444; color:#fff; border:none;">Yes, Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="/js/component-loader.js"></script>
-  <script src="/js/admin.js"></script>
+  <script type="module" src="/js/admin-technicians.js"></script>
+  <script>
+    window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
+    window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
+  </script>
 </body>
 </html>

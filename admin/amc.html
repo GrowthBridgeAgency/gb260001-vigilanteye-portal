@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMC Tracking | VigilantEye Admin</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    /* Metric Cards */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .metric-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #fff;
+      font-family: var(--font-family-headline);
+    }
+    .metric-success { color: #86efac; }
+    .metric-warning { color: #fcd34d; }
+    .metric-danger { color: #fca5a5; }
+    .metric-highlight { color: #7dd3fc; }
+
+    /* Upcoming Renewals Panel */
+    .renewals-panel {
+      background: rgba(125, 211, 252, 0.05);
+      border: 1px solid rgba(125, 211, 252, 0.2);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    body[data-theme="light"] .metric-card { background: #fff; border-color: rgba(0,0,0,0.05); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    body[data-theme="light"] .metric-value { color: #000; }
+  </style>
+</head>
+<body>
+  <div class="dashboard-wrapper">
+    <div id="admin-sidebar-placeholder"></div>
+    <main class="dashboard-main">
+      <div id="admin-header-placeholder"></div>
+      
+      <div class="dashboard-content">
+        <h1 style="margin-top: 0; margin-bottom: 1.5rem;">AMC Tracking</h1>
+
+        <!-- Dashboard Summary -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-title">Active AMC</div>
+            <div class="metric-value metric-success" id="metric-active">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Expiring in 30 Days</div>
+            <div class="metric-value metric-warning" id="metric-expiring">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Expired AMC</div>
+            <div class="metric-value metric-danger" id="metric-expired">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Potential Renewals This Month</div>
+            <div class="metric-value metric-highlight" id="metric-renewals">0</div>
+          </div>
+        </div>
+
+        <div class="renewals-panel" id="upcoming-renewals-panel" style="display: none;">
+          <h3 style="margin-top: 0; color: #7dd3fc; display: flex; align-items: center; gap: 0.5rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            Upcoming Renewals Action Required
+          </h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">The following AMCs are expiring in the next 30 days or have recently expired. Follow up for renewal.</p>
+          <div style="overflow-x: auto;">
+            <table class="data-table" style="background: rgba(0,0,0,0.2);">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Product</th>
+                  <th>Expiry Date</th>
+                  <th>Days Left</th>
+                  <th style="text-align: center;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="renewals-tbody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div style="padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 1rem; flex-wrap: wrap;">
+            <input type="text" id="search-input" class="form-control" placeholder="Search customer, product..." style="width: 250px; margin: 0;">
+            <select id="filter-status" class="form-control" style="width: 150px; margin: 0;">
+              <option value="All">All AMCs</option>
+              <option value="Active">Active</option>
+              <option value="Expiring Soon">Expiring Soon (≤30 Days)</option>
+              <option value="Expired">Expired</option>
+            </select>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="amc-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Product</th>
+                  <th>AMC Start</th>
+                  <th>AMC Expiry</th>
+                  <th>Status</th>
+                  <th style="text-align: center;">Renew</th>
+                </tr>
+              </thead>
+              <tbody id="amc-tbody">
+                <tr><td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading AMC records...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/component-loader.js"></script>
+  <script type="module" src="/js/admin-amc.js"></script>
+</body>
+</html>
