@@ -3,22 +3,286 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VigilantEye | About Us</title>
+  <title>About Us | VigilantEye Surveillance Pvt Ltd</title>
+  <meta name="description" content="Delivering advanced surveillance and security solutions for homes, businesses, and industries. Learn more about VigilantEye.">
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* About Page Specific Styles */
+    .about-hero {
+      padding: 7.5rem 0 2.5rem;
+      text-align: left;
+      background: transparent;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+    }
+    
+    .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .breadcrumb a {
+      color: var(--text-main);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .breadcrumb a:hover {
+      color: var(--text-muted);
+    }
+
+    /* Timeline UI */
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 4rem auto 0;
+      padding: 2rem 0;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-50%);
+    }
+    .timeline-item {
+      position: relative;
+      width: 50%;
+      padding: 1.5rem 3rem;
+      box-sizing: border-box;
+    }
+    .timeline-item:nth-child(odd) {
+      left: 0;
+      text-align: right;
+    }
+    .timeline-item:nth-child(even) {
+      left: 50%;
+      text-align: left;
+    }
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      background: var(--bg-main);
+      border: 4px solid var(--text-muted);
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .timeline-item:nth-child(odd)::after {
+      right: -10px;
+    }
+    .timeline-item:nth-child(even)::after {
+      left: -10px;
+    }
+    
+    /* Process Grid */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem 2rem;
+      margin-top: 4rem;
+    }
+    .process-step {
+      position: relative;
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--border-radius);
+    }
+    .process-number {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 50px;
+      background: var(--text-main);
+      color: var(--bg-main);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-family: var(--font-family-headline);
+      font-weight: 700;
+      border: 4px solid var(--bg-main);
+    }
+
+    @media (max-width: 768px) {
+      .timeline::before { left: 30px; }
+      .timeline-item { width: 100%; left: 0 !important; text-align: left !important; padding: 1.5rem 0 1.5rem 80px; }
+      .timeline-item::after { left: 20px !important; right: auto !important; }
+    }
+
+    /* Light Theme Compatibility Overrides */
+    body[data-theme="light"] .about-hero { border-bottom-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .timeline::before { background: rgba(0,0,0,0.1); }
+    body[data-theme="light"] .process-step { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .process-number { border-color: var(--bg-main); }
+    body[data-theme="light"] .stat-container { border-color: rgba(0,0,0,0.05) !important; }
+  </style>
 </head>
 <body>
   <!-- Navbar Placeholder -->
   <div id="navbar-placeholder"></div>
 
-  <main class="container" style="padding-top: 2rem;">
-    <h1>About Us</h1>
-    <p>We are a leading provider of comprehensive security solutions...</p>
-    <!-- Future Content -->
+  <!-- SECTION 1: PAGE HERO -->
+  <header class="about-hero">
+    <div class="container" style="display: flex; flex-direction: column; gap: 0.5rem; position: relative; z-index: 2;">
+      <div class="breadcrumb" style="margin-bottom: 0;">
+        <a href="/index.html">Home</a>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <span style="color: var(--accent-color);">About</span>
+      </div>
+      <h1 style="font-size: 2.75rem; font-weight: 500; margin: 0; letter-spacing: -0.02em;">About VigilantEye</h1>
+      <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0; line-height: 1.6;">
+        Delivering advanced surveillance and security solutions for homes, businesses, and industries.
+      </p>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- SECTION 3: WHO WE ARE -->
+    <section class="py-5 bg-alt">
+      <div class="container bento-grid animate-fade-up" style="align-items: stretch;">
+        <div class="glass-panel bento-item-wide" style="padding: 3rem;">
+          <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Who We Are</h2>
+          <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+            VigilantEye Surveillance Pvt Ltd is an industry leader in high-performance physical security integration. With deep <strong>security expertise</strong>, we specialize in transforming vulnerable premises into impregnable fortresses.
+          </p>
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.5rem;">
+            <li style="display: flex; align-items: flex-start; gap: 1rem;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2" style="flex-shrink: 0;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; color: #fff;">Professional Installation Services</h4>
+                <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">Flawless execution by certified technical personnel minimizing operational disruption.</p>
+              </div>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 1rem;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2" style="flex-shrink: 0;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; color: #fff;">Customer Support Commitment</h4>
+                <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">A dedicated, responsive support ecosystem ensuring your systems remain active 24/7.</p>
+              </div>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 1rem;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2" style="flex-shrink: 0;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; color: #fff;">Long-Term Maintenance Approach</h4>
+                <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">Proactive maintenance methodologies designed to extend the lifespan of your security hardware.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="glass-panel bento-item-wide" style="display: flex; align-items: center; justify-content: center; min-height: 400px; background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 100%); position: relative; overflow: hidden;">
+           <div style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.15), transparent 70%);"></div>
+           <span style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; padding: 2rem; position: relative; z-index: 2;">Corporate Office & Operations<br>Image Placeholder</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: OUR JOURNEY -->
+    <section class="py-5">
+      <div class="container">
+        <div class="section-header">
+          <h2>Our Journey</h2>
+          <p>The milestones that defined our continuous commitment to excellence.</p>
+        </div>
+        
+        <div class="timeline">
+          <div class="timeline-item">
+            <h3 style="color: var(--text-main); font-family: var(--font-family-headline); margin-bottom: 0.5rem;">Company Founded</h3>
+            <p style="color: var(--text-muted); margin: 0;">Established with a core focus on bringing enterprise-grade surveillance to local businesses.</p>
+          </div>
+          <div class="timeline-item">
+            <h3 style="color: var(--text-main); font-family: var(--font-family-headline); margin-bottom: 0.5rem;">First Major Installation</h3>
+            <p style="color: var(--text-muted); margin: 0;">Successfully secured our first large-scale corporate facility, paving the way for rapid growth.</p>
+          </div>
+          <div class="timeline-item">
+            <h3 style="color: var(--text-main); font-family: var(--font-family-headline); margin-bottom: 0.5rem;">Expansion of Services</h3>
+            <p style="color: var(--text-muted); margin: 0;">Introduced Biometrics, Access Control, and Smart Lock integration to our catalog.</p>
+          </div>
+          <div class="timeline-item">
+            <h3 style="color: var(--text-main); font-family: var(--font-family-headline); margin-bottom: 0.5rem;">Launch of Customer Portal</h3>
+            <p style="color: var(--text-muted); margin: 0;">Digitized our customer experience, enabling seamless ticket tracking and AMC management.</p>
+          </div>
+          <div class="timeline-item">
+            <h3 style="color: var(--text-main); font-family: var(--font-family-headline); margin-bottom: 0.5rem;">Growing Client Base</h3>
+            <p style="color: var(--text-muted); margin: 0;">Surpassed critical milestones in both residential and enterprise deployments.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: WHY CUSTOMERS TRUST US -->
+    <section class="py-5 bg-alt animate-fade-up delay-200">
+      <div class="container">
+        <div class="section-header text-center" style="margin-bottom: 4rem;">
+          <h2>Why Customers Trust Us</h2>
+          <p style="margin:0 auto;">We deliver an uncompromising standard of quality across every layer of our service.</p>
+        </div>
+        
+        <div class="bento-grid">
+          <div class="card" style="text-align: center;">
+            <div style="margin-bottom: 1.5rem; color: var(--accent-color);"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+            <h3>Certified Technicians</h3>
+            <p>Rigorous training standards ensure faultless execution.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div style="margin-bottom: 1.5rem; color: var(--accent-color);"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+            <h3>Professional Installation</h3>
+            <p>Clean, efficient, and discreet deployment processes.</p>
+          </div>
+          <div class="card bento-item-tall" style="text-align: center; justify-content: center;">
+            <div style="margin-bottom: 1.5rem; color: var(--accent-color);"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
+            <h3>AMC Support</h3>
+            <p>Priority maintenance keeping your systems consistently online.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div style="margin-bottom: 1.5rem; color: var(--accent-color);"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
+            <h3>Quality Products</h3>
+            <p>Sourcing only the most durable, high-fidelity hardware globally.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div style="margin-bottom: 1.5rem; color: var(--accent-color);"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div>
+            <h3>Fast Response</h3>
+            <p>Rapid deployment and lightning-fast issue resolution times.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- SECTION 9: CALL TO ACTION -->
+    <section class="py-5" style="text-align: center; margin: 4rem 0;">
+      <div class="container glass-panel animate-fade-up delay-300" style="padding: 4rem; border-radius: 32px;">
+        <h2 style="font-size: 3rem; margin-bottom: 2rem;">Ready to Secure Your Property?</h2>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+          <a href="/contact.html" class="btn btn-primary">Get Free Quote</a>
+          <a href="/contact.html" class="btn btn-outline">Contact Us</a>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Footer Placeholder -->
+  <!-- SECTION 10: FOOTER -->
   <div id="footer-placeholder"></div>
 
   <script src="/js/component-loader.js"></script>
+  <script type="module" src="/js/about.js"></script>
 </body>
 </html>

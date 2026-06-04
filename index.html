@@ -3,24 +3,296 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VigilantEye | Home</title>
+  <title>VigilantEye | Premium Security & Surveillance Solutions</title>
+  <meta name="description" content="Advanced CCTV, Security & Surveillance Solutions for Homes, Businesses and Industries.">
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .showcase-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .showcase-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255,255,255,0.2);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .showcase-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      background: #1a1a1a;
+    }
+    .showcase-content {
+      padding: 1.5rem;
+    }
+    .showcase-title {
+      font-size: 1.2rem;
+      color: #fff;
+      margin: 0 0 0.5rem 0;
+    }
+    .showcase-client {
+      font-size: 0.9rem;
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .showcase-loc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .showcase-desc {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+    .badge-featured {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #f59e0b;
+      color: #000;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 4px;
+    }
+    @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+      z-index: 1000; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .modal-overlay.active {
+      opacity: 1; pointer-events: auto;
+    }
+    .modal-content {
+      background: var(--bg-main); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--border-radius); width: 90%; max-height: 90vh;
+      overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      transform: translateY(20px); transition: transform 0.3s;
+    }
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
-  <!-- Navbar Placeholder -->
+  <!-- SECTION 1: STICKY NAVBAR -->
   <div id="navbar-placeholder"></div>
 
-  <main class="container" style="padding-top: 2rem;">
-    <section class="hero">
-      <h1>Secure Your World with VigilantEye</h1>
-      <p>Professional CCTV and Security Solutions for your Home and Business.</p>
-      <a href="/services.html" class="btn">Explore Services</a>
-    </section>
-  </main>
+  <!-- SECTION 2: HERO SECTION -->
+  <section class="hero-section animate-fade-up">
+    <div class="container grid-2" style="align-items: center;">
+      <div class="hero-content">
+        <h1 style="font-weight: 500;">Protect What Matters Most</h1>
+        <p>Advanced CCTV, Security & Surveillance Solutions for Homes, Businesses and Industries.</p>
+        <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+          <a href="/contact.html" class="btn btn-secondary">Get Free Quote</a>
+          <a href="#" class="btn btn-outline">WhatsApp Us</a>
+        </div>
+        <div class="trust-indicators">
+          <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Professional Installation</span>
+          <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Certified Technicians</span>
+          <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> AMC Support</span>
+          <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Fast Response</span>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="/assets/homepageimage.png" alt="VigilantEye Premium Security Hardware Showcase" style="width: 100%; max-width: 800px; height: auto; display: block; margin: 0 auto; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));" />
+      </div>
+    </div>
+  </section>
 
-  <!-- Footer Placeholder -->
+
+  <!-- SECTION 4: FEATURED PRODUCTS -->
+  <section class="py-5">
+    <div class="container">
+      <div class="section-header">
+        <h2>Featured Security Products</h2>
+        <p>Top-tier equipment sourced from trusted global manufacturing partners.</p>
+      </div>
+      
+      <!-- Dynamic Featured Product Catalog Integration -->
+      <div id="featured-products-container" class="bento-grid animate-fade-up delay-100">
+        <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">Loading featured products...</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- SECTION 6: CLIENT SHOWCASE -->
+  <section class="py-5 bg-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Recent Projects</h2>
+        <p>A glimpse into our successful, high-profile security deployments.</p>
+      </div>
+      
+      <!-- Dynamic Supabase Client Showcase Integration -->
+      <div id="featured-projects-container" class="bento-grid animate-fade-up delay-200">
+        <!-- Skeleton Loaders -->
+        <div class="showcase-card">
+          <div class="skeleton" style="height: 220px; border-radius:12px 12px 0 0;"></div>
+          <div class="showcase-content">
+            <div class="skeleton" style="height: 20px; width: 60%; margin-bottom: 1rem;"></div>
+            <div class="skeleton" style="height: 15px; width: 40%; margin-bottom: 0.5rem;"></div>
+            <div class="skeleton" style="height: 12px; width: 100%;"></div>
+          </div>
+        </div>
+        <div class="showcase-card">
+          <div class="skeleton" style="height: 220px; border-radius:12px 12px 0 0;"></div>
+          <div class="showcase-content">
+            <div class="skeleton" style="height: 20px; width: 60%; margin-bottom: 1rem;"></div>
+            <div class="skeleton" style="height: 15px; width: 40%; margin-bottom: 0.5rem;"></div>
+            <div class="skeleton" style="height: 12px; width: 100%;"></div>
+          </div>
+        </div>
+        <div class="showcase-card">
+          <div class="skeleton" style="height: 220px; border-radius:12px 12px 0 0;"></div>
+          <div class="showcase-content">
+            <div class="skeleton" style="height: 20px; width: 60%; margin-bottom: 1rem;"></div>
+            <div class="skeleton" style="height: 15px; width: 40%; margin-bottom: 0.5rem;"></div>
+            <div class="skeleton" style="height: 12px; width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-2" style="margin-top: 3rem;">
+        <a href="/showcase.html" class="btn btn-primary">View All Projects</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Detailed Modal -->
+  <div id="showcase-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 800px; padding: 0; overflow: hidden; background: #1a1a1a; position: relative;">
+      <span class="close-modal" onclick="window.closeModal('showcase-modal')" style="position:absolute; right:1rem; top:1rem; background:rgba(0,0,0,0.5); border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:#fff; z-index:10; cursor:pointer;">&times;</span>
+      
+      <img id="modal-img" src="" style="width: 100%; max-height: 400px; object-fit: cover; display: block; background: #0a0a0a;">
+      
+      <div style="padding: 2rem;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
+          <div>
+            <div id="modal-client" style="color:var(--primary-color); font-weight:600; font-size:1.1rem;"></div>
+            <h2 id="modal-project" style="margin: 0.25rem 0;"></h2>
+            <div id="modal-loc" style="color:var(--text-muted); font-size:0.9rem; display:flex; align-items:center; gap:0.25rem;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span></span>
+            </div>
+          </div>
+          <div id="modal-badge-container"></div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.02); padding:1.5rem; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+          <h4 style="margin:0 0 0.5rem 0; color:var(--text-main); font-size:0.9rem; text-transform:uppercase; letter-spacing:0.05em;">Project Details</h4>
+          <div id="modal-details" style="color:var(--text-main); line-height:1.6; white-space:pre-wrap;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Modal -->
+  <div id="product-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 800px; padding: 0; overflow-y: auto; overflow-x: hidden; background: #1a1a1a; position: relative;">
+      <span class="close-modal" onclick="window.closeModal('product-modal')" style="position:absolute; right:1rem; top:1rem; background:rgba(0,0,0,0.5); border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:#fff; z-index:10; cursor:pointer;">&times;</span>
+      
+      <img id="prod-modal-img" src="" style="width: 100%; max-height: 400px; object-fit: contain; display: block; background: #fff;">
+      
+      <div style="padding: 2rem;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <div style="color:var(--primary-color); font-weight:600; font-size:1.1rem; margin-bottom:0.25rem;"><span id="prod-modal-brand"></span> • <span id="prod-modal-category"></span></div>
+            <h2 id="prod-modal-title" style="margin: 0 0 0.25rem 0;"></h2>
+            <div style="color:var(--text-muted); font-size:0.95rem;">Model: <span id="prod-modal-model"></span></div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary-color);" id="prod-modal-price"></div>
+          </div>
+        </div>
+
+        <p id="prod-modal-short-desc" style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 2rem; border-left: 3px solid var(--primary-color); padding-left: 1rem;"></p>
+
+        <div style="background:rgba(255,255,255,0.02); padding:1.5rem; border-radius:8px; border:1px solid rgba(255,255,255,0.05); margin-bottom: 1.5rem;">
+          <h4 style="margin:0 0 0.75rem 0; color:var(--text-main); font-size:1rem; text-transform:uppercase; letter-spacing:0.05em;">Description</h4>
+          <div id="prod-modal-full-desc" style="color:var(--text-main); line-height:1.6;"></div>
+        </div>
+
+        <div id="prod-modal-specs-container" style="background:rgba(255,255,255,0.02); padding:1.5rem; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+          <h4 style="margin:0 0 0.75rem 0; color:var(--text-main); font-size:1rem; text-transform:uppercase; letter-spacing:0.05em;">Specifications</h4>
+          <div id="prod-modal-specs" style="color:var(--text-main); line-height:1.6; white-space: pre-wrap;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 9: CALL TO ACTION -->
+  <section class="py-5 bg-dark text-center">
+    <div class="container">
+      <div class="glass-panel animate-fade-up delay-300" style="padding: 4rem; text-align: center; border-radius: 32px;">
+        <h2 style="color: #fff; font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1.5rem;">Ready to Secure Your Property?</h2>
+        <p style="color: #cbd5e1; max-width: 600px; margin: 0 auto 2.5rem; font-size: 1.125rem;">
+          Contact our security experts today for a free consultation, site survey, and personalized surveillance audit.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="/contact.html" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem;">Request Site Survey</a>
+          <a href="tel:+919876543210" class="btn btn-outline" style="font-size: 1.1rem; padding: 1rem 2rem;">Call Now</a>
+          <a href="#" class="btn btn-outline" style="font-size: 1.1rem; padding: 1rem 2rem;">WhatsApp Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- SECTION 11: FOOTER -->
   <div id="footer-placeholder"></div>
 
   <script src="/js/component-loader.js"></script>
+  <script type="module" src="/js/index.js"></script>
+  <script type="module">
+    import { fetchAllProjects } from '/js/showcase.js';
+    // Fetch top 6 featured projects
+    fetchAllProjects(6, true);
+  </script>
+  <script>
+    window.openModal = function(id) { 
+      if (!document.startViewTransition) {
+        document.getElementById(id).classList.add('active'); 
+      } else {
+        document.startViewTransition(() => {
+          document.getElementById(id).classList.add('active');
+        });
+      }
+    }
+    window.closeModal = function(id) { 
+      if (!document.startViewTransition) {
+        document.getElementById(id).classList.remove('active'); 
+      } else {
+        document.startViewTransition(() => {
+          document.getElementById(id).classList.remove('active');
+        });
+      }
+    }
+  </script>
 </body>
 </html>

@@ -3,22 +3,202 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VigilantEye | Gallery</title>
+  <title>Gallery | VigilantEye Surveillance Pvt Ltd</title>
+  <meta name="description" content="Explore our completed surveillance, access control and security installations.">
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Gallery Specific Styles */
+    .gallery-hero {
+      padding: 7.5rem 0 2.5rem;
+      text-align: left;
+      background: transparent;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+    }
+    
+    .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .breadcrumb a {
+      color: var(--text-main);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .breadcrumb a:hover {
+      color: var(--text-muted);
+    }
+
+    /* Filters */
+    .filter-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    .filter-btn {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-muted);
+      padding: 0.5rem 1.5rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-family: var(--font-family-base);
+      transition: var(--transition);
+      font-size: 0.95rem;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--text-main);
+      color: var(--bg-main);
+      border-color: var(--text-main);
+    }
+
+    /* Masonry Grid */
+    .masonry-grid {
+      column-count: 3;
+      column-gap: 2rem;
+    }
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 2rem;
+      background: #000;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+    .masonry-item img {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .masonry-item:hover img {
+      transform: scale(1.08);
+    }
+    .masonry-item:hover {
+      border-color: var(--accent-color);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(56, 189, 248, 0.2);
+    }
+    .masonry-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2rem;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .masonry-item:hover .masonry-overlay {
+      opacity: 1;
+    }
+    .masonry-overlay h4, .masonry-overlay p {
+      transform: translateY(20px);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .masonry-item:hover .masonry-overlay h4, .masonry-item:hover .masonry-overlay p {
+      transform: translateY(0);
+    }
+    @media (max-width: 992px) { .masonry-grid { column-count: 2; } }
+    @media (max-width: 576px) { .masonry-grid { column-count: 1; } }
+
+    /* Light Theme Compatibility */
+    body[data-theme="light"] .gallery-hero { border-bottom-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .filter-btn { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.1); color: var(--text-main); }
+    body[data-theme="light"] .filter-btn:hover, body[data-theme="light"] .filter-btn.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+    body[data-theme="light"] .masonry-item { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .masonry-item:hover { border-color: rgba(0,0,0,0.1); }
+    body[data-theme="light"] .masonry-placeholder { background: rgba(0,0,0,0.02); border-bottom-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .stat-container { border-color: rgba(0,0,0,0.05) !important; }
+  </style>
 </head>
 <body>
   <!-- Navbar Placeholder -->
   <div id="navbar-placeholder"></div>
 
-  <main class="container" style="padding-top: 2rem;">
-    <h1>Product Gallery</h1>
-    <p>View our state-of-the-art security products.</p>
-    <!-- Future Gallery Grid -->
+  <!-- SECTION 1: PAGE HERO -->
+  <header class="gallery-hero">
+    <div class="container" style="display: flex; flex-direction: column; gap: 0.5rem; position: relative; z-index: 2;">
+      <div class="breadcrumb" style="margin-bottom: 0;">
+        <a href="/index.html">Home</a>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <span style="color: var(--accent-color);">Gallery</span>
+      </div>
+      <h1 style="font-size: 2.75rem; font-weight: 500; margin: 0; letter-spacing: -0.02em;">Project Gallery</h1>
+      <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0; line-height: 1.6;">
+        Explore our completed surveillance, access control and security installations.
+      </p>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- SECTION 3: FEATURED PROJECTS -->
+    <section class="py-5 bg-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Featured Client Projects</h2>
+          <p>Highlighting some of our most robust security architecture designs.</p>
+        </div>
+        
+        <!-- Dynamic Client Showcase Integration -->
+        <div class="bento-grid" id="client-showcase-container">
+          <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">Loading featured projects...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: PROJECT CATEGORIES (FILTERS) -->
+    <section class="py-5">
+      <div class="container">
+        <div class="section-header">
+          <h2>Photo Gallery</h2>
+        </div>
+        
+        <div class="filter-container">
+          <button class="filter-btn active">All</button>
+          <button class="filter-btn">CCTV</button>
+          <button class="filter-btn">Biometric</button>
+          <button class="filter-btn">Access Control</button>
+          <button class="filter-btn">Networking</button>
+          <button class="filter-btn">AMC</button>
+        </div>
+
+        <!-- SECTION 4: PHOTO GALLERY GRID -->
+        <!-- Dynamic Gallery Integration -->
+        <div id="gallery-grid-container" class="masonry-grid">
+           <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">Loading gallery items...</div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- SECTION 9: CALL TO ACTION -->
+    <section class="py-5" style="text-align: center; margin: 4rem 0;">
+      <div class="container">
+        <h2 style="font-size: 3rem; margin-bottom: 2rem;">Ready To Start Your Security Project?</h2>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="/contact.html" class="btn btn-primary">Get Free Quote</a>
+          <a href="/contact.html" class="btn btn-outline">Contact Us</a>
+          <a href="#" class="btn btn-secondary">WhatsApp Us</a>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Footer Placeholder -->
+  <!-- FOOTER -->
   <div id="footer-placeholder"></div>
 
   <script src="/js/component-loader.js"></script>
+  <script type="module" src="/js/gallery.js"></script>
 </body>
 </html>

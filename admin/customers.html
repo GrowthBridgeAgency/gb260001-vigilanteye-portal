@@ -3,42 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Customers | VigilantEye Admin</title>
+  <title>Customer CRM | VigilantEye Admin</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
   <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    @media (max-width: 1024px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
+    
+    .snapshot-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    @media (max-width: 768px) { .snapshot-grid { grid-template-columns: repeat(2, 1fr); } }
+    
+    .health-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }
+    .health-healthy { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #22c55e; }
+    .health-attention { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+    .health-critical { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 4px;
+    }
+    @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    .activity-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .activity-item:last-child { border-bottom: none; }
+    
+    /* Ensure modal body is scrollable */
+    .modal-body { max-height: 70vh; overflow-y: auto; padding: 1.5rem; }
+  </style>
+  <meta name="view-transition" content="same-origin">
 </head>
 <body>
   <div class="dashboard-wrapper">
-    <!-- Sidebar Placeholder -->
     <div id="admin-sidebar-placeholder"></div>
-
     <main class="dashboard-main">
-      <!-- Header Placeholder -->
       <div id="admin-header-placeholder"></div>
 
       <div class="dashboard-content">
-        <h1>Manage Customers</h1>
-        <div class="card">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td colspan="4">Loading...</td></tr>
-            </tbody>
-          </table>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+          <h1 style="margin: 0;">Customer CRM Dashboard</h1>
+          <input type="text" id="search-input" class="form-control" placeholder="Search by name, email, phone..." style="width: 300px; margin-top: 0;">
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid" id="summary-cards">
+          <div class="metric-card"><div class="skeleton" style="height:15px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:30px; width:40%;"></div></div>
+          <div class="metric-card"><div class="skeleton" style="height:15px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:30px; width:40%;"></div></div>
+          <div class="metric-card"><div class="skeleton" style="height:15px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:30px; width:40%;"></div></div>
+          <div class="metric-card"><div class="skeleton" style="height:15px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:30px; width:40%;"></div></div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="customers-table">
+              <thead>
+                <tr>
+                  <th>Customer Name</th>
+                  <th>Contact Info</th>
+                  <th>Health Score</th>
+                  <th>Joined Date</th>
+                  <th style="width: 100px; text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="customers-tbody">
+                <tr><td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading customers...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </main>
   </div>
 
+  <!-- Customer Details Modal (CRM View) -->
+  <div class="modal-overlay" id="crm-modal">
+    <div class="modal-content" style="max-width: 900px; width:95%;">
+      <div class="modal-header">
+        <div>
+          <h2 id="crm-name" style="margin:0 0 0.25rem 0;">Loading...</h2>
+          <div style="font-size:0.9rem; color:var(--text-muted); display:flex; gap:1rem; flex-wrap:wrap;">
+            <span id="crm-email"></span> | <span id="crm-phone"></span> | <span id="crm-since"></span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <div id="crm-health-badge"></div>
+          <button class="modal-close" onclick="window.closeModal('crm-modal')">&times;</button>
+        </div>
+      </div>
+      
+      <div class="modal-body" style="background:#0f172a;">
+        <!-- Loading State for Modal inner content -->
+        <div id="crm-loading-state">
+          <div class="skeleton" style="height:100px; width:100%; margin-bottom:1rem;"></div>
+          <div class="skeleton" style="height:200px; width:100%;"></div>
+        </div>
+
+        <div id="crm-content" style="display:none;">
+          <!-- Revenue Metrics -->
+          <div class="grid-3" id="crm-revenue" style="margin-bottom:1.5rem; gap:1rem;">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Snapshot Grid (8 KPIs) -->
+          <div class="card" style="background:rgba(255,255,255,0.02); margin-bottom:1.5rem; padding:1rem;">
+            <h3 style="margin: 0 0 1rem 0; font-size:1rem;">Account Snapshot</h3>
+            <div class="snapshot-grid" id="crm-snapshot">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- AMC Overview & Products Preview -->
+          <div class="grid-2" style="margin-bottom:1.5rem; align-items:start; gap:1rem;">
+            <div class="card" style="background:rgba(255,255,255,0.02); padding:1rem; height:100%;">
+              <h3 style="margin: 0 0 1rem 0; font-size:1rem;">AMC Overview</h3>
+              <div id="crm-amc"></div>
+            </div>
+            
+            <div class="card" style="background:rgba(255,255,255,0.02); padding:1rem; height:100%;">
+              <h3 style="margin: 0 0 1rem 0; font-size:1rem;">Top 5 Assigned Products</h3>
+              <div id="crm-products"></div>
+            </div>
+          </div>
+
+          <!-- Activity Timeline & Quick Actions -->
+          <div class="grid-2" style="align-items:start; gap:1rem;">
+            <div class="card" style="background:rgba(255,255,255,0.02); padding:1rem;">
+              <h3 style="margin: 0 0 1rem 0; font-size:1rem;">Recent Activity Timeline</h3>
+              <div id="crm-timeline"></div>
+            </div>
+
+            <div class="card" style="background:rgba(255,255,255,0.02); padding:1rem;">
+              <h3 style="margin: 0 0 1rem 0; font-size:1rem;">Quick Actions</h3>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Navigate directly to modules filtered by this customer.</p>
+              <div style="display:flex; flex-direction:column; gap:0.5rem;" id="crm-quick-actions">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="window.closeModal('crm-modal')">Close Window</button>
+      </div>
+    </div>
+  </div>
+
   <script src="/js/component-loader.js"></script>
-  <script src="/js/admin.js"></script>
+  <script type="module" src="/js/admin-customers.js"></script>
+  <script>
+    window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
+    window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
+  </script>
 </body>
 </html>

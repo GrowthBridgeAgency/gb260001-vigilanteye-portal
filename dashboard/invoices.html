@@ -6,42 +6,75 @@
   <title>My Invoices | VigilantEye</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
+  <style>
+    /* Modals CSS mapping from admin if not loaded globally */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg-main); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--border-radius); width: 90%; max-width: 700px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5); transform: translateY(20px); transition: transform 0.3s; }
+    .modal-overlay.active .modal-content { transform: translateY(0); }
+    .modal-header { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h2 { margin: 0; font-size: 1.25rem; }
+    .modal-close { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.5rem; line-height: 1; }
+    .modal-close:hover { color: var(--text-main); }
+    .modal-body { padding: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+    .modal-footer { padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: flex-end; gap: 1rem; }
+
+    /* Light Theme Modals */
+    body[data-theme="light"] .modal-content { background: #fff; border-color: rgba(0,0,0,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    body[data-theme="light"] .modal-header, body[data-theme="light"] .modal-footer { border-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .modal-close { color: #64748b; }
+    body[data-theme="light"] .modal-close:hover { color: #0f172a; }
+  </style>
 </head>
 <body>
   <div class="dashboard-wrapper">
-    <!-- Sidebar Placeholder -->
     <div id="customer-sidebar-placeholder"></div>
-
     <main class="dashboard-main">
-      <!-- Header Placeholder -->
       <div id="customer-header-placeholder"></div>
-
+      
       <div class="dashboard-content">
-        <h1>My Invoices</h1>
-        <div class="card">
-          <!-- Future Invoice Generation -->
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Invoice No.</th>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="5">Loading invoices...</td>
-              </tr>
-            </tbody>
-          </table>
+        <h1 style="margin-top: 0; margin-bottom: 1.5rem;">My Invoices</h1>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="invoices-table">
+              <thead>
+                <tr>
+                  <th>Invoice Number</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th style="text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="invoices-tbody">
+                <tr><td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading your invoices...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </main>
   </div>
 
+  <!-- DETAILS MODAL -->
+  <div class="modal-overlay" id="details-modal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h2 id="details-title">Invoice Details</h2>
+        <button class="modal-close" onclick="window.closeModal('details-modal')">&times;</button>
+      </div>
+      <div class="modal-body" id="details-body" style="padding: 1.5rem;">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
   <script src="/js/component-loader.js"></script>
-  <script src="/js/invoices.js"></script>
+  <script type="module" src="/js/customer-invoices.js"></script>
+  <script>
+    window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
+    window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
+  </script>
 </body>
 </html>

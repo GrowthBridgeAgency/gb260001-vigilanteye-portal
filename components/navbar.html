@@ -1,16 +1,29 @@
 <nav class="main-navbar">
-  <div class="container">
-    <div class="brand">
-      <a href="/index.html" style="margin: 0; font-weight: bold; font-size: 1.25rem;">VigilantEye</a>
+  <div class="container nav-container">
+    <a href="/index.html" class="brand-logo">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><circle cx="12" cy="11" r="3"></circle></svg>
+      Vigilant<span>Eye</span>
+    </a>
+    
+    <!-- Mobile Hamburger Toggle -->
+    <div class="nav-toggle" id="mobile-menu-btn">
+      ☰
     </div>
-    <div class="nav-links">
-      <a href="/index.html">Home</a>
-      <a href="/about.html">About</a>
-      <a href="/services.html">Services</a>
-      <a href="/gallery.html">Gallery</a>
-      <a href="/clients.html">Clients</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/login.html" class="btn" style="margin-left: 1.5rem;">Login</a>
+
+    <!-- Desktop Menu -->
+    <div class="nav-menu" id="nav-menu">
+      <a href="/index.html" class="nav-link">Home</a>
+      <a href="/about.html" class="nav-link">About</a>
+      <a href="/services.html" class="nav-link">Services</a>
+      <a href="/gallery.html" class="nav-link">Gallery</a>
+      <a href="/clients.html" class="nav-link">Clients</a>
+      <a href="/contact.html" class="nav-link">Contact</a>
+    </div>
+
+    <!-- Desktop Actions -->
+    <div class="nav-actions" id="nav-actions">
+      <a href="/login.html" id="nav-login-btn" class="btn btn-outline-dark">Login</a>
+      <a href="/contact.html" class="btn btn-primary">Get Free Quote</a>
     </div>
   </div>
 </nav>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My AMC Tracking | VigilantEye</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-wrapper">
+    <div id="customer-sidebar-placeholder"></div>
+    <main class="dashboard-main">
+      <div id="customer-header-placeholder"></div>
+      
+      <div class="dashboard-content">
+        <h1 style="margin-top: 0; margin-bottom: 1.5rem;">AMC Tracking</h1>
+        <p style="color: var(--text-muted); margin-bottom: 2rem;">Monitor your Annual Maintenance Contracts for all installed products.</p>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="amc-table">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>AMC Start Date</th>
+                  <th>AMC Expiry Date</th>
+                  <th>Days Remaining</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="amc-tbody">
+                <tr><td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading your AMC records...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/component-loader.js"></script>
+  <script type="module" src="/js/customer-amc.js"></script>
+</body>
+</html>

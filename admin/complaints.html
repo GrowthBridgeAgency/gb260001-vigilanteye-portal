@@ -7,34 +7,159 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
   <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    /* WhatsApp Button Styles */
+    .btn-whatsapp {
+      background-color: #25D366;
+      color: #fff;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .btn-whatsapp:hover {
+      background-color: #128C7E;
+      color: #fff;
+    }
+  </style>
+  <meta name="view-transition" content="same-origin">
 </head>
 <body>
   <div class="dashboard-wrapper">
     <div id="admin-sidebar-placeholder"></div>
     <main class="dashboard-main">
       <div id="admin-header-placeholder"></div>
+      
       <div class="dashboard-content">
-        <h1>Manage Complaints</h1>
-        <div class="card">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Ticket</th>
-                <th>Customer</th>
-                <th>Status</th>
-                <th>Assigned To</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td colspan="5">Loading...</td></tr>
-            </tbody>
-          </table>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+          <h1 style="margin: 0;">Manage Complaints</h1>
+          
+          <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+            <input type="text" id="search-input" class="form-control" placeholder="Search ticket, customer, product..." style="width: 250px; margin-top: 0;">
+            <select id="filter-status" class="form-control" style="width: 150px; margin-top: 0;">
+              <option value="all">All Statuses</option>
+              <option value="Open">Open</option>
+              <option value="Assigned">Assigned</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Closed">Closed</option>
+            </select>
+            <select id="filter-priority" class="form-control" style="width: 150px; margin-top: 0;">
+              <option value="all">All Priorities</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+            <select id="filter-technician" class="form-control" style="width: 180px; margin-top: 0;">
+              <option value="all">All Technicians</option>
+              <!-- Populated by JS -->
+            </select>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="complaints-table">
+              <thead>
+                <tr>
+                  <th>Ticket</th>
+                  <th>Customer</th>
+                  <th>Product</th>
+                  <th>Issue Type</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Assigned Tech</th>
+                  <th>Date</th>
+                  <th style="width: 100px; text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="complaints-tbody">
+                <tr><td colspan="9" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading complaints...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </main>
   </div>
+
+  <!-- MANAGE COMPLAINT MODAL -->
+  <div class="modal-overlay" id="manage-modal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h2 id="manage-ticket-title">Manage Ticket</h2>
+        <button class="modal-close" onclick="closeModal('manage-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="manage-form">
+          <input type="hidden" id="manage_id">
+          
+          <div class="grid-2" style="gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div>
+              <label>Update Status</label>
+              <select id="manage_status" class="form-control" required>
+                <option value="Open">Open</option>
+                <option value="Assigned">Assigned</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+                <option value="Closed">Closed</option>
+              </select>
+            </div>
+            <div>
+              <label>Assign Technician</label>
+              <select id="manage_technician" class="form-control">
+                <option value="">-- Unassigned --</option>
+                <!-- Populated by JS -->
+              </select>
+            </div>
+          </div>
+
+          <label>Admin Notes (Internal)</label>
+          <textarea id="manage_admin_notes" class="form-control" rows="3" placeholder="Internal tracking notes..."></textarea>
+
+          <label style="margin-top: 1rem;">Resolution Notes (Visible to Customer)</label>
+          <textarea id="manage_resolution_notes" class="form-control" rows="3" placeholder="Explain how the issue was resolved..."></textarea>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('manage-modal')">Cancel</button>
+        <button class="btn btn-primary" id="btn-save-management">Save Updates</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW COMPLAINT DETAILS MODAL -->
+  <div class="modal-overlay" id="view-modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h2 id="view-ticket-no">Ticket Details</h2>
+        <div style="display:flex; gap:1rem; align-items:center;">
+          <a id="whatsapp-btn" class="btn-whatsapp" href="#" target="_blank" style="display:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964 1.003-3.582c-.605-1.052-.922-2.256-.922-3.473 0-4.661 3.792-8.452 8.45-8.452 4.659 0 8.452 3.791 8.452 8.452 0 4.66-3.793 8.452-8.452 8.452z"/></svg>
+            WhatsApp
+          </a>
+          <button class="modal-close" onclick="closeModal('view-modal')">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body" id="view-modal-body">
+        <!-- Injected via JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('view-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
   <script src="/js/component-loader.js"></script>
-  <script src="/js/admin.js"></script>
+  <script type="module" src="/js/admin-complaints.js"></script>
+  <script>
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+  </script>
 </body>
 </html>
