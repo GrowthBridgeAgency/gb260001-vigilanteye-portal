@@ -3,20 +3,440 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VigilantEye | Contact</title>
+  <title>Contact Us | VigilantEye Surveillance Pvt Ltd</title>
+  <meta name="description" content="Let's discuss your security requirements and find the right solution for your property.">
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Contact Specific Styles */
+    .contact-hero {
+      padding: 8rem 0 4rem;
+      text-align: center;
+      background: radial-gradient(circle at 50% 0%, var(--bg-alt) 0%, var(--bg-main) 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .breadcrumb a {
+      color: var(--text-main);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .breadcrumb a:hover {
+      color: var(--text-muted);
+    }
+
+    /* FAQ UI Reuse */
+    .faq-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--border-radius);
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    .faq-summary {
+      padding: 1.5rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      list-style: none;
+    }
+    .faq-summary::-webkit-details-marker {
+      display: none;
+    }
+    .faq-summary::after {
+      content: '+';
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      transition: transform 0.3s;
+    }
+    details[open] .faq-summary::after {
+      content: '-';
+      transform: rotate(180deg);
+    }
+    .faq-content {
+      padding: 0 1.5rem 1.5rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Form Overrides */
+    .form-control {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 0.5rem;
+    }
+    .form-control option {
+      background: var(--bg-main);
+      color: var(--text-main);
+    }
+    input[type="file"].form-control {
+      padding: 0.75rem;
+      background: rgba(255,255,255,0.02);
+      cursor: pointer;
+    }
+
+    /* WhatsApp Banner */
+    .wa-banner {
+      background: linear-gradient(135deg, rgba(37, 211, 102, 0.1) 0%, rgba(255,255,255,0) 100%);
+      border: 1px solid rgba(37, 211, 102, 0.2);
+      border-radius: var(--border-radius);
+      padding: 4rem;
+      position: relative;
+    }
+
+    /* Light Theme Adjustments */
+    body[data-theme="light"] .contact-hero { border-bottom-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .faq-item { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .form-control { border-color: rgba(0,0,0,0.15) !important; color: #0f172a !important; }
+    body[data-theme="light"] .form-control option { background: #fff; color: #0f172a; }
+    body[data-theme="light"] input[type="file"].form-control { background: rgba(0,0,0,0.02); }
+    body[data-theme="light"] .wa-banner { background: linear-gradient(135deg, rgba(37, 211, 102, 0.05) 0%, rgba(0,0,0,0) 100%); border-color: rgba(37, 211, 102, 0.2); }
+    body[data-theme="light"] .map-container { border-color: rgba(0,0,0,0.05) !important; background: rgba(0,0,0,0.02) !important; }
+  </style>
 </head>
 <body>
   <!-- Navbar Placeholder -->
   <div id="navbar-placeholder"></div>
 
-  <main class="container" style="padding-top: 2rem;">
-    <h1>Contact Us</h1>
-    <p>Get in touch for a quotation or general enquiries.</p>
-    <!-- Future Enquiry Form -->
+  <!-- SECTION 1: PAGE HERO -->
+  <header class="contact-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/index.html">Home</a>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <span>Contact</span>
+      </div>
+      <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Contact VigilantEye</h1>
+      <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.6;">
+        Let's discuss your security requirements and find the right solution for your property.
+      </p>
+    </div>
+  </header>
+
+  <main>
+    <!-- SECTION 2: CONTACT INFORMATION -->
+    <section class="py-5" style="margin-top: 2rem;">
+      <div class="container grid-4">
+        <div class="card" style="text-align: center;">
+          <div style="color: var(--primary-color); margin-bottom: 1rem;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </div>
+          <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Phone</h3>
+          <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">+91 98765 43210</p>
+          <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">+91 87654 32109</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="color: var(--primary-color); margin-bottom: 1rem;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </div>
+          <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Email</h3>
+          <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">info@vigilanteye.in</p>
+          <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">support@vigilanteye.in</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="color: var(--primary-color); margin-bottom: 1rem;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          </div>
+          <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Office Address</h3>
+          <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">Tech Park Plaza, Sector 4<br>New Delhi, 110001</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="color: var(--primary-color); margin-bottom: 1rem;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Business Hours</h3>
+          <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">Mon - Sat: 9:00 AM - 7:00 PM</p>
+          <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">Sun: Support Only</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: ENQUIRY FORM & SECTION 4: SITE SURVEY -->
+    <section class="py-5 bg-alt">
+      <div class="container grid-2" style="align-items: flex-start; gap: 4rem;">
+        
+        <!-- SECTION 3: ENQUIRY FORM -->
+        <div class="card" style="padding: 3rem;">
+          <h2 style="margin-bottom: 0.5rem;">Send an Enquiry</h2>
+          <p style="color: var(--text-muted); margin-bottom: 2rem;">Fill out the form below and our security experts will get back to you shortly.</p>
+          
+          <!-- Future Enquiries Table Integration -->
+          <form id="enquiry-form">
+            <div class="grid-2" style="gap: 1.5rem; margin-bottom: 1.5rem;">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Your Full Name" required>
+              </div>
+              <div class="form-group">
+                <label for="mobile_number">Mobile Number</label>
+                <input type="tel" id="mobile_number" name="mobile_number" class="form-control" placeholder="+91 XXXXX XXXXX" required>
+              </div>
+            </div>
+
+            <div class="grid-2" style="gap: 1.5rem; margin-bottom: 1.5rem;">
+              <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" class="form-control" placeholder="City / Area" required>
+              </div>
+              <div class="form-group">
+                <label for="budget">Budget Estimate</label>
+                <input type="text" id="budget" name="budget" class="form-control" placeholder="e.g. 50,000 INR">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label for="requirement_type">Requirement Type</label>
+              <select id="requirement_type" name="requirement_type" class="form-control" required>
+                <option value="" disabled selected>Select your requirement...</option>
+                <option value="CCTV Installation">CCTV Installation</option>
+                <option value="IP Camera Setup">IP Camera Setup</option>
+                <option value="Wireless CCTV">Wireless CCTV</option>
+                <option value="Biometric Attendance">Biometric Attendance</option>
+                <option value="Access Control">Access Control</option>
+                <option value="Video Door Phone">Video Door Phone</option>
+                <option value="Networking">Networking</option>
+                <option value="AMC Services">AMC Services</option>
+                <option value="CCTV Rental">CCTV Rental</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label for="message">Message / Additional Details</label>
+              <textarea id="message" name="message" class="form-control" rows="4" placeholder="Describe your security needs..."></textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 2rem;">
+              <label for="file_upload">File Upload (Site Layout / Photos)</label>
+              <input type="file" id="file_upload" name="file_upload" class="form-control" accept="image/*,.pdf,.doc,.docx">
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+              <button type="button" class="btn btn-primary" style="flex: 1;">Submit Enquiry</button>
+              <button type="reset" class="btn btn-outline" style="flex: 1;">Reset Form</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- SECTION 4: REQUEST A FREE SITE SURVEY -->
+        <div>
+          <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Request A Free Site Survey</h2>
+          <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">
+            Every property is unique. Instead of guessing, let our certified engineers visit your location to design a flawless, customized security architecture completely free of charge.
+          </p>
+          
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 3rem;">
+            <li style="display: flex; align-items: flex-start; gap: 1rem;">
+              <div style="background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 50%; color: var(--primary-color);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </div>
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; font-size: 1.1rem;">Site Inspection</h4>
+                <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">We identify critical vulnerabilities and blind spots.</p>
+              </div>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 1rem;">
+              <div style="background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 50%; color: var(--primary-color);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+              </div>
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; font-size: 1.1rem;">Requirement Analysis</h4>
+                <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">We listen to your specific operational needs and goals.</p>
+              </div>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 1rem;">
+              <div style="background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 50%; color: var(--primary-color);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              </div>
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; font-size: 1.1rem;">Security Planning</h4>
+                <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">Architecting a comprehensive layout using industry-leading hardware.</p>
+              </div>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 1rem;">
+              <div style="background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 50%; color: var(--primary-color);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; font-size: 1.1rem;">Cost Estimation</h4>
+                <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">Providing a transparent, highly-detailed quotation with zero hidden fees.</p>
+              </div>
+            </li>
+          </ul>
+          
+          <button class="btn btn-outline" style="padding: 1rem 2rem; font-size: 1.05rem;">Book Your Free Survey Now</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 5: WHATSAPP SUPPORT -->
+    <section class="py-5">
+      <div class="container">
+        <!-- Future WhatsApp Template Integration -->
+        <div class="wa-banner grid-2" style="align-items: center; gap: 3rem;">
+          <div>
+            <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+              WhatsApp Support
+            </h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">
+              Skip the queues. Connect directly with our technical experts and sales engineers on WhatsApp for immediate assistance.
+            </p>
+            <div class="grid-2" style="margin-bottom: 2rem; gap: 1.5rem;">
+              <div style="color: var(--text-main);">✓ Quick Assistance</div>
+              <div style="color: var(--text-main);">✓ Product Information</div>
+              <div style="color: var(--text-main);">✓ Complaint Registration</div>
+              <div style="color: var(--text-main);">✓ AMC Support</div>
+            </div>
+            <a href="#" class="btn btn-primary" style="background: #25d366; color: #fff;">Chat on WhatsApp</a>
+          </div>
+          <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--border-radius); min-height: 300px; display: flex; align-items: center; justify-content: center;">
+            <span style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; text-align: center;">Support Dashboard /<br>Phone Graphic Placeholder</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: GOOGLE MAP SECTION -->
+    <section class="py-5 bg-alt">
+      <div class="container grid-2" style="align-items: center;">
+        <!-- Future Google Maps Integration -->
+        <div class="map-container" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--border-radius); min-height: 450px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">
+          Google Map Placeholder
+        </div>
+        <div style="padding: 0 2rem;">
+          <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Visit Our Headquarters</h2>
+          <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">
+            Our state-of-the-art office is open for client visits. Come inspect our hardware quality firsthand and discuss your architecture with our lead engineers.
+          </p>
+          <div style="display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.5rem;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" style="flex-shrink: 0; margin-top: 0.25rem;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <div>
+              <h4 style="margin: 0 0 0.25rem 0;">Address</h4>
+              <p style="color: var(--text-muted); margin: 0;">Tech Park Plaza, Sector 4, New Delhi, 110001</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.5rem;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" style="flex-shrink: 0; margin-top: 0.25rem;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <div>
+              <h4 style="margin: 0 0 0.25rem 0;">Phone Directory</h4>
+              <p style="color: var(--text-muted); margin: 0;">Sales: +91 98765 43210<br>Support: +91 87654 32109</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: WHY CONTACT US -->
+    <section class="py-5">
+      <div class="container">
+        <div class="section-header">
+          <h2>Why Partner With Us</h2>
+        </div>
+        
+        <div class="grid-3">
+          <div class="card" style="text-align: center;">
+            <h3>Expert Consultation</h3>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Speak directly to certified engineers, not call centers.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3>Customized Solutions</h3>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">We build systems tailored exactly to your unique layout.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3>Professional Installation</h3>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Flawless deployment minimizing visible wiring.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3>AMC Support</h3>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Priority maintenance keeping your systems online.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3>Fast Response</h3>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Rapid dispatch for site surveys and emergency repairs.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3>Trusted Service</h3>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">A pristine track record built on client satisfaction.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: FAQ -->
+    <section class="py-5 bg-alt">
+      <div class="container" style="max-width: 800px;">
+        <div class="section-header">
+          <h2>Frequently Asked Questions</h2>
+        </div>
+        
+        <div>
+          <details class="faq-item" name="contact-faq">
+            <summary class="faq-summary">How quickly can installation be scheduled?</summary>
+            <div class="faq-content">
+              Once the site survey is complete and the quotation is approved, we typically commence installation within 48 to 72 hours, depending on hardware availability and project scale.
+            </div>
+          </details>
+          <details class="faq-item" name="contact-faq">
+            <summary class="faq-summary">Do you provide AMC?</summary>
+            <div class="faq-content">
+              Yes, our Annual Maintenance Contracts (AMC) are highly recommended. They provide routine preventive checks, priority on-call support, and discounted part replacements.
+            </div>
+          </details>
+          <details class="faq-item" name="contact-faq">
+            <summary class="faq-summary">Can you upgrade existing systems?</summary>
+            <div class="faq-content">
+              Absolutely. Our engineers can assess your current DVR/NVR and cabling infrastructure to integrate new 4K cameras or biometrics without forcing a complete tear-down.
+            </div>
+          </details>
+          <details class="faq-item" name="contact-faq">
+            <summary class="faq-summary">Do you offer site surveys?</summary>
+            <div class="faq-content">
+              Yes, we provide completely free, no-obligation site surveys to accurately assess your vulnerabilities and recommend the most effective hardware layout.
+            </div>
+          </details>
+          <details class="faq-item" name="contact-faq">
+            <summary class="faq-summary">Do you support businesses and factories?</summary>
+            <div class="faq-content">
+              Yes. While we handle premium residential properties, our core expertise lies in securing large-scale corporate hubs, factories, logistics parks, and multi-location retail chains.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 9: EMERGENCY SUPPORT CTA -->
+    <section class="py-5" style="text-align: center; margin: 4rem 0;">
+      <div class="container">
+        <h2 style="font-size: 3rem; margin-bottom: 2rem;">Need Immediate Security Assistance?</h2>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="#" class="btn btn-primary">Call Now</a>
+          <a href="#" class="btn btn-outline" style="background: #25d366; color: #fff; border-color: transparent;">WhatsApp Us</a>
+          <a href="#" class="btn btn-secondary">Request Callback</a>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Footer Placeholder -->
+  <!-- SECTION 10: FOOTER -->
   <div id="footer-placeholder"></div>
 
   <script src="/js/component-loader.js"></script>

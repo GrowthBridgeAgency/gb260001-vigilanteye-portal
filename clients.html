@@ -3,20 +3,439 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VigilantEye | Clients</title>
+  <title>Clients | VigilantEye Surveillance Pvt Ltd</title>
+  <meta name="description" content="Trusted by homeowners, businesses, institutions and industries for advanced security solutions.">
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Clients Specific Styles */
+    .clients-hero {
+      padding: 8rem 0 4rem;
+      text-align: center;
+      background: radial-gradient(circle at 50% 0%, var(--bg-alt) 0%, var(--bg-main) 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .breadcrumb a {
+      color: var(--text-main);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .breadcrumb a:hover {
+      color: var(--text-muted);
+    }
+
+    /* Process Grid Reuse for Highlights */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem 2rem;
+      margin-top: 4rem;
+    }
+    .process-step {
+      position: relative;
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--border-radius);
+    }
+    .process-number {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 50px;
+      background: var(--text-main);
+      color: var(--bg-main);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-family: var(--font-family-headline);
+      font-weight: 700;
+      border: 4px solid var(--bg-main);
+    }
+
+    /* Light Theme Adjustments */
+    body[data-theme="light"] .clients-hero { border-bottom-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .process-step { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .process-number { border-color: var(--bg-main); }
+    body[data-theme="light"] .testimonial-text { color: #0f172a !important; }
+  </style>
 </head>
 <body>
   <!-- Navbar Placeholder -->
   <div id="navbar-placeholder"></div>
 
-  <main class="container" style="padding-top: 2rem;">
-    <h1>Our Clients</h1>
-    <p>Trusted by top businesses and homeowners.</p>
-    <!-- Future Client Showcase -->
+  <!-- SECTION 1: PAGE HERO -->
+  <header class="clients-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/index.html">Home</a>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <span>Clients</span>
+      </div>
+      <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Our Clients & Success Stories</h1>
+      <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.6;">
+        Trusted by homeowners, businesses, institutions and industries for advanced security solutions.
+      </p>
+    </div>
+  </header>
+
+  <main>
+    <!-- SECTION 2: CLIENT OVERVIEW -->
+    <section class="py-5" style="margin-top: 2rem;">
+      <div class="container" style="text-align: center; max-width: 800px;">
+        <h2 style="margin-bottom: 1rem;">Building Long-Term Relationships</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8;">
+          We believe that security is an ongoing partnership, not a one-time transaction. Through our quality installations, highly professional support, and dedicated Annual Maintenance Contracts (AMC), we ensure our clients receive unparalleled protection year after year.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 3: FEATURED CLIENTS -->
+    <section class="py-5 bg-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Featured Clients</h2>
+          <p>A glimpse into the trusted partnerships we've built across diverse sectors.</p>
+        </div>
+        
+        <!-- Future Client Showcase Integration -->
+        <div id="featured-clients-container" class="grid-3">
+          
+          <div class="card" style="text-align: left;">
+            <div style="margin-bottom: 1.5rem; color: var(--primary-color);">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            </div>
+            <h3 style="margin-bottom: 0.25rem;">Alpha Logistics</h3>
+            <p style="color: var(--text-main); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; opacity: 0.7;">Warehouse • Industrial Park</p>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Secured their 20,000 sq.ft facility with 4K IP cameras and biometric access controls to monitor high-value inventory.</p>
+          </div>
+
+          <div class="card" style="text-align: left;">
+            <div style="margin-bottom: 1.5rem; color: var(--primary-color);">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <h3 style="margin-bottom: 0.25rem;">Global Tech Retail</h3>
+            <p style="color: var(--text-main); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; opacity: 0.7;">Retail Store • City Mall</p>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Deployed an integrated CCTV and smart lock system for 5 flagship stores with a centralized remote monitoring dashboard.</p>
+          </div>
+
+          <div class="card" style="text-align: left;">
+            <div style="margin-bottom: 1.5rem; color: var(--primary-color);">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <h3 style="margin-bottom: 0.25rem;">Emerald Heights Society</h3>
+            <p style="color: var(--text-main); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; opacity: 0.7;">Residential Community • North District</p>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Comprehensive perimeter surveillance with License Plate Recognition (LPR) cameras and Video Door Phones for 200 villas.</p>
+          </div>
+
+          <div class="card" style="text-align: left;">
+            <div style="margin-bottom: 1.5rem; color: var(--primary-color);">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+            </div>
+            <h3 style="margin-bottom: 0.25rem;">CityCare Hospital</h3>
+            <p style="color: var(--text-main); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; opacity: 0.7;">Healthcare • Downtown</p>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Installed multi-zone access control restricting unauthorized entry to ICUs and medicine storage units.</p>
+          </div>
+
+          <div class="card" style="text-align: left;">
+            <div style="margin-bottom: 1.5rem; color: var(--primary-color);">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            </div>
+            <h3 style="margin-bottom: 0.25rem;">Modern Academy</h3>
+            <p style="color: var(--text-main); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; opacity: 0.7;">Educational Institution • East Campus</p>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Upgraded legacy analog cameras to a high-speed IP network, ensuring the safety of over 1,500 students.</p>
+          </div>
+
+          <div class="card" style="text-align: left;">
+            <div style="margin-bottom: 1.5rem; color: var(--primary-color);">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+            </div>
+            <h3 style="margin-bottom: 0.25rem;">NexGen IT Solutions</h3>
+            <p style="color: var(--text-main); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; opacity: 0.7;">Corporate Office • Tech Park</p>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Implemented biometric attendance linked directly to their HR payroll, replacing an outdated RFID card system.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: INDUSTRIES WE SERVE -->
+    <section class="py-5">
+      <div class="container">
+        <div class="section-header">
+          <h2>Industries We Serve</h2>
+          <p>Delivering robust setups tailored to specific environmental demands.</p>
+        </div>
+        
+        <div class="grid-4">
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Residential Communities</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Corporate Offices</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Retail Stores</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Factories</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Warehouses</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Hospitals</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Educational Institutions</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Hotels</h3></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: SUCCESS STORIES -->
+    <section class="py-5 bg-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Success Stories</h2>
+          <p>Detailed case studies of how we solved complex security challenges.</p>
+        </div>
+        
+        <div class="grid-3">
+          
+          <div class="card" style="text-align: left;">
+            <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">Logistics Hub Upgrade</h3>
+            <div style="margin-bottom: 1rem;">
+              <h4 style="color: var(--text-main); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Project Challenge</h4>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">Frequent blind spots and low-resolution analog cameras resulted in untraceable inventory theft.</p>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <h4 style="color: var(--text-main); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Implemented Solution</h4>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">A complete overhaul using 4K varifocal IP cameras and a fiber-optic networking backbone for zero latency.</p>
+            </div>
+            <div>
+              <h4 style="color: var(--primary-color); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Outcome</h4>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">Theft reduced by 100% within the first month. Security staff can now monitor the entire perimeter from one screen.</p>
+            </div>
+          </div>
+
+          <div class="card" style="text-align: left;">
+            <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">Corporate Access Control</h3>
+            <div style="margin-bottom: 1rem;">
+              <h4 style="color: var(--text-main); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Project Challenge</h4>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">Unauthorized personnel were frequently accessing secure server rooms and R&D departments.</p>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <h4 style="color: var(--text-main); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Implemented Solution</h4>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">Installed multi-door biometric controllers synced with an active directory to strictly manage permissions.</p>
+            </div>
+            <div>
+              <h4 style="color: var(--primary-color); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Outcome</h4>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">Total restriction of unauthorized access. HR now has real-time logs of exactly who enters secure zones.</p>
+            </div>
+          </div>
+
+          <div class="card" style="text-align: left;">
+            <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">Villa Smart Security</h3>
+            <div style="margin-bottom: 1rem;">
+              <h4 style="color: var(--text-main); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Project Challenge</h4>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">The homeowner wanted high-end security without ruining the aesthetic appeal of their luxury property.</p>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <h4 style="color: var(--text-main); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Implemented Solution</h4>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">Discreet dome cameras painted to match the exterior, paired with a sleek Video Door Phone and digital locks.</p>
+            </div>
+            <div>
+              <h4 style="color: var(--primary-color); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Outcome</h4>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">Flawless security integration that feels invisible. The owner now manages the entire house from their smartphone.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: CLIENT TESTIMONIALS -->
+    <section class="py-5">
+      <div class="container">
+        <div class="section-header">
+          <h2>Client Testimonials</h2>
+          <p>Don't just take our word for it—hear from the people we protect.</p>
+        </div>
+        
+        <!-- Future Reviews Integration -->
+        <div id="client-reviews-container" class="grid-3">
+          
+          <div class="card" style="text-align: center;">
+            <div style="color: #f59e0b; font-size: 1.5rem; margin-bottom: 1rem; letter-spacing: 2px;">★★★★★</div>
+            <p class="testimonial-text" style="font-style: italic; color: #fff; font-size: 1.05rem; line-height: 1.7;">"Exceptional service! The IP camera clarity is amazing, and their team was highly professional during the entire installation process. Zero downtime."</p>
+            <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 1rem;">
+              <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+              <div style="text-align: left;">
+                <h4 style="margin: 0; font-size: 1rem; color: var(--text-main);">Rajesh Kumar</h4>
+                <span style="color: var(--text-muted); font-size: 0.85rem;">Business Owner</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card" style="text-align: center;">
+            <div style="color: #f59e0b; font-size: 1.5rem; margin-bottom: 1rem; letter-spacing: 2px;">★★★★★</div>
+            <p class="testimonial-text" style="font-style: italic; color: #fff; font-size: 1.05rem; line-height: 1.7;">"The biometric system works flawlessly. We haven't had a single issue since deployment. Their customer portal makes it so easy to request help."</p>
+            <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 1rem;">
+              <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+              <div style="text-align: left;">
+                <h4 style="margin: 0; font-size: 1rem; color: var(--text-main);">Anita Singh</h4>
+                <span style="color: var(--text-muted); font-size: 0.85rem;">HR Manager</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="text-align: center;">
+            <div style="color: #f59e0b; font-size: 1.5rem; margin-bottom: 1rem; letter-spacing: 2px;">★★★★★</div>
+            <p class="testimonial-text" style="font-style: italic; color: #fff; font-size: 1.05rem; line-height: 1.7;">"Their AMC service is absolutely top-notch. Any minor issue is resolved within hours by their expert technicians. A very reliable security partner."</p>
+            <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 1rem;">
+              <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+              <div style="text-align: left;">
+                <h4 style="margin: 0; font-size: 1rem; color: var(--text-main);">Vikram Patel</h4>
+                <span style="color: var(--text-muted); font-size: 0.85rem;">Facility Director</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: WHY CLIENTS CHOOSE US -->
+    <section class="py-5 bg-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Why Clients Choose Us</h2>
+        </div>
+        
+        <div class="grid-3">
+          <div class="card" style="text-align: center;">
+            <h3>Professional Installation</h3>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Clean, efficient, and discreet deployment processes.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3>Reliable Equipment</h3>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Sourcing only the most durable, high-fidelity hardware globally.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3>AMC Support</h3>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Priority maintenance keeping your systems consistently online.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3>Fast Response</h3>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Rapid deployment and lightning-fast issue resolution times.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3>Expert Team</h3>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Rigorous training standards ensure faultless execution.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3>Customer Satisfaction</h3>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">A client-first philosophy embedded deeply in our culture.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: PROJECT HIGHLIGHTS -->
+    <section class="py-5">
+      <div class="container">
+        <div class="section-header">
+          <h2>Project Lifecycle</h2>
+          <p>Our visual timeline of how we transform a requirement into a fully secured premise.</p>
+        </div>
+        
+        <div class="process-grid">
+          <div class="process-step">
+            <div class="process-number">1</div>
+            <h3>Consultation</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">Understanding your exact security needs.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-number">2</div>
+            <h3>Site Survey</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">Physical inspection for optimal hardware placement.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-number">3</div>
+            <h3>Installation</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">Professional deployment by certified technicians.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-number">4</div>
+            <h3>Testing</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">Rigorous QA to ensure flawless operation.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-number">5</div>
+            <h3>Training</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">We teach your staff how to use the new systems.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-number">6</div>
+            <h3>Support</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">Continuous backing through dedicated AMC contracts.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 9: TRUST & COMMITMENT -->
+    <section class="py-5 bg-alt">
+      <div class="container grid-2" style="align-items: center;">
+        <div>
+          <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Unwavering Trust & Commitment</h2>
+          <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+            When you choose VigilantEye, you are investing in a dedicated partner committed to the absolute safety of your assets and personnel.
+          </p>
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem;">
+            <li style="display: flex; align-items: center; gap: 1rem;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <h4 style="margin: 0; font-size: 1.05rem;">Uncompromising Service Quality</h4>
+            </li>
+            <li style="display: flex; align-items: center; gap: 1rem;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <h4 style="margin: 0; font-size: 1.05rem;">A Deep Customer-First Approach</h4>
+            </li>
+            <li style="display: flex; align-items: center; gap: 1rem;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <h4 style="margin: 0; font-size: 1.05rem;">Reliable Long-Term Maintenance</h4>
+            </li>
+            <li style="display: flex; align-items: center; gap: 1rem;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <h4 style="margin: 0; font-size: 1.05rem;">Total Pricing Transparency</h4>
+            </li>
+          </ul>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--border-radius); display: flex; align-items: center; justify-content: center; min-height: 400px;">
+           <span style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; padding: 2rem;">Client Handshake<br>Image Placeholder</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 10: CALL TO ACTION -->
+    <section class="py-5" style="text-align: center; margin: 4rem 0;">
+      <div class="container">
+        <h2 style="font-size: 3rem; margin-bottom: 2rem;">Join Our Growing Client Network</h2>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="/contact.html" class="btn btn-primary">Get Free Quote</a>
+          <a href="/contact.html" class="btn btn-outline">Contact Us</a>
+          <a href="#" class="btn btn-secondary">WhatsApp Us</a>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Footer Placeholder -->
+  <!-- FOOTER -->
   <div id="footer-placeholder"></div>
 
   <script src="/js/component-loader.js"></script>

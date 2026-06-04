@@ -3,20 +3,393 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VigilantEye | Gallery</title>
+  <title>Gallery | VigilantEye Surveillance Pvt Ltd</title>
+  <meta name="description" content="Explore our completed surveillance, access control and security installations.">
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Gallery Specific Styles */
+    .gallery-hero {
+      padding: 8rem 0 4rem;
+      text-align: center;
+      background: radial-gradient(circle at 50% 0%, var(--bg-alt) 0%, var(--bg-main) 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .breadcrumb a {
+      color: var(--text-main);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .breadcrumb a:hover {
+      color: var(--text-muted);
+    }
+
+    /* Filters */
+    .filter-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    .filter-btn {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-muted);
+      padding: 0.5rem 1.5rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-family: var(--font-family-base);
+      transition: var(--transition);
+      font-size: 0.95rem;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--text-main);
+      color: var(--bg-main);
+      border-color: var(--text-main);
+    }
+
+    /* Masonry Grid */
+    .masonry-grid {
+      column-count: 3;
+      column-gap: 2rem;
+    }
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 2rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+    }
+    .masonry-item:hover {
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-5px);
+    }
+    .masonry-placeholder {
+      width: 100%;
+      background: rgba(255,255,255,0.02);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .masonry-caption {
+      padding: 1.5rem;
+    }
+    @media (max-width: 992px) { .masonry-grid { column-count: 2; } }
+    @media (max-width: 576px) { .masonry-grid { column-count: 1; } }
+
+    /* Light Theme Compatibility */
+    body[data-theme="light"] .gallery-hero { border-bottom-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .filter-btn { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.1); color: var(--text-main); }
+    body[data-theme="light"] .filter-btn:hover, body[data-theme="light"] .filter-btn.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+    body[data-theme="light"] .masonry-item { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .masonry-item:hover { border-color: rgba(0,0,0,0.1); }
+    body[data-theme="light"] .masonry-placeholder { background: rgba(0,0,0,0.02); border-bottom-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .stat-container { border-color: rgba(0,0,0,0.05) !important; }
+  </style>
 </head>
 <body>
   <!-- Navbar Placeholder -->
   <div id="navbar-placeholder"></div>
 
-  <main class="container" style="padding-top: 2rem;">
-    <h1>Product Gallery</h1>
-    <p>View our state-of-the-art security products.</p>
-    <!-- Future Gallery Grid -->
+  <!-- SECTION 1: PAGE HERO -->
+  <header class="gallery-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/index.html">Home</a>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <span>Gallery</span>
+      </div>
+      <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Project Gallery</h1>
+      <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.6;">
+        Explore our completed surveillance, access control and security installations.
+      </p>
+    </div>
+  </header>
+
+  <main>
+    <!-- SECTION 2: GALLERY INTRODUCTION -->
+    <section class="py-5" style="margin-top: 2rem;">
+      <div class="container" style="text-align: center; max-width: 800px;">
+        <h2 style="margin-bottom: 1rem;">Proven Security Deployments</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8;">
+          Take a look inside our diverse portfolio of real installations. From high-risk commercial projects and sprawling industrial deployments to discrete residential setups, we design and implement uncompromising security networks.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 3: FEATURED PROJECTS -->
+    <section class="py-5 bg-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Featured Client Projects</h2>
+          <p>Highlighting some of our most robust security architecture designs.</p>
+        </div>
+        
+        <!-- Future Client Showcase Integration -->
+        <div class="grid-3" id="client-showcase-container">
+          
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="height: 250px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.05);">Image Placeholder</div>
+            <div style="padding: 2rem;">
+              <span style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(255,255,255,0.1); color: var(--text-main); border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 1rem;">Corporate</span>
+              <h3 style="margin: 0.5rem 0;">TechPark Perimeter Security</h3>
+              <p style="color: var(--text-main); opacity: 0.7; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Location: Downtown IT Hub</p>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0;">Complete IP camera integration across 15 acres with centralized NVR storage.</p>
+            </div>
+          </div>
+          
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="height: 250px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.05);">Image Placeholder</div>
+            <div style="padding: 2rem;">
+              <span style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(255,255,255,0.1); color: var(--text-main); border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 1rem;">Industrial</span>
+              <h3 style="margin: 0.5rem 0;">Warehouse Surveillance Upgrade</h3>
+              <p style="color: var(--text-main); opacity: 0.7; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Location: Logistics Park</p>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0;">Upgraded 64 analog cameras to 4K network cameras with AI intrusion detection.</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="height: 250px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.05);">Image Placeholder</div>
+            <div style="padding: 2rem;">
+              <span style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(255,255,255,0.1); color: var(--text-main); border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 1rem;">Residential</span>
+              <h3 style="margin: 0.5rem 0;">Luxury Villa Automation</h3>
+              <p style="color: var(--text-main); opacity: 0.7; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Location: Hills Estate</p>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0;">Deployed biometric smart locks, video door phones, and discreet CCTV coverage.</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="height: 250px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.05);">Image Placeholder</div>
+            <div style="padding: 2rem;">
+              <span style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(255,255,255,0.1); color: var(--text-main); border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 1rem;">Retail</span>
+              <h3 style="margin: 0.5rem 0;">Mall Access Control</h3>
+              <p style="color: var(--text-main); opacity: 0.7; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Location: City Center</p>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0;">Secured staff-only corridors with RFID scanning and centralized logging.</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="height: 250px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.05);">Image Placeholder</div>
+            <div style="padding: 2rem;">
+              <span style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(255,255,255,0.1); color: var(--text-main); border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 1rem;">Hospitality</span>
+              <h3 style="margin: 0.5rem 0;">Hotel Network & CCTV</h3>
+              <p style="color: var(--text-main); opacity: 0.7; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Location: Coastal Resort</p>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0;">120+ camera installation integrated directly with their secure internal LAN.</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="height: 250px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.05);">Image Placeholder</div>
+            <div style="padding: 2rem;">
+              <span style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(255,255,255,0.1); color: var(--text-main); border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 1rem;">Education</span>
+              <h3 style="margin: 0.5rem 0;">Campus Security Layout</h3>
+              <p style="color: var(--text-main); opacity: 0.7; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Location: University Grounds</p>
+              <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0;">High-density perimeter surveillance and biometric lab access systems.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: PROJECT CATEGORIES (FILTERS) -->
+    <section class="py-5">
+      <div class="container">
+        <div class="section-header">
+          <h2>Photo Gallery</h2>
+        </div>
+        
+        <div class="filter-container">
+          <button class="filter-btn active">All</button>
+          <button class="filter-btn">CCTV</button>
+          <button class="filter-btn">Biometric</button>
+          <button class="filter-btn">Access Control</button>
+          <button class="filter-btn">Networking</button>
+          <button class="filter-btn">AMC</button>
+        </div>
+
+        <!-- SECTION 4: PHOTO GALLERY GRID -->
+        <!-- Future Gallery Bucket Integration -->
+        <div id="gallery-grid-container" class="masonry-grid">
+          
+          <div class="masonry-item">
+            <div class="masonry-placeholder" style="height: 300px;">CCTV Image</div>
+            <div class="masonry-caption">
+              <h4 style="margin: 0 0 0.25rem 0;">Outdoor Bullet Camera</h4>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">CCTV Installations</p>
+            </div>
+          </div>
+
+          <div class="masonry-item">
+            <div class="masonry-placeholder" style="height: 450px;">Access Control Image</div>
+            <div class="masonry-caption">
+              <h4 style="margin: 0 0 0.25rem 0;">Server Room Access</h4>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">Access Control</p>
+            </div>
+          </div>
+
+          <div class="masonry-item">
+            <div class="masonry-placeholder" style="height: 250px;">Biometric Image</div>
+            <div class="masonry-caption">
+              <h4 style="margin: 0 0 0.25rem 0;">Fingerprint Terminal</h4>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">Biometric Systems</p>
+            </div>
+          </div>
+
+          <div class="masonry-item">
+            <div class="masonry-placeholder" style="height: 350px;">Video Door Phone Image</div>
+            <div class="masonry-caption">
+              <h4 style="margin: 0 0 0.25rem 0;">Villa VDP Panel</h4>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">Video Door Phones</p>
+            </div>
+          </div>
+
+          <div class="masonry-item">
+            <div class="masonry-placeholder" style="height: 280px;">Networking Image</div>
+            <div class="masonry-caption">
+              <h4 style="margin: 0 0 0.25rem 0;">Structured Cabling</h4>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">Networking</p>
+            </div>
+          </div>
+
+          <div class="masonry-item">
+            <div class="masonry-placeholder" style="height: 400px;">AMC Image</div>
+            <div class="masonry-caption">
+              <h4 style="margin: 0 0 0.25rem 0;">DVR Maintenance</h4>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">AMC Visits</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: INDUSTRIES SHOWCASE -->
+    <section class="py-5 bg-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Industries We Secure</h2>
+          <p>Delivering robust setups tailored to specific environmental demands.</p>
+        </div>
+        
+        <div class="grid-4">
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Residential</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Corporate</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Retail</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Warehouses</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Factories</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Hospitals</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Schools</h3></div>
+          <div class="card" style="text-align: center; padding: 2rem;"><h3 style="font-size: 1.1rem; margin: 0;">Hotels</h3></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: PROJECT STATS -->
+    <section class="py-5 stat-container" style="border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05);">
+      <div class="container">
+        <!-- Future Dynamic Statistics -->
+        <div class="grid-4">
+          <div style="text-align: center; padding: 2rem;">
+            <div class="stat-number" style="font-size: 3.5rem; font-family: var(--font-family-headline); font-weight: 400; line-height: 1; -webkit-text-fill-color: transparent; -webkit-text-stroke: 1px var(--text-main);">--</div>
+            <p style="text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; margin-top: 1rem; color: var(--text-muted);">Projects Completed</p>
+          </div>
+          <div style="text-align: center; padding: 2rem;">
+            <div class="stat-number" style="font-size: 3.5rem; font-family: var(--font-family-headline); font-weight: 400; line-height: 1; -webkit-text-fill-color: transparent; -webkit-text-stroke: 1px var(--text-main);">--</div>
+            <p style="text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; margin-top: 1rem; color: var(--text-muted);">Sites Protected</p>
+          </div>
+          <div style="text-align: center; padding: 2rem;">
+            <div class="stat-number" style="font-size: 3.5rem; font-family: var(--font-family-headline); font-weight: 400; line-height: 1; -webkit-text-fill-color: transparent; -webkit-text-stroke: 1px var(--text-main);">--</div>
+            <p style="text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; margin-top: 1rem; color: var(--text-muted);">Support Visits</p>
+          </div>
+          <div style="text-align: center; padding: 2rem;">
+            <div class="stat-number" style="font-size: 3.5rem; font-family: var(--font-family-headline); font-weight: 400; line-height: 1; -webkit-text-fill-color: transparent; -webkit-text-stroke: 1px var(--text-main);">--</div>
+            <p style="text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; margin-top: 1rem; color: var(--text-muted);">AMC Customers</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: CLIENT SUCCESS SECTION -->
+    <section class="py-5 bg-alt">
+      <div class="container grid-2" style="align-items: center;">
+        <div>
+          <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Engineered for Total Reliability</h2>
+          <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">
+            A successful security project goes beyond just hanging cameras. We take immense pride in the neatness of our cabling, the precision of our hardware alignment, and the absolute stability of the network infrastructure we leave behind.
+          </p>
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.5rem;">
+            <li style="display: flex; align-items: flex-start; gap: 1rem;">
+              <div style="background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 50%; color: var(--text-main);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; font-size: 1.1rem;">Professional Installation</h4>
+                <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">Flawless execution minimizing visible wiring and operational disruption.</p>
+              </div>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 1rem;">
+              <div style="background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 50%; color: var(--text-main);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </div>
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; font-size: 1.1rem;">Quality Assurance</h4>
+                <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">Rigorous post-installation testing of feeds, locks, and sync states.</p>
+              </div>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 1rem;">
+              <div style="background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 50%; color: var(--text-main);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              </div>
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; font-size: 1.1rem;">Long-Term Support</h4>
+                <p style="color: var(--text-muted); margin: 0; font-size: 0.95rem;">Rapid response diagnostics for complete peace of mind.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--border-radius); display: flex; align-items: center; justify-content: center; min-height: 500px;">
+           <span style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; padding: 2rem;">Server Rack & Infrastructure<br>Image Placeholder</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 9: CALL TO ACTION -->
+    <section class="py-5" style="text-align: center; margin: 4rem 0;">
+      <div class="container">
+        <h2 style="font-size: 3rem; margin-bottom: 2rem;">Ready To Start Your Security Project?</h2>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="/contact.html" class="btn btn-primary">Get Free Quote</a>
+          <a href="/contact.html" class="btn btn-outline">Contact Us</a>
+          <a href="#" class="btn btn-secondary">WhatsApp Us</a>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Footer Placeholder -->
+  <!-- FOOTER -->
   <div id="footer-placeholder"></div>
 
   <script src="/js/component-loader.js"></script>
