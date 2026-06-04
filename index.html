@@ -74,6 +74,26 @@
       border-radius: 4px;
     }
     @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+      z-index: 1000; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .modal-overlay.active {
+      opacity: 1; pointer-events: auto;
+    }
+    .modal-content {
+      background: var(--bg-main); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--border-radius); width: 90%; max-height: 90vh;
+      overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      transform: translateY(20px); transition: transform 0.3s;
+    }
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -103,28 +123,6 @@
     </div>
   </section>
 
-  <!-- SECTION 3: SERVICES SECTION -->
-  <section class="py-5 bg-alt">
-    <div class="container">
-      <div class="section-header">
-        <h2>Our Security Solutions</h2>
-        <p>Comprehensive, state-of-the-art protection tailored for your specific environment.</p>
-      </div>
-      
-      <!-- Future Supabase Product Catalog Integration -->
-      <div id="services-container" class="grid-4">
-        <!-- 8 Placeholder Service Cards -->
-        <div class="card"><div class="icon-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg></div><h3>CCTV Installation</h3><p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Professional high-definition camera deployments.</p></div>
-        <div class="card"><div class="icon-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg></div><h3>IP Camera Setup</h3><p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Network-based surveillance with remote access.</p></div>
-        <div class="card"><div class="icon-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg></div><h3>Wireless CCTV</h3><p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Clean, cable-free camera solutions for modern spaces.</p></div>
-        <div class="card"><div class="icon-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><h3>Biometric Attendance</h3><p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Accurate employee tracking and identity verification.</p></div>
-        <div class="card"><div class="icon-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><h3>Access Control Systems</h3><p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Secure door locks and centralized entry management.</p></div>
-        <div class="card"><div class="icon-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></div><h3>Video Door Phone</h3><p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Communicate safely with visitors before opening.</p></div>
-        <div class="card"><div class="icon-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div><h3>Networking Solutions</h3><p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Robust infrastructure for continuous surveillance data.</p></div>
-        <div class="card"><div class="icon-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div><h3>AMC Services</h3><p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Comprehensive annual maintenance contracts for peace of mind.</p></div>
-      </div>
-    </div>
-  </section>
 
   <!-- SECTION 4: FEATURED PRODUCTS -->
   <section class="py-5">
@@ -134,111 +132,13 @@
         <p>Top-tier equipment sourced from trusted global manufacturing partners.</p>
       </div>
       
-      <!-- Future Featured Product Catalog Integration -->
+      <!-- Dynamic Featured Product Catalog Integration -->
       <div id="featured-products-container" class="grid-3">
-        <!-- 6 Placeholder Products -->
-        <div class="card">
-          <div class="product-image">Camera Image Placeholder</div>
-          <span style="color: var(--accent-color); font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Surveillance</span>
-          <h3 style="margin: 0.5rem 0;">CCTV Camera</h3>
-          <p class="mb-2" style="color: var(--text-muted); font-size: 0.95rem;">High-definition analog security cameras designed for robust continuous surveillance.</p>
-        </div>
-        <div class="card">
-          <div class="product-image">IP Camera Placeholder</div>
-          <span style="color: var(--accent-color); font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Network</span>
-          <h3 style="margin: 0.5rem 0;">IP Camera</h3>
-          <p class="mb-2" style="color: var(--text-muted); font-size: 0.95rem;">Advanced network cameras offering superior resolution and edge analytics.</p>
-        </div>
-        <div class="card">
-          <div class="product-image">Biometric Image Placeholder</div>
-          <span style="color: var(--accent-color); font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Access</span>
-          <h3 style="margin: 0.5rem 0;">Biometric Device</h3>
-          <p class="mb-2" style="color: var(--text-muted); font-size: 0.95rem;">Secure attendance logging via state-of-the-art fingerprint and facial recognition.</p>
-        </div>
-        <div class="card">
-          <div class="product-image">Smart Lock Placeholder</div>
-          <span style="color: var(--accent-color); font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Hardware</span>
-          <h3 style="margin: 0.5rem 0;">Smart Door Lock</h3>
-          <p class="mb-2" style="color: var(--text-muted); font-size: 0.95rem;">Keyless entry systems integrating RFID, PIN, and biometric technologies.</p>
-        </div>
-        <div class="card">
-          <div class="product-image">Control Panel Placeholder</div>
-          <span style="color: var(--accent-color); font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">System</span>
-          <h3 style="margin: 0.5rem 0;">Access Control System</h3>
-          <p class="mb-2" style="color: var(--text-muted); font-size: 0.95rem;">Centralized gate and door management for authorizing facility personnel.</p>
-        </div>
-        <div class="card">
-          <div class="product-image">VDP System Placeholder</div>
-          <span style="color: var(--accent-color); font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Intercom</span>
-          <h3 style="margin: 0.5rem 0;">Video Door Phone</h3>
-          <p class="mb-2" style="color: var(--text-muted); font-size: 0.95rem;">High-resolution video intercoms to verify visitors instantly and safely.</p>
-        </div>
+        <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">Loading featured products...</div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 5: WHY CHOOSE US -->
-  <section class="py-5 bg-dark">
-    <div class="container">
-      <div class="section-header">
-        <h2 style="color: #fff;">Why Choose Us</h2>
-        <p style="color: #cbd5e1;">Delivering excellence, reliability, and peace of mind in every deployment.</p>
-      </div>
-      
-      <div class="grid-3" style="margin-bottom: 4rem;">
-        <div style="background: rgba(255,255,255,0.03); padding: 2.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-          <div style="color: var(--accent-color); margin-bottom: 1rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-          <h3 style="color: #fff; font-size: 1.25rem;">Expert Technicians</h3>
-          <p style="color: #94a3b8; font-size: 0.95rem; margin-top: 0.5rem;">Fully certified, highly trained personnel handling your security infrastructure.</p>
-        </div>
-        <div style="background: rgba(255,255,255,0.03); padding: 2.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-          <div style="color: var(--accent-color); margin-bottom: 1rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div>
-          <h3 style="color: #fff; font-size: 1.25rem;">Fast Installation</h3>
-          <p style="color: #94a3b8; font-size: 0.95rem; margin-top: 0.5rem;">Rapid deployment processes ensuring minimal downtime for your operations.</p>
-        </div>
-        <div style="background: rgba(255,255,255,0.03); padding: 2.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-          <div style="color: var(--accent-color); margin-bottom: 1rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
-          <h3 style="color: #fff; font-size: 1.25rem;">AMC Support</h3>
-          <p style="color: #94a3b8; font-size: 0.95rem; margin-top: 0.5rem;">Priority maintenance and support contracts to keep systems online 24/7.</p>
-        </div>
-        <div style="background: rgba(255,255,255,0.03); padding: 2.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-          <div style="color: var(--accent-color); margin-bottom: 1rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
-          <h3 style="color: #fff; font-size: 1.25rem;">Modern Technology</h3>
-          <p style="color: #94a3b8; font-size: 0.95rem; margin-top: 0.5rem;">We utilize the latest hardware from top brands globally to ensure durability.</p>
-        </div>
-        <div class="glass-card-dark">
-          <div style="color: var(--accent-color); margin-bottom: 1rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
-          <h3 style="color: #fff; font-size: 1.25rem;">Reliable Service</h3>
-          <p style="color: #94a3b8; font-size: 0.95rem; margin-top: 0.5rem;">Our customer-first approach means we don't rest until your premises are secure.</p>
-        </div>
-        <div class="glass-card-dark">
-          <div style="color: var(--accent-color); margin-bottom: 1rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
-          <h3 style="color: #fff; font-size: 1.25rem;">Customer Satisfaction</h3>
-          <p style="color: #94a3b8; font-size: 0.95rem; margin-top: 0.5rem;">Thousands of happy homeowners and businesses trust our solutions daily.</p>
-        </div>
-      </div>
-
-      <div class="grid-4" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 3rem;">
-        <div class="stat-card">
-          <div class="stat-number">500+</div>
-          <div style="color: #cbd5e1; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Projects</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">1000+</div>
-          <div style="color: #cbd5e1; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Devices Installed</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">98%</div>
-          <div style="color: #cbd5e1; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Client Satisfaction</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">24/7</div>
-          <div style="color: #cbd5e1; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Support</div>
-        </div>
-      </div>
-
-    </div>
-  </section>
 
   <!-- SECTION 6: CLIENT SHOWCASE -->
   <section class="py-5 bg-alt">
@@ -283,72 +183,68 @@
     </div>
   </section>
 
-  <!-- SECTION 7: CUSTOMER PORTAL FEATURES -->
-  <section class="py-5">
-    <div class="container">
-      <div class="section-header">
-        <h2>Smart Customer Portal</h2>
-        <p>Manage your security products, AMC contracts, and support tickets seamlessly online.</p>
-      </div>
-      <!-- Future Customer Dashboard Integration -->
-      <div class="grid-3">
-        <div class="card" style="text-align: center;">
-          <div style="color: var(--primary-color); margin-bottom: 1rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
-          <h3>Track Complaints</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem;">Log tickets and get real-time status updates.</p>
-        </div>
-        <div class="card" style="text-align: center;">
-          <div style="color: var(--primary-color); margin-bottom: 1rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
-          <h3>View Warranty</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem;">Check active hardware coverage instantly.</p>
-        </div>
-        <div class="card" style="text-align: center;">
-          <div style="color: var(--primary-color); margin-bottom: 1rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path><path d="M14 3v5h5M16 13H8M16 17H8M10 9H8"></path></svg></div>
-          <h3>AMC Management</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem;">Monitor and renew maintenance contracts.</p>
-        </div>
-        <div class="card" style="text-align: center;">
-          <div style="color: var(--primary-color); margin-bottom: 1rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
-          <h3>Service History</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem;">Maintain a permanent log of all technician visits.</p>
-        </div>
-        <div class="card" style="text-align: center;">
-          <div style="color: var(--primary-color); margin-bottom: 1rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
-          <h3>Download Invoices</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem;">Access and securely download billing records.</p>
-        </div>
-        <div class="card" style="text-align: center;">
-          <div style="color: var(--primary-color); margin-bottom: 1rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
-          <h3>Submit Reviews</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem;">Share your honest feedback directly with us.</p>
-        </div>
-      </div>
-      
-      <div class="text-center" style="margin-top: 3rem;">
-        <a href="/signup.html" class="btn btn-secondary">Create Your Account</a>
-      </div>
-    </div>
-  </section>
 
-  <!-- SECTION 8: TESTIMONIALS -->
-  <section class="py-5 bg-alt">
-    <div class="container">
-      <div class="section-header">
-        <h2>What Our Clients Say</h2>
-        <p>Don't just take our word for it—hear from our verified customers.</p>
-        <div id="average-rating-container" style="margin-top: 1rem; font-family: var(--font-family-headline); display: flex; align-items: center; gap: 0.5rem;">
-          <!-- Loaded via JS -->
-        </div>
-      </div>
+  <!-- Detailed Modal -->
+  <div id="showcase-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 800px; padding: 0; overflow: hidden; background: #1a1a1a; position: relative;">
+      <span class="close-modal" onclick="window.closeModal('showcase-modal')" style="position:absolute; right:1rem; top:1rem; background:rgba(0,0,0,0.5); border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:#fff; z-index:10; cursor:pointer;">&times;</span>
       
-      <!-- Verified Reviews Integration -->
-      <div id="reviews-container" class="grid-3">
-        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; color: var(--text-muted);">
-          Loading testimonials...
+      <img id="modal-img" src="" style="width: 100%; max-height: 400px; object-fit: cover; display: block; background: #0a0a0a;">
+      
+      <div style="padding: 2rem;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
+          <div>
+            <div id="modal-client" style="color:var(--primary-color); font-weight:600; font-size:1.1rem;"></div>
+            <h2 id="modal-project" style="margin: 0.25rem 0;"></h2>
+            <div id="modal-loc" style="color:var(--text-muted); font-size:0.9rem; display:flex; align-items:center; gap:0.25rem;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span></span>
+            </div>
+          </div>
+          <div id="modal-badge-container"></div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.02); padding:1.5rem; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+          <h4 style="margin:0 0 0.5rem 0; color:var(--text-main); font-size:0.9rem; text-transform:uppercase; letter-spacing:0.05em;">Project Details</h4>
+          <div id="modal-details" style="color:var(--text-main); line-height:1.6; white-space:pre-wrap;"></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- Product Modal -->
+  <div id="product-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 800px; padding: 0; overflow-y: auto; overflow-x: hidden; background: #1a1a1a; position: relative;">
+      <span class="close-modal" onclick="window.closeModal('product-modal')" style="position:absolute; right:1rem; top:1rem; background:rgba(0,0,0,0.5); border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:#fff; z-index:10; cursor:pointer;">&times;</span>
+      
+      <img id="prod-modal-img" src="" style="width: 100%; max-height: 400px; object-fit: contain; display: block; background: #fff;">
+      
+      <div style="padding: 2rem;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <div style="color:var(--primary-color); font-weight:600; font-size:1.1rem; margin-bottom:0.25rem;"><span id="prod-modal-brand"></span> • <span id="prod-modal-category"></span></div>
+            <h2 id="prod-modal-title" style="margin: 0 0 0.25rem 0;"></h2>
+            <div style="color:var(--text-muted); font-size:0.95rem;">Model: <span id="prod-modal-model"></span></div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary-color);" id="prod-modal-price"></div>
+          </div>
+        </div>
+
+        <p id="prod-modal-short-desc" style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 2rem; border-left: 3px solid var(--primary-color); padding-left: 1rem;"></p>
+
+        <div style="background:rgba(255,255,255,0.02); padding:1.5rem; border-radius:8px; border:1px solid rgba(255,255,255,0.05); margin-bottom: 1.5rem;">
+          <h4 style="margin:0 0 0.75rem 0; color:var(--text-main); font-size:1rem; text-transform:uppercase; letter-spacing:0.05em;">Description</h4>
+          <div id="prod-modal-full-desc" style="color:var(--text-main); line-height:1.6;"></div>
+        </div>
+
+        <div id="prod-modal-specs-container" style="background:rgba(255,255,255,0.02); padding:1.5rem; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+          <h4 style="margin:0 0 0.75rem 0; color:var(--text-main); font-size:1rem; text-transform:uppercase; letter-spacing:0.05em;">Specifications</h4>
+          <div id="prod-modal-specs" style="color:var(--text-main); line-height:1.6; white-space: pre-wrap;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- SECTION 9: CALL TO ACTION -->
   <section class="py-5 bg-dark text-center">
@@ -365,57 +261,20 @@
     </div>
   </section>
 
-  <!-- SECTION 10: CONTACT PREVIEW -->
-  <section class="py-5">
-    <div class="container grid-2" style="align-items: center;">
-      <div style="padding-right: 2rem;">
-        <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Get In Touch</h2>
-        <p style="color: var(--text-muted); margin-bottom: 3rem; font-size: 1.1rem;">We're here to answer any questions about your unique security needs.</p>
-        
-        <div style="margin-bottom: 2rem; display: flex; gap: 1rem;">
-          <div style="color: var(--primary-color);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
-          <div>
-            <h4 style="margin-bottom: 0.25rem; font-size: 1.1rem;">Phone</h4>
-            <p style="color: var(--text-muted);">+91 98765 43210</p>
-          </div>
-        </div>
-        
-        <div style="margin-bottom: 2rem; display: flex; gap: 1rem;">
-          <div style="color: var(--primary-color);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div>
-          <div>
-            <h4 style="margin-bottom: 0.25rem; font-size: 1.1rem;">Email</h4>
-            <p style="color: var(--text-muted);">info@vigilanteye.com</p>
-          </div>
-        </div>
-        
-        <div style="margin-bottom: 3rem; display: flex; gap: 1rem;">
-          <div style="color: var(--primary-color);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
-          <div>
-            <h4 style="margin-bottom: 0.25rem; font-size: 1.1rem;">Address</h4>
-            <p style="color: var(--text-muted); line-height: 1.5;">123 Security Avenue, Tech District,<br>Mumbai, MH 400001, India</p>
-          </div>
-        </div>
-        
-        <a href="/contact.html" class="btn btn-primary">Open Contact Form</a>
-      </div>
-      
-      <div>
-        <div class="image-placeholder" style="height: 100%; min-height: 450px; background: var(--bg-alt); border-color: var(--border-color); color: var(--text-muted); border-radius: 12px; box-shadow: var(--shadow-sm);">
-          Interactive Google Map Placeholder
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- SECTION 11: FOOTER -->
   <div id="footer-placeholder"></div>
 
   <script src="/js/component-loader.js"></script>
-  <script type="module" src="/js/testimonials.js"></script>
+  <script type="module" src="/js/index.js"></script>
   <script type="module">
     import { fetchAllProjects } from '/js/showcase.js';
     // Fetch top 6 featured projects
     fetchAllProjects(6, true);
+  </script>
+  <script>
+    window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
+    window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
   </script>
 </body>
 </html>

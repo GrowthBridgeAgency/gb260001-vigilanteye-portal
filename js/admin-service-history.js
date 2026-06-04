@@ -66,7 +66,7 @@ async function fetchDependencies() {
       });
     }
 
-    const { data: tData } = await supabase.from('technicians').select('id, technician_name, status');
+    const { data: tData } = await supabase.from('technicians').select('id, technician_name, is_active');
     if (tData) {
       allTechnicians = tData;
       const select = document.getElementById('sr-tech');
