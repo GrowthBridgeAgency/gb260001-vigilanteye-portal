@@ -129,7 +129,7 @@ function renderPlatformSummary(customers, products, complaints, services, invoic
       <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Service Visits</div>
     </div>
     <div style="background:rgba(255,255,255,0.02); padding:1rem; border:1px solid rgba(255,255,255,0.05); border-radius:8px; text-align:center; grid-column: 1 / -1;">
-      <div style="font-size:1.5rem; font-weight:bold; color:#4ade80;">$${totalRevenue.toFixed(2)}</div>
+      <div style="font-size:1.5rem; font-weight:bold; color:#4ade80;">₹${totalRevenue.toFixed(2)}</div>
       <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Total Platform Revenue</div>
     </div>
   `;
@@ -162,7 +162,7 @@ function renderActivityTimeline(complaints, services, invoices, reviews, enquiri
   invoices.forEach(i => {
     events.push({
       title: `Invoice Generated: ${i.invoice_number}`,
-      desc: `Amount: $${i.amount} - ${i.status}`,
+      desc: `Amount: ₹${i.amount} - ${i.status}`,
       date: new Date(i.created_at),
       icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>'
     });
