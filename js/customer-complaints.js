@@ -358,6 +358,49 @@ window.viewComplaint = async function(id) {
        </div>` 
     : '';
 
+  // Fetch linked service history
+  let serviceHtml = '';
+  try {
+    const { data: services, error: servErr } = await supabase
+      .from('service_history')
+      .select('*')
+      .eq('complaint_id', id)
+      .limit(1);
+    
+    if (services && services.length > 0) {
+      const s = services[0];
+      const match = (s.service_details || '').match(/^\\[OUTCOME:\s*(.+?)\\]\s*(.*)$/is);
+      const outcome = match ? match[1].trim() : 'Completed';
+      const notes = match ? match[2].trim() : (s.service_details || '');
+      
+      let bClass = 'outcome-completed';
+      if(outcome === 'Partially Resolved') bClass = 'outcome-partial';
+      if(outcome === 'Follow-up Required') bClass = 'outcome-followup';
+      if(outcome === 'Parts Replacement Needed') bClass = 'outcome-parts';
+      if(outcome === 'AMC Maintenance Completed') bClass = 'outcome-amc';
+
+      serviceHtml = `
+        <div style="background:rgba(255,255,255,0.02); padding:1rem; border-radius:4px; margin-bottom:1.5rem; border:1px solid rgba(255,255,255,0.05);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <h4 style="margin:0; color:var(--text-main);">Official Service Report</h4>
+            <span style="display:inline-block; padding:0.25rem 0.5rem; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase; ${
+              bClass === 'outcome-completed' ? 'background: rgba(34,197,94,0.1); color: #86efac;' : 
+              bClass === 'outcome-partial' ? 'background: rgba(245,158,11,0.1); color: #fcd34d;' :
+              bClass === 'outcome-followup' ? 'background: rgba(239,68,68,0.1); color: #fca5a5;' :
+              bClass === 'outcome-parts' ? 'background: rgba(168,85,247,0.1); color: #d8b4fe;' :
+              'background: rgba(56,189,248,0.1); color: #7dd3fc;'
+            }">${outcome}</span>
+          </div>
+          <p style="margin:0 0 0.5rem 0; font-size:0.9rem;"><strong>Date:</strong> ${new Date(s.service_date).toLocaleDateString('en-IN')}</p>
+          <p style="margin:0 0 0.5rem 0; font-size:0.9rem;"><strong>Technician:</strong> ${s.technician_name}</p>
+          <div style="background:var(--bg-main); padding:0.75rem; border-radius:4px; font-size:0.9rem; white-space:pre-wrap;">${notes}</div>
+        </div>
+      `;
+    }
+  } catch(e) {
+    console.error("Error fetching service log:", e);
+  }
+
   body.innerHTML = `
     <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem;">
       <div>
@@ -368,6 +411,7 @@ window.viewComplaint = async function(id) {
     </div>
 
     ${resolutionBlock}
+    ${serviceHtml}
     ${techBlock}
 
     <h4 style="margin:0 0 0.5rem 0; color:var(--text-main);">Description</h4>

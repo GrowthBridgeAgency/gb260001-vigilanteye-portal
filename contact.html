@@ -179,7 +179,7 @@
           
           <!-- Future Enquiries Table Integration -->
           <form id="enquiry-form">
-            <div class="grid-2" style="gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="grid-3" style="gap: 1.5rem; margin-bottom: 1.5rem;">
               <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" class="form-control" placeholder="Your Full Name" required>
@@ -187,6 +187,10 @@
               <div class="form-group">
                 <label for="mobile_number">Mobile Number</label>
                 <input type="tel" id="mobile_number" name="mobile_number" class="form-control" placeholder="+91 XXXXX XXXXX" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com">
               </div>
             </div>
 
@@ -229,7 +233,7 @@
             </div>
 
             <div style="display: flex; gap: 1rem;">
-              <button type="button" class="btn btn-primary" style="flex: 1;">Submit Enquiry</button>
+              <button type="submit" id="btn-submit-enquiry" class="btn btn-primary" style="flex: 1;">Submit Enquiry</button>
               <button type="reset" class="btn btn-outline" style="flex: 1;">Reset Form</button>
             </div>
           </form>
@@ -440,5 +444,6 @@
   <div id="footer-placeholder"></div>
 
   <script src="/js/component-loader.js"></script>
+  <script type="module" src="/js/contact-form.js"></script>
 </body>
 </html>

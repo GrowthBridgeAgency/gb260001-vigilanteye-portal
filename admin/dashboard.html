@@ -3,31 +3,330 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | VigilantEye</title>
+  <title>Analytics Dashboard | VigilantEye Admin</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
   <link rel="stylesheet" href="/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Dashboard specific layout */
+    .filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      background: rgba(255,255,255,0.02);
+      padding: 1rem 1.5rem;
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .kpi-section {
+      margin-bottom: 2rem;
+    }
+    
+    .kpi-section-title {
+      font-size: 1.1rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .metric-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s;
+    }
+    .metric-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.15);
+    }
+    
+    .metric-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      font-family: var(--font-family-headline);
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .chart-container {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .activity-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .activity-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 1rem;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .activity-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Light Mode Overrides */
+    body[data-theme="light"] .metric-card { background: #fff; border-color: rgba(0,0,0,0.05); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    body[data-theme="light"] .metric-value { color: #000; }
+    body[data-theme="light"] .chart-container { background: #fff; border-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .activity-item { background: #fff; border-color: rgba(0,0,0,0.05); }
+  </style>
 </head>
 <body>
   <div class="dashboard-wrapper">
-    <!-- Sidebar Placeholder -->
     <div id="admin-sidebar-placeholder"></div>
-
     <main class="dashboard-main">
-      <!-- Header Placeholder -->
       <div id="admin-header-placeholder"></div>
-
-      <div class="dashboard-content">
-        <h1>Admin Dashboard</h1>
-        <div class="card">
-          <h3>System Overview</h3>
-          <p>Quick stats and active alerts will appear here.</p>
+      
+      <div class="dashboard-content" id="dashboard-root">
+        
+        <div class="filter-bar">
+          <div>
+            <h1 style="margin: 0; font-size: 1.8rem;">Command Center</h1>
+            <p style="margin: 0.25rem 0 0 0; color: var(--text-muted);">Real-time business insights and analytics.</p>
+          </div>
+          <div>
+            <select id="global-date-filter" class="form-control" style="width: 200px; margin: 0;">
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+              <option value="month" selected>This Month</option>
+              <option value="year">This Year</option>
+              <option value="all">All Time</option>
+            </select>
+          </div>
         </div>
+
+        <div id="loading-overlay" style="text-align:center; padding:4rem; color:var(--text-muted);">
+          <div class="spinner" style="border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--primary-color); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 1rem auto;"></div>
+          Fetching massive datasets...
+        </div>
+
+        <div id="analytics-content" style="display: none;">
+          
+          <!-- FINANCIAL KPIs -->
+          <div class="kpi-section">
+            <h3 class="kpi-section-title">Financial & Revenue</h3>
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-title">Total Revenue</div>
+                <div class="metric-value" style="color: #22c55e;" id="kpi-rev-total">₹0</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-title">Monthly Revenue</div>
+                <div class="metric-value" style="color: #4ade80;" id="kpi-rev-monthly">₹0</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-title">Average Invoice Value</div>
+                <div class="metric-value" style="color: #86efac;" id="kpi-rev-avg">₹0</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-title">Outstanding Revenue</div>
+                <div class="metric-value" style="color: #f87171;" id="kpi-rev-out">₹0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- COMPLAINTS & SLA -->
+          <div class="kpi-section">
+            <h3 class="kpi-section-title">Support & Complaints</h3>
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-title">Open Tickets</div>
+                <div class="metric-value" style="color: #fca5a5;" id="kpi-comp-open">0</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-title">In Progress</div>
+                <div class="metric-value" style="color: #fcd34d;" id="kpi-comp-prog">0</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-title">Resolved Tickets</div>
+                <div class="metric-value" style="color: #86efac;" id="kpi-comp-res">0</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-title">Avg Resolution Time</div>
+                <div class="metric-value" style="color: #93c5fd;" id="kpi-comp-sla">-</div>
+              </div>
+              <div class="metric-card" style="border-color: rgba(239,68,68,0.3);">
+                <div class="metric-title">Aging > 7 Days</div>
+                <div class="metric-value" style="color: #ef4444;" id="kpi-comp-aging">0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CRM LEADS -->
+          <div class="kpi-section">
+            <h3 class="kpi-section-title">Lead Pipeline</h3>
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-title">Total Leads</div>
+                <div class="metric-value" id="kpi-lead-total">0</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-title">Converted Leads</div>
+                <div class="metric-value" style="color: #22c55e;" id="kpi-lead-conv">0</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-title">Conversion Rate</div>
+                <div class="metric-value" style="color: #fcd34d;" id="kpi-lead-rate">0%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHARTS SECTION -->
+          <div class="charts-grid">
+            <div class="chart-container">
+              <h4 style="margin:0 0 1rem 0; color:var(--text-main);">Revenue Trend (Last 6 Months)</h4>
+              <canvas id="chart-revenue" height="250"></canvas>
+            </div>
+            <div class="chart-container">
+              <h4 style="margin:0 0 1rem 0; color:var(--text-main);">Ticket Status Distribution</h4>
+              <canvas id="chart-complaints" height="250"></canvas>
+            </div>
+            <div class="chart-container">
+              <h4 style="margin:0 0 1rem 0; color:var(--text-main);">Lead Funnel</h4>
+              <canvas id="chart-funnel" height="250"></canvas>
+            </div>
+            <div class="chart-container">
+              <h4 style="margin:0 0 1rem 0; color:var(--text-main);">Service History Volume</h4>
+              <canvas id="chart-services" height="250"></canvas>
+            </div>
+          </div>
+
+          <!-- HARDWARE & AMC -->
+          <div class="kpi-section">
+            <h3 class="kpi-section-title">Hardware & AMC Tracking</h3>
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-title">Total Products Installed</div>
+                <div class="metric-value" id="kpi-prod-total">0</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-title">Active AMC Contracts</div>
+                <div class="metric-value" style="color: #22c55e;" id="kpi-amc-active">0</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-title">AMC Expiring (<30 Days)</div>
+                <div class="metric-value" style="color: #fcd34d;" id="kpi-amc-expiring">0</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-title">AMC Expired</div>
+                <div class="metric-value" style="color: #f87171;" id="kpi-amc-expired">0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECONDARY GRIDS -->
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom:2rem;">
+            <!-- CUSTOMERS & REVIEWS -->
+            <div>
+              <div class="metrics-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="metric-card">
+                  <div class="metric-title">Total Customers</div>
+                  <div class="metric-value" id="kpi-cust-total">0</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-title">Avg Review Rating</div>
+                  <div class="metric-value" style="color: #fcd34d;" id="kpi-rev-rating">0.0</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-title">Total Techs</div>
+                  <div class="metric-value" id="kpi-tech-total">0</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-title">Active Techs</div>
+                  <div class="metric-value" style="color: #22c55e;" id="kpi-tech-active">0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- UNIFIED ACTIVITY FEED -->
+            <div class="card" style="margin: 0; display:flex; flex-direction:column; max-height: 400px;">
+              <h3 style="margin-top:0; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:1rem;">Unified Activity Feed</h3>
+              <div class="activity-feed" id="activity-feed" style="overflow-y:auto; padding-right:0.5rem; flex:1;">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TABLES SECTION -->
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            
+            <div class="card">
+              <h3 style="margin-top:0;">Top Customers</h3>
+              <table class="data-table">
+                <thead><tr><th>Name</th><th>Products</th><th>Tickets</th></tr></thead>
+                <tbody id="table-customers"></tbody>
+              </table>
+            </div>
+
+            <div class="card">
+              <h3 style="margin-top:0;">Top Products</h3>
+              <table class="data-table">
+                <thead><tr><th>Model</th><th>Installs</th></tr></thead>
+                <tbody id="table-products"></tbody>
+              </table>
+            </div>
+
+            <div class="card">
+              <h3 style="margin-top:0;">Technician Performance</h3>
+              <table class="data-table">
+                <thead><tr><th>Technician</th><th>Services</th></tr></thead>
+                <tbody id="table-techs"></tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </div> <!-- end analytics-content -->
       </div>
     </main>
   </div>
 
+  <style>
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
+
   <script src="/js/component-loader.js"></script>
-  <script src="/js/admin.js"></script>
+  <script type="module" src="/js/admin-dashboard.js"></script>
 </body>
 </html>

@@ -123,6 +123,7 @@ function renderTable() {
       if (!matchTicket && !matchCust && !matchProd) return false;
     }
     // Filters
+    if (statusFilter === 'all' && c.status === 'Resolved') return false;
     if (statusFilter !== 'all' && c.status !== statusFilter) return false;
     if (priorityFilter !== 'all' && c.priority !== priorityFilter) return false;
     if (technicianFilter !== 'all' && String(c.technician_id) !== technicianFilter) return false;
@@ -251,6 +252,24 @@ async function handleSaveManagement(e) {
     showToast('Complaint updated successfully.', 'success');
     window.closeModal('manage-modal');
     fetchData(); // Refresh
+
+    // AUTO-INSERT SERVICE RECORD
+    if (originalComplaint.status !== 'Resolved' && newStatus === 'Resolved') {
+      try {
+        const servicePayload = {
+          customer_id: originalComplaint.customer_id,
+          product_id: parseInt(originalComplaint.product_id, 10),
+          complaint_id: parseInt(id, 10),
+          service_date: new Date().toISOString().split('T')[0],
+          service_type: 'Complaint Resolution',
+          technician_name: assignedName || '',
+          service_details: `[OUTCOME: Completed] ${resNotes || adminNotes || 'Complaint marked as resolved automatically.'}`
+        };
+        await supabase.from('service_history').insert([servicePayload]);
+      } catch (err) {
+        console.error('Auto-service record error:', err);
+      }
+    }
 
   } catch (error) {
     console.error('Update error:', error);

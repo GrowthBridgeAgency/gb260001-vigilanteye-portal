@@ -3,37 +3,172 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Enquiries | VigilantEye Admin</title>
+  <title>CRM: Manage Enquiries | VigilantEye Admin</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
   <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .metric-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #fff;
+      font-family: var(--font-family-headline);
+    }
+    
+    .priority-badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .priority-high { background: rgba(239,68,68,0.1); color: #fca5a5; }
+    .priority-medium { background: rgba(245,158,11,0.1); color: #fcd34d; }
+    .priority-low { background: rgba(34,197,94,0.1); color: #86efac; }
+    
+    body[data-theme="light"] .metric-card { background: #fff; border-color: rgba(0,0,0,0.05); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    body[data-theme="light"] .metric-value { color: #000; }
+  </style>
 </head>
 <body>
   <div class="dashboard-wrapper">
     <div id="admin-sidebar-placeholder"></div>
     <main class="dashboard-main">
       <div id="admin-header-placeholder"></div>
+      
       <div class="dashboard-content">
-        <h1>Manage Enquiries</h1>
-        <div class="card">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Mobile</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td colspan="4">Loading...</td></tr>
-            </tbody>
-          </table>
+        <h1 style="margin-top: 0; margin-bottom: 1.5rem;">CRM: Manage Leads</h1>
+
+        <!-- Dashboard Summary -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-title">Total Leads</div>
+            <div class="metric-value" id="metric-total">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">New Leads</div>
+            <div class="metric-value" style="color: #60a5fa;" id="metric-new">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Contacted Leads</div>
+            <div class="metric-value" style="color: #fcd34d;" id="metric-contacted">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Converted Leads</div>
+            <div class="metric-value" style="color: #86efac;" id="metric-converted">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Today's Leads</div>
+            <div class="metric-value" id="metric-today">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">This Week's Leads</div>
+            <div class="metric-value" id="metric-week">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Average Budget</div>
+            <div class="metric-value" style="color: #a78bfa;" id="metric-budget">₹0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Conversion Rate</div>
+            <div class="metric-value" style="color: #86efac;" id="metric-conversion">0%</div>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div style="padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 1rem; flex-wrap: wrap;">
+            <input type="text" id="search-input" class="form-control" placeholder="Search name, mobile, email, location..." style="width: 250px; margin: 0;">
+            <select id="filter-status" class="form-control" style="width: 180px; margin: 0;">
+              <option value="All">All Status</option>
+              <option value="New">New</option>
+              <option value="Contacted">Contacted</option>
+              <option value="Qualified">Qualified</option>
+              <option value="Quotation Sent">Quotation Sent</option>
+              <option value="Converted">Converted</option>
+              <option value="Closed">Closed</option>
+            </select>
+            <select id="filter-type" class="form-control" style="width: 180px; margin: 0;">
+              <option value="All">All Requirements</option>
+              <option value="CCTV Installation">CCTV Installation</option>
+              <option value="IP Camera Setup">IP Camera Setup</option>
+              <option value="Wireless CCTV">Wireless CCTV</option>
+              <option value="Biometric Attendance">Biometric Attendance</option>
+              <option value="Access Control">Access Control</option>
+              <option value="Video Door Phone">Video Door Phone</option>
+              <option value="Networking">Networking</option>
+              <option value="AMC Services">AMC Services</option>
+              <option value="CCTV Rental">CCTV Rental</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="leads-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Mobile</th>
+                  <th>Requirement</th>
+                  <th>Budget</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Days Open</th>
+                  <th>Date</th>
+                  <th style="text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="leads-tbody">
+                <tr><td colspan="9" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading enquiries...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </main>
   </div>
+
+  <!-- Lead Details Modal -->
+  <div class="modal-overlay" id="lead-modal">
+    <div class="modal-content" style="max-width: 700px;">
+      <div class="modal-header">
+        <h2>Lead Details</h2>
+        <button class="modal-close" onclick="window.closeModal('lead-modal')">&times;</button>
+      </div>
+      <div class="modal-body" id="lead-modal-body">
+        <!-- Injected via JS -->
+      </div>
+      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
+        <div id="quick-actions-container" style="display:flex; gap:0.5rem;"></div>
+        <button class="btn btn-outline" onclick="window.closeModal('lead-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
   <script src="/js/component-loader.js"></script>
-  <script src="/js/admin.js"></script>
+  <script type="module" src="/js/admin-enquiries.js"></script>
+  <script>
+    window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
+    window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
+  </script>
 </body>
 </html>

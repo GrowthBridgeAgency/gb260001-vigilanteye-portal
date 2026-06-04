@@ -115,7 +115,7 @@ function renderProducts(grid) {
   }).join('');
 }
 
-window.viewProductDetails = function(id) {
+window.viewProductDetails = async function(id) {
   const p = myProducts.find(x => x.id === id);
   if (!p) return;
 
@@ -168,4 +168,55 @@ window.viewProductDetails = function(id) {
     </div>
   `;
   document.getElementById('view-modal').classList.add('active');
+
+  // Fetch Service History for this Product
+  try {
+    const { data: services, error } = await supabase
+      .from('service_history')
+      .select('*')
+      .eq('product_id', p.id)
+      .order('service_date', { ascending: false });
+
+    if (error) throw error;
+
+    let serviceHtml = '';
+    if (!services || services.length === 0) {
+      serviceHtml = '<div style="color:var(--text-muted); font-size:0.9rem;">No service history logged for this product.</div>';
+    } else {
+      const latestService = services[0];
+      const lastDate = new Date(latestService.service_date).toLocaleDateString('en-IN');
+      
+      serviceHtml = `
+        <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); padding:1rem; border-radius:8px;">
+          <div class="grid-3" style="gap:1rem;">
+            <div>
+              <div style="color:var(--text-muted); font-size:0.85rem; text-transform:uppercase;">Last Service Date</div>
+              <div style="font-weight:600; font-size:1.05rem; color:#fff;">${lastDate}</div>
+            </div>
+            <div>
+              <div style="color:var(--text-muted); font-size:0.85rem; text-transform:uppercase;">Most Recent Tech</div>
+              <div style="font-weight:600; font-size:1.05rem; color:#fff;">${latestService.technician_name || 'Unknown'}</div>
+            </div>
+            <div>
+              <div style="color:var(--text-muted); font-size:0.85rem; text-transform:uppercase;">Total Visits</div>
+              <div style="font-weight:600; font-size:1.05rem; color:var(--primary-color);">${services.length}</div>
+            </div>
+          </div>
+          <div style="margin-top:1rem; text-align:right;">
+            <a href="/dashboard/service-history.html" class="btn btn-outline" style="padding:0.25rem 0.75rem; font-size:0.8rem;">View Full Logbook</a>
+          </div>
+        </div>
+      `;
+    }
+
+    body.innerHTML += `
+      <div style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem;">
+        <h4 style="color:var(--text-main); margin:0 0 1rem 0;">Maintenance & Service History</h4>
+        ${serviceHtml}
+      </div>
+    `;
+
+  } catch (err) {
+    console.error('Error loading service history for product:', err);
+  }
 };
