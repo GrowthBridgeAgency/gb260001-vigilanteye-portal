@@ -75,6 +75,19 @@ function setupCharCount() {
 async function fetchMyReviews() {
   tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:3rem; color:var(--text-muted);">Loading reviews...</td></tr>';
   
+  if (currentUser.id === 'mock-id') {
+    myReviews = [{
+      id: 1,
+      customer_id: 'mock-id',
+      rating: 5,
+      review: 'Excellent, Very fast responces',
+      approved: true,
+      created_at: new Date('2026-06-04T09:42:45.149Z').toISOString()
+    }];
+    renderTable();
+    return;
+  }
+  
   try {
     const { data, error } = await supabase
       .from('reviews')
@@ -146,12 +159,38 @@ async function handleReviewSubmit(e) {
   btnSubmit.disabled = true;
   btnSubmit.textContent = 'Submitting...';
 
+  // If mock mode is active, we mock the database insertion to avoid UUID/RLS constraints
+  if (currentUser.id === 'mock-id') {
+    const mockNewReview = {
+      id: Date.now(),
+      customer_id: currentUser.id,
+      rating: parseInt(ratingInput.value, 10),
+      review: text,
+      approved: false,
+      created_at: new Date().toISOString()
+    };
+    myReviews.unshift(mockNewReview);
+    renderTable();
+    
+    showToast('Review submitted successfully! Pending admin approval.', 'success');
+    
+    // Reset form
+    form.reset();
+    ratingInput.value = '';
+    stars.forEach(s => s.style.color = 'var(--text-muted)');
+    charCount.textContent = '0';
+    
+    btnSubmit.disabled = false;
+    btnSubmit.textContent = 'Submit Review';
+    return;
+  }
+
   try {
     const payload = {
       customer_id: currentUser.id,
       rating: parseInt(ratingInput.value, 10),
-      review: text,
-      approved: false // defaults to false in DB, but explicit here
+      review: text
+      // approved is omitted and will default to false in the database to satisfy columns RLS policies
     };
 
     const { error } = await supabase
