@@ -24,6 +24,7 @@ let fd = {};
 
 // Chart Instances
 let charts = { rev: null, comp: null, funnel: null, serv: null };
+window.charts = charts;
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadCurrentUser();
