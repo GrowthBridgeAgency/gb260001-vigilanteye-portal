@@ -20,10 +20,33 @@ async function fetchGalleryData() {
 
     renderFeaturedProjects(projects);
     renderGalleryGrid(projects);
+    setupFilters(projects);
     
   } catch (error) {
     console.error("Error fetching gallery data:", error);
   }
+}
+
+function setupFilters(projects) {
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      // Remove active class from all buttons
+      filterButtons.forEach(b => b.classList.remove('active'));
+      // Add active class to clicked button
+      btn.classList.add('active');
+      
+      const category = btn.textContent.trim();
+      if (category.toLowerCase() === 'all') {
+        renderGalleryGrid(projects);
+      } else {
+        const filtered = (projects || []).filter(p => {
+          return p.project_name && p.project_name.toLowerCase().includes(category.toLowerCase());
+        });
+        renderGalleryGrid(filtered);
+      }
+    });
+  });
 }
 
 function renderFeaturedProjects(projects) {
