@@ -117,3 +117,24 @@ document.addEventListener('change', (e) => {
     }
   }
 });
+
+// Mobile menu toggle logic
+document.addEventListener('click', (e) => {
+  const toggleBtn = e.target.closest('#mobile-menu-btn');
+  if (toggleBtn) {
+    const navbar = document.querySelector('.main-navbar');
+    if (navbar) {
+      navbar.classList.toggle('mobile-menu-active');
+    }
+    return;
+  }
+  
+  const navLink = e.target.closest('.nav-link');
+  if (navLink) {
+    const navbar = document.querySelector('.main-navbar');
+    if (navbar && navbar.classList.contains('mobile-menu-active')) {
+      navbar.classList.remove('mobile-menu-active');
+    }
+  }
+});
+

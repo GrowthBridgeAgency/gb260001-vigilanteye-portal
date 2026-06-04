@@ -55,7 +55,7 @@ export async function loadCurrentUser() {
     if (urlParams.has('mock')) {
       const mockRole = urlParams.get('mock') || 'admin';
       window.currentUser = { id: 'mock-id', email: 'mock@example.com' };
-      window.currentProfile = { id: 'mock-id', name: 'Mock User', email: 'mock@example.com', phone: '1234567890', role: mockRole };
+      window.currentProfile = { id: 'mock-id', name: 'Mock User', email: 'mock@example.com', phone: '1234567890', role: mockRole, created_at: '2026-01-01T00:00:00Z' };
       if (window.updateNavigationUI) window.updateNavigationUI();
       return { user: window.currentUser, profile: window.currentProfile };
     }

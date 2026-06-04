@@ -70,13 +70,15 @@ function renderBasicInfo() {
   document.getElementById('read_email').textContent = currentProfile.email || 'N/A';
   document.getElementById('read_role').textContent = currentProfile.role || 'customer';
   
-  const createdDate = new Date(currentProfile.created_at);
+  const createdDate = currentProfile.created_at ? new Date(currentProfile.created_at) : new Date();
   const now = new Date();
   const diffTime = Math.abs(now - createdDate);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const diffDays = isNaN(createdDate.getTime()) ? 0 : Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  const displayDate = isNaN(createdDate.getTime()) ? 'N/A' : createdDate.toLocaleDateString('en-GB');
   
   document.getElementById('read_since').innerHTML = `
-    <div style="font-weight:600; color:#fff;">${createdDate.toLocaleDateString('en-GB')}</div>
+    <div style="font-weight:600; color:#fff;">${displayDate}</div>
     <div style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">Member for ${diffDays} days</div>
   `;
 }
