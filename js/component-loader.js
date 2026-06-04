@@ -3,13 +3,15 @@
  * Utility to fetch and inject HTML partials into designated placeholders.
  */
 
+// Determine base path dynamically for GitHub Pages support
+const basePath = window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '';
+window.basePath = basePath; // Expose globally for other scripts
+
 document.addEventListener("DOMContentLoaded", () => {
-  loadComponent("navbar-placeholder", "/components/navbar.html");
-  loadComponent("footer-placeholder", "/components/footer.html");
-  loadComponent("customer-sidebar-placeholder", "/components/customer-sidebar.html");
-  loadComponent("customer-header-placeholder", "/components/customer-header.html");
-  loadComponent("admin-sidebar-placeholder", "/components/admin-sidebar.html");
-  loadComponent("admin-header-placeholder", "/components/admin-header.html");
+  loadComponent("navbar-placeholder", basePath + "/components/navbar.html");
+  loadComponent("footer-placeholder", basePath + "/components/footer.html");
+  loadComponent("customer-sidebar-placeholder", basePath + "/components/customer-sidebar.html");
+  loadComponent("admin-sidebar-placeholder", basePath + "/components/admin-sidebar.html");
 });
 
 async function loadComponent(elementId, componentPath) {
@@ -19,7 +21,15 @@ async function loadComponent(elementId, componentPath) {
   try {
     const response = await fetch(componentPath);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const html = await response.text();
+    let html = await response.text();
+    
+    // Rewrite root-relative URLs in components to include the base path
+    if (basePath) {
+      html = html.replace(/(href|src)=["']\/([^"']*)["']/g, (match, attr, path) => {
+        return `${attr}="${basePath}/${path}"`;
+      });
+    }
+    
     element.innerHTML = html;
     
     if (elementId === 'navbar-placeholder' && window.updateNavigationUI) {
@@ -34,8 +44,8 @@ async function loadComponent(elementId, componentPath) {
 // Dynamically load core modules sequentially:
 // 1. auth.js (Route protection)
 // 2. user-context.js (Populate globals like window.currentUser)
-import('/js/auth.js')
-  .then(() => import('/js/user-context.js'))
+import(basePath + '/js/auth.js')
+  .then(() => import(basePath + '/js/user-context.js'))
   .catch(err => console.error("Failed to load core modules:", err));
 
 // Global File Input Clear Utility

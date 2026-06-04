@@ -53,12 +53,7 @@
 
 /* Header Component */
 .dashboard-header {
-  background-color: transparent;
-  padding: 1.5rem 3rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: none !important;
 }
 
 .dashboard-header .user-info {

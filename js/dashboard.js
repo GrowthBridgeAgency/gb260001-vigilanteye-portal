@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   currentUser = window.currentUser;
   
   if (!isCustomer()) {
-    window.location.href = '/login.html';
+    const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
+    window.location.href = basePath + '/login.html';
     return;
   }
   
@@ -174,9 +175,9 @@ function renderAlerts(products) {
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
       if (diffDays <= 0) {
-        alertsHtml += `<div class="alert-card alert-danger"><div><strong>AMC Expired:</strong> ${p.product_name}</div><a href="/dashboard/amc.html" class="btn btn-primary" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Renew</a></div>`;
+        alertsHtml += `<div class="alert-card alert-danger"><div><strong>AMC Expired:</strong> ${p.product_name}</div><a href="${window.basePath || ''}/dashboard/amc.html" class="btn btn-primary" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Renew</a></div>`;
       } else if (diffDays <= 30) {
-        alertsHtml += `<div class="alert-card alert-warning"><div><strong>AMC Expiring in ${diffDays} days:</strong> ${p.product_name}</div><a href="/dashboard/amc.html" class="btn btn-outline" style="padding:0.25rem 0.5rem; font-size:0.75rem;">View</a></div>`;
+        alertsHtml += `<div class="alert-card alert-warning"><div><strong>AMC Expiring in ${diffDays} days:</strong> ${p.product_name}</div><a href="${window.basePath || ''}/dashboard/amc.html" class="btn btn-outline" style="padding:0.25rem 0.5rem; font-size:0.75rem;">View</a></div>`;
       }
     }
     
@@ -228,7 +229,7 @@ function renderProductsPreview(products) {
         </div>
         <div style="text-align:right; font-size:0.85rem;">
           <div>AMC: ${amcStatus}</div>
-          <div><a href="/dashboard/products.html" style="color:var(--primary-color);">Details</a></div>
+          <div><a href="${window.basePath || ''}/dashboard/products.html" style="color:var(--primary-color);">Details</a></div>
         </div>
       </div>
     `;

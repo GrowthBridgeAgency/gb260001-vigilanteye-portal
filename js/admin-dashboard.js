@@ -366,7 +366,7 @@ function buildActivityFeed() {
   }
 
   container.innerHTML = topFeed.map(f => `
-    <div class="activity-item">
+    <div class="activity-item" style="border-left-color: ${f.color} !important;">
       <div>
         <div style="color:${f.color}; font-size:0.75rem; text-transform:uppercase; font-weight:600;">${f.type}</div>
         <div style="font-weight:600; color:#fff;">${f.title}</div>

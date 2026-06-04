@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!isLoggedIn()) {
     showToast('Unauthorized access. Redirecting...', 'error');
     setTimeout(() => {
-      window.location.href = '/login.html';
+      const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
+      window.location.href = basePath + '/login.html';
     }, 1500);
     return;
   }
@@ -203,7 +204,7 @@ window.viewProductDetails = async function(id) {
             </div>
           </div>
           <div style="margin-top:1rem; text-align:right;">
-            <a href="/dashboard/service-history.html" class="btn btn-outline" style="padding:0.25rem 0.75rem; font-size:0.8rem;">View Full Logbook</a>
+            <a href="${window.basePath || ''}/dashboard/service-history.html" class="btn btn-outline" style="padding:0.25rem 0.75rem; font-size:0.8rem;">View Full Logbook</a>
           </div>
         </div>
       `;

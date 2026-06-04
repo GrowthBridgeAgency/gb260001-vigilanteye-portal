@@ -15,7 +15,8 @@ let allInvoices = [];
 document.addEventListener('DOMContentLoaded', async () => {
   await loadCurrentUser();
   if (!isAdmin()) {
-    window.location.href = '/login.html';
+    const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
+    window.location.href = basePath + '/login.html';
     return;
   }
   
@@ -376,10 +377,11 @@ function renderCRMTimeline(complaints, services, invoices, reviews) {
 
 function renderCRMQuickActions(customerId) {
   // Pass customer ID as URL param so other modules could theoretically filter by it if implemented.
+  const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
   document.getElementById('crm-quick-actions').innerHTML = `
-    <a href="/admin/products.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Hardware Inventory</a>
-    <a href="/admin/complaints.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Support Tickets</a>
-    <a href="/admin/invoices.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Billing History</a>
-    <a href="/admin/service-history.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Service Records</a>
+    <a href="${basePath}/admin/products.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Hardware Inventory</a>
+    <a href="${basePath}/admin/complaints.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Support Tickets</a>
+    <a href="${basePath}/admin/invoices.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Billing History</a>
+    <a href="${basePath}/admin/service-history.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Service Records</a>
   `;
 }
