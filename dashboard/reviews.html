@@ -6,29 +6,103 @@
   <title>My Reviews | VigilantEye</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
+  <style>
+    .rating-stars {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 2rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .rating-stars span.active, .rating-stars span:hover, .rating-stars span:hover ~ span {
+      color: #f59e0b; /* Golden Yellow */
+    }
+    .rating-stars {
+      direction: rtl; /* For clean hover fill left-to-right via CSS */
+      display: inline-flex;
+    }
+    .rating-stars span {
+      transition: color 0.2s;
+    }
+    .status-badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-approved { background: rgba(34,197,94,0.1); color: #86efac; }
+    .badge-pending { background: rgba(245,158,11,0.1); color: #fcd34d; }
+  </style>
 </head>
 <body>
   <div class="dashboard-wrapper">
-    <!-- Sidebar Placeholder -->
     <div id="customer-sidebar-placeholder"></div>
-
     <main class="dashboard-main">
-      <!-- Header Placeholder -->
       <div id="customer-header-placeholder"></div>
-
+      
       <div class="dashboard-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h1>My Reviews</h1>
-          <button class="btn">Write Review</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+          <h1 style="margin: 0;">My Reviews</h1>
         </div>
-        <div class="card">
-          <p>Your submitted reviews will appear here.</p>
+
+        <div class="grid-2" style="gap: 2rem;">
+          
+          <!-- Submit Review Form -->
+          <div class="card" style="padding: 2rem;">
+            <h2 style="margin-top:0; font-size:1.5rem; margin-bottom: 1.5rem;">Submit a Review</h2>
+            <form id="review-form">
+              <div style="margin-bottom: 1.5rem;">
+                <label style="display:block; margin-bottom:0.5rem; color:var(--text-muted); font-size:0.85rem; text-transform:uppercase;">Rating</label>
+                <!-- Right-to-Left star structure for pure CSS hover effects -->
+                <div class="rating-stars" id="star-container">
+                  <span data-val="5">★</span>
+                  <span data-val="4">★</span>
+                  <span data-val="3">★</span>
+                  <span data-val="2">★</span>
+                  <span data-val="1">★</span>
+                </div>
+                <input type="hidden" id="review_rating" required>
+              </div>
+
+              <div style="margin-bottom: 1.5rem;">
+                <label style="display:block; margin-bottom:0.5rem; color:var(--text-muted); font-size:0.85rem; text-transform:uppercase;">Your Experience (Min 20, Max 500 characters)</label>
+                <textarea id="review_text" class="form-control" rows="5" minlength="20" maxlength="500" required placeholder="Tell us about your experience with our products and service..."></textarea>
+                <div style="text-align: right; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+                  <span id="char-count">0</span>/500
+                </div>
+              </div>
+
+              <button type="submit" id="btn-submit" class="btn btn-primary" style="width: 100%;">Submit Review</button>
+            </form>
+          </div>
+
+          <!-- Past Reviews List -->
+          <div class="card" style="padding: 0; overflow: hidden; align-self: start;">
+            <div style="padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <h3 style="margin:0;">Review History</h3>
+            </div>
+            <div style="overflow-x: auto;">
+              <table class="data-table" id="reviews-table">
+                <thead>
+                  <tr>
+                    <th>Rating</th>
+                    <th>Review</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="reviews-tbody">
+                  <tr><td colspan="3" style="text-align:center; padding:3rem; color:var(--text-muted);">Loading reviews...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
       </div>
     </main>
   </div>
 
   <script src="/js/component-loader.js"></script>
-  <script src="/js/dashboard.js"></script>
+  <script type="module" src="/js/customer-reviews.js"></script>
 </body>
 </html>

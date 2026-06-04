@@ -272,43 +272,15 @@
       <div class="section-header">
         <h2>What Our Clients Say</h2>
         <p>Don't just take our word for it—hear from our verified customers.</p>
+        <div id="average-rating-container" style="margin-top: 1rem; font-family: var(--font-family-headline); display: flex; align-items: center; gap: 0.5rem;">
+          <!-- Loaded via JS -->
+        </div>
       </div>
-      <!-- Future Verified Reviews Integration -->
+      
+      <!-- Verified Reviews Integration -->
       <div id="reviews-container" class="grid-3">
-        <div class="card">
-          <div style="color: #f59e0b; font-size: 1.5rem; margin-bottom: 1rem; letter-spacing: 2px;">★★★★★</div>
-          <p style="font-style: italic; color: #fff; font-size: 1.05rem; line-height: 1.7;">"Exceptional service! The IP camera clarity is amazing, and their team was highly professional during the entire installation process. Zero downtime."</p>
-          <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 1rem;">
-            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
-            <div style="text-align: left;">
-              <h4 style="margin: 0; font-size: 1rem; color: #fff;">Rajesh Kumar</h4>
-              <span style="color: var(--text-muted); font-size: 0.85rem;">Business Owner</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="card">
-          <div style="color: #f59e0b; font-size: 1.5rem; margin-bottom: 1rem; letter-spacing: 2px;">★★★★★</div>
-          <p style="font-style: italic; color: #fff; font-size: 1.05rem; line-height: 1.7;">"The biometric system works flawlessly. We haven't had a single issue since deployment. Their customer portal makes it so easy to request help."</p>
-          <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 1rem;">
-            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
-            <div style="text-align: left;">
-              <h4 style="margin: 0; font-size: 1rem; color: #fff;">Anita Singh</h4>
-              <span style="color: var(--text-muted); font-size: 0.85rem;">HR Manager</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div style="color: #f59e0b; font-size: 1.5rem; margin-bottom: 1rem; letter-spacing: 2px;">★★★★★</div>
-          <p style="font-style: italic; color: #fff; font-size: 1.05rem; line-height: 1.7;">"Their AMC service is absolutely top-notch. Any minor issue is resolved within hours by their expert technicians. A very reliable security partner."</p>
-          <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 1rem;">
-            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
-            <div style="text-align: left;">
-              <h4 style="margin: 0; font-size: 1rem; color: #fff;">Vikram Patel</h4>
-              <span style="color: var(--text-muted); font-size: 0.85rem;">Facility Director</span>
-            </div>
-          </div>
+        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; color: var(--text-muted);">
+          Loading testimonials...
         </div>
       </div>
     </div>
@@ -375,5 +347,6 @@
   <div id="footer-placeholder"></div>
 
   <script src="/js/component-loader.js"></script>
+  <script type="module" src="/js/testimonials.js"></script>
 </body>
 </html>

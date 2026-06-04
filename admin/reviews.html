@@ -7,34 +7,134 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
   <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    /* Metric Cards */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .metric-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #fff;
+      font-family: var(--font-family-headline);
+    }
+    .metric-success { color: #86efac; }
+    .metric-warning { color: #fcd34d; }
+    .metric-highlight { color: #f59e0b; } /* Star Gold */
+
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(255,255,255,0.1);
+      transition: .4s; border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute; content: "";
+      height: 18px; width: 18px; left: 3px; bottom: 3px;
+      background-color: white; transition: .4s; border-radius: 50%;
+    }
+    input:checked + .slider { background-color: #22c55e; }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    body[data-theme="light"] .metric-card { background: #fff; border-color: rgba(0,0,0,0.05); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    body[data-theme="light"] .metric-value { color: #000; }
+  </style>
 </head>
 <body>
   <div class="dashboard-wrapper">
     <div id="admin-sidebar-placeholder"></div>
     <main class="dashboard-main">
       <div id="admin-header-placeholder"></div>
+      
       <div class="dashboard-content">
-        <h1>Manage Reviews</h1>
-        <div class="card">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Customer</th>
-                <th>Rating</th>
-                <th>Review</th>
-                <th>Approved</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td colspan="5">Loading...</td></tr>
-            </tbody>
-          </table>
+        <h1 style="margin-top: 0; margin-bottom: 1.5rem;">Manage Reviews</h1>
+
+        <!-- Dashboard Summary -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-title">Total Reviews</div>
+            <div class="metric-value" id="metric-total">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Pending Approval</div>
+            <div class="metric-value metric-warning" id="metric-pending">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Approved (Live)</div>
+            <div class="metric-value metric-success" id="metric-approved">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Average Rating</div>
+            <div class="metric-value metric-highlight" id="metric-rating">0.0</div>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div style="padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 1rem; flex-wrap: wrap;">
+            <input type="text" id="search-input" class="form-control" placeholder="Search customer, review text..." style="width: 250px; margin: 0;">
+            <select id="filter-status" class="form-control" style="width: 150px; margin: 0;">
+              <option value="All">All Status</option>
+              <option value="Approved">Approved</option>
+              <option value="Pending">Pending</option>
+            </select>
+            <select id="filter-stars" class="form-control" style="width: 150px; margin: 0;">
+              <option value="All">All Stars</option>
+              <option value="5">5 Stars</option>
+              <option value="4">4 Stars</option>
+              <option value="3">3 Stars</option>
+              <option value="2">2 Stars</option>
+              <option value="1">1 Star</option>
+            </select>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="reviews-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Rating</th>
+                  <th>Review</th>
+                  <th>Date</th>
+                  <th>Live on Website?</th>
+                  <th style="text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="reviews-tbody">
+                <tr><td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading reviews...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </main>
   </div>
+
   <script src="/js/component-loader.js"></script>
-  <script src="/js/admin.js"></script>
+  <script type="module" src="/js/admin-reviews.js"></script>
 </body>
 </html>
