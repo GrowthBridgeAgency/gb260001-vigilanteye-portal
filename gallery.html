@@ -9,10 +9,11 @@
   <style>
     /* Gallery Specific Styles */
     .gallery-hero {
-      padding: 8rem 0 4rem;
-      text-align: center;
-      background: radial-gradient(circle at 50% 0%, var(--bg-alt) 0%, var(--bg-main) 100%);
+      padding: 7.5rem 0 2.5rem;
+      text-align: left;
+      background: transparent;
       border-bottom: 1px solid rgba(255,255,255,0.05);
+      position: relative;
     }
     
     .breadcrumb {
@@ -69,32 +70,43 @@
     .masonry-item {
       break-inside: avoid;
       margin-bottom: 2rem;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: var(--border-radius);
+      background: #000;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: var(--transition);
+      position: relative;
+      cursor: pointer;
+    }
+    .masonry-item img {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .masonry-item:hover img {
+      transform: scale(1.08);
     }
     .masonry-item:hover {
-      border-color: rgba(255,255,255,0.15);
-      transform: translateY(-5px);
+      border-color: var(--accent-color);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(56, 189, 248, 0.2);
     }
-    .masonry-placeholder {
-      width: 100%;
-      background: rgba(255,255,255,0.02);
+    .masonry-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 100%);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2rem;
+      opacity: 0;
+      transition: opacity 0.4s ease;
     }
-    .masonry-caption {
-      padding: 1.5rem;
+    .masonry-item:hover .masonry-overlay {
+      opacity: 1;
+    }
+    .masonry-overlay h4, .masonry-overlay p {
+      transform: translateY(20px);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .masonry-item:hover .masonry-overlay h4, .masonry-item:hover .masonry-overlay p {
+      transform: translateY(0);
     }
     @media (max-width: 992px) { .masonry-grid { column-count: 2; } }
     @media (max-width: 576px) { .masonry-grid { column-count: 1; } }
@@ -115,14 +127,14 @@
 
   <!-- SECTION 1: PAGE HERO -->
   <header class="gallery-hero">
-    <div class="container">
-      <div class="breadcrumb">
+    <div class="container" style="display: flex; flex-direction: column; gap: 0.5rem; position: relative; z-index: 2;">
+      <div class="breadcrumb" style="margin-bottom: 0;">
         <a href="/index.html">Home</a>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        <span>Gallery</span>
+        <span style="color: var(--accent-color);">Gallery</span>
       </div>
-      <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Project Gallery</h1>
-      <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.6;">
+      <h1 style="font-size: 2.75rem; font-weight: 500; margin: 0; letter-spacing: -0.02em;">Project Gallery</h1>
+      <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0; line-height: 1.6;">
         Explore our completed surveillance, access control and security installations.
       </p>
     </div>
@@ -139,7 +151,7 @@
         </div>
         
         <!-- Dynamic Client Showcase Integration -->
-        <div class="grid-3" id="client-showcase-container">
+        <div class="bento-grid" id="client-showcase-container">
           <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">Loading featured projects...</div>
         </div>
       </div>

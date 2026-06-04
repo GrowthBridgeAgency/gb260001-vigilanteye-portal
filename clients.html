@@ -9,10 +9,11 @@
   <style>
     /* Clients Specific Styles */
     .clients-hero {
-      padding: 8rem 0 4rem;
-      text-align: center;
-      background: radial-gradient(circle at 50% 0%, var(--bg-alt) 0%, var(--bg-main) 100%);
+      padding: 7.5rem 0 2.5rem;
+      text-align: left;
+      background: transparent;
       border-bottom: 1px solid rgba(255,255,255,0.05);
+      position: relative;
     }
     
     .breadcrumb {
@@ -83,14 +84,14 @@
 
   <!-- SECTION 1: PAGE HERO -->
   <header class="clients-hero">
-    <div class="container">
-      <div class="breadcrumb">
+    <div class="container" style="display: flex; flex-direction: column; gap: 0.5rem; position: relative; z-index: 2;">
+      <div class="breadcrumb" style="margin-bottom: 0;">
         <a href="/index.html">Home</a>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        <span>Clients</span>
+        <span style="color: var(--accent-color);">Clients</span>
       </div>
-      <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Our Clients & Success Stories</h1>
-      <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.6;">
+      <h1 style="font-size: 2.75rem; font-weight: 500; margin: 0; letter-spacing: -0.02em;">Our Clients & Success Stories</h1>
+      <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0; line-height: 1.6;">
         Trusted by homeowners, businesses, institutions and industries for advanced security solutions.
       </p>
     </div>
@@ -99,15 +100,15 @@
   <main>
 
     <!-- SECTION 3: FEATURED CLIENTS -->
-    <section class="py-5 bg-alt">
+    <section class="py-5 bg-alt animate-fade-up delay-100">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header text-center" style="margin-bottom: 4rem;">
           <h2>Featured Clients</h2>
-          <p>A glimpse into the trusted partnerships we've built across diverse sectors.</p>
+          <p style="margin: 0 auto;">A glimpse into the trusted partnerships we've built across diverse sectors.</p>
         </div>
         
         <!-- Dynamic Client Showcase Integration -->
-        <div id="featured-clients-container" class="grid-3">
+        <div id="featured-clients-container" class="bento-grid">
           <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">Loading featured clients...</div>
         </div>
       </div>
@@ -115,18 +116,18 @@
 
 
     <!-- SECTION 6: CLIENT TESTIMONIALS -->
-    <section class="py-5">
+    <section class="py-5 animate-fade-up delay-200">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header text-center" style="margin-bottom: 4rem;">
           <h2>What Our Clients Say</h2>
-          <p>Don't just take our word for it—hear from our verified customers.</p>
+          <p style="margin: 0 auto;">Don't just take our word for it—hear from our verified customers.</p>
           <div id="average-rating-container" style="margin-top: 1rem; font-family: var(--font-family-headline); display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
             <!-- Loaded via JS -->
           </div>
         </div>
         
         <!-- Verified Reviews Integration -->
-        <div id="reviews-container" class="grid-3">
+        <div id="reviews-container" class="bento-grid">
           <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; color: var(--text-muted);">
             Loading testimonials...
           </div>
@@ -137,7 +138,7 @@
 
     <!-- SECTION 10: CALL TO ACTION -->
     <section class="py-5" style="text-align: center; margin: 4rem 0;">
-      <div class="container">
+      <div class="container glass-panel animate-fade-up delay-300" style="padding: 4rem; border-radius: 32px;">
         <h2 style="font-size: 3rem; margin-bottom: 2rem;">Join Our Growing Client Network</h2>
         <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
           <a href="/contact.html" class="btn btn-primary">Get Free Quote</a>

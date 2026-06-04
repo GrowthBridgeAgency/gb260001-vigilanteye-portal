@@ -9,10 +9,11 @@
   <style>
     /* Services Specific Styles */
     .services-hero {
-      padding: 8rem 0 4rem;
-      text-align: center;
-      background: radial-gradient(circle at 50% 0%, var(--bg-alt) 0%, var(--bg-main) 100%);
+      padding: 7.5rem 0 2.5rem;
+      text-align: left;
+      background: transparent;
       border-bottom: 1px solid rgba(255,255,255,0.05);
+      position: relative;
     }
     
     .breadcrumb {
@@ -138,14 +139,14 @@
 
   <!-- SECTION 1: PAGE HERO -->
   <header class="services-hero">
-    <div class="container">
-      <div class="breadcrumb">
+    <div class="container" style="display: flex; flex-direction: column; gap: 0.5rem; position: relative; z-index: 2;">
+      <div class="breadcrumb" style="margin-bottom: 0;">
         <a href="/index.html">Home</a>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        <span>Services</span>
+        <span style="color: var(--accent-color);">Services</span>
       </div>
-      <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Our Security Services</h1>
-      <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.6;">
+      <h1 style="font-size: 2.75rem; font-weight: 500; margin: 0; letter-spacing: -0.02em;">Our Security Services</h1>
+      <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0; line-height: 1.6;">
         Comprehensive surveillance and security solutions designed for homes, businesses, and industries.
       </p>
     </div>
@@ -153,8 +154,8 @@
 
   <main>
     <!-- SECTION 2: SERVICES OVERVIEW -->
-    <section class="py-5" style="margin-top: 2rem;">
-      <div class="container" style="text-align: center; max-width: 800px;">
+    <section class="py-5 animate-fade-up" style="margin-top: 2rem;">
+      <div class="container glass-panel" style="text-align: center; max-width: 800px; padding: 4rem 2rem; border-radius: 32px;">
         <h2 style="margin-bottom: 1rem;">End-to-End Security Integration</h2>
         <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8;">
           VigilantEye brings together advanced security expertise, modern technology, and flawless professional installation to create impenetrable environments. From your first consultation through to ongoing support, we provide an unbroken chain of trust.
@@ -163,11 +164,11 @@
     </section>
 
     <!-- SECTION 3: ALL SERVICES GRID -->
-    <section class="py-5 bg-alt">
+    <section class="py-5 bg-alt animate-fade-up delay-100">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header text-center" style="margin-bottom: 4rem;">
           <h2>Our Core Services</h2>
-          <p>Explore our wide range of professional security integrations.</p>
+          <p style="margin: 0 auto;">Explore our wide range of professional security integrations.</p>
         </div>
         
         <div class="auto-grid">
@@ -303,9 +304,9 @@
     </section>
 
     <!-- SECTION 6: AMC SERVICES -->
-    <section class="py-5">
+    <section class="py-5 animate-fade-up delay-200">
       <div class="container">
-        <div class="amc-banner">
+        <div class="glass-panel" style="padding: 4rem; text-align: center; border-radius: 32px; background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0) 100%);">
           <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Annual Maintenance Contracts (AMC)</h2>
           <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 700px; margin: 0 auto 2rem; line-height: 1.7;">
             Security isn't a one-time purchase, it's an ongoing commitment. Our AMC services guarantee that your hardware remains functional, updated, and ready to record when it matters most.
@@ -336,7 +337,7 @@
 
     <!-- SECTION 10: CALL TO ACTION -->
     <section class="py-5" style="text-align: center; margin: 4rem 0;">
-      <div class="container">
+      <div class="container glass-panel animate-fade-up delay-300" style="padding: 4rem; border-radius: 32px;">
         <h2 style="font-size: 3rem; margin-bottom: 2rem;">Need a Custom Security Solution?</h2>
         <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
           <a href="/contact.html" class="btn btn-primary">Get Free Quote</a>

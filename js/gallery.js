@@ -52,14 +52,14 @@ function renderFeaturedProjects(projects) {
       : `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); color: var(--text-muted);">No Image Available</div>`;
 
     return `
-    <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+    <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; cursor: pointer;">
       <div style="height: 250px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2);">
         ${imgHtml}
       </div>
       <div style="padding: 2rem; flex: 1; display: flex; flex-direction: column;">
         <div>${isFeaturedBadge}</div>
         <h3 style="margin: 0.5rem 0;">${p.project_name}</h3>
-        <p style="color: var(--text-main); opacity: 0.7; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Client: ${p.client_name} ${p.location ? '| Location: ' + p.location : ''}</p>
+        <p style="color: var(--accent-color); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Client: ${p.client_name} ${p.location ? '| Location: ' + p.location : ''}</p>
         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0;">${p.description || p.short_description || 'Security infrastructure deployment.'}</p>
       </div>
     </div>
@@ -91,12 +91,12 @@ function renderGalleryGrid(projects) {
 
     return `
       <div class="masonry-item">
-        <div class="masonry-placeholder" style="height: ${h}px; padding: 0; overflow: hidden; background: rgba(0,0,0,0.2);">
+        <div style="height: ${h}px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2);">
           ${imgHtml}
         </div>
-        <div class="masonry-caption">
-          <h4 style="margin: 0 0 0.25rem 0;">${p.project_name}</h4>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">${p.client_name}</p>
+        <div class="masonry-overlay">
+          <h4 style="color: #fff; margin: 0 0 0.5rem 0; font-size: 1.3rem;">${p.project_name}</h4>
+          <p style="color: var(--accent-color); font-size: 0.9rem; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;">${p.client_name}</p>
         </div>
       </div>
     `;
