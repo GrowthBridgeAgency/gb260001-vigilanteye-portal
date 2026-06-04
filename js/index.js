@@ -71,8 +71,8 @@ function renderFeaturedProducts(products) {
 
   container.innerHTML = uniqueProducts.map((p, index) => {
     const imgHtml = p.image_url 
-      ? `<img src="${p.image_url}" alt="${p.product_name}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">`
-      : `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); color: var(--text-muted);">No Image</div>`;
+      ? `<img src="${p.image_url}" alt="${p.product_name}" loading="lazy">`
+      : `<div class="no-image">No Image</div>`;
 
     let displayPrice = 'Contact for price';
     if (p.price) {
@@ -81,15 +81,15 @@ function renderFeaturedProducts(products) {
     }
 
     return `
-    <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.3s ease;" onclick="window.openProductModal(${index})" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-      <div style="height: 250px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2);">
+    <div class="featured-product-card" onclick="window.openProductModal(${index})">
+      <div class="image-container">
         ${imgHtml}
       </div>
-      <div style="padding: 2rem; flex: 1; display: flex; flex-direction: column;">
-        <div><span style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(255,255,255,0.1); color: var(--text-main); border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 1rem;">Featured</span></div>
-        <h3 style="margin: 0.5rem 0;">${p.product_name}</h3>
-        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.25rem;">Model: ${p.model_number || 'N/A'}</p>
-        <p style="color: var(--primary-color); font-weight: bold; font-size: 1.1rem; margin-bottom: 1rem;">${displayPrice}</p>
+      <div class="info-container">
+        <div><span class="badge">Featured</span></div>
+        <h3>${p.product_name}</h3>
+        <p class="model-text">Model: ${p.model_number || 'N/A'}</p>
+        <p class="price-text">${displayPrice}</p>
       </div>
     </div>
   `}).join('');
