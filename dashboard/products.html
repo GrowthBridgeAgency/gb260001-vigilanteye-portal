@@ -3,9 +3,102 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Products | VigilantEye</title>
+  <title>My Installed Products | VigilantEye</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
+  <style>
+    /* Customer Products Grid Styles */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: var(--bg-alt);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+    .product-card:hover {
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-5px);
+    }
+    .product-img-box {
+      width: 100%;
+      height: 200px;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .product-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .product-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .product-title {
+      font-size: 1.25rem;
+      margin: 0 0 0.5rem 0;
+      color: var(--text-main);
+    }
+    .product-brand {
+      color: var(--primary-color);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .badge-active { background: rgba(34,197,94,0.1); color: #86efac; }
+    .badge-expired { background: rgba(239,68,68,0.1); color: #fca5a5; }
+    
+    /* Modals & Toasts appended globally via dashboard/admin CSS usually, we include them inline here for dashboard isolation if needed, but they share style.css.
+       We will reuse the modal styles from admin.css by appending them if they don't exist globally, but since this is dashboard, let's inject modal styles safely. */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg-main); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--border-radius); width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5); transform: translateY(20px); transition: transform 0.3s; }
+    .modal-overlay.active .modal-content { transform: translateY(0); }
+    .modal-header { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h2 { margin: 0; font-size: 1.25rem; }
+    .modal-close { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.5rem; line-height: 1; }
+    .modal-close:hover { color: var(--text-main); }
+    .modal-body { padding: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+    .modal-footer { padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: flex-end; gap: 1rem; }
+
+    /* Light Theme Adjustments */
+    body[data-theme="light"] .product-card { background: #fff; border-color: rgba(0,0,0,0.1); }
+    body[data-theme="light"] .product-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    body[data-theme="light"] .product-img-box { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .badge-row { border-color: rgba(0,0,0,0.05); }
+    body[data-theme="light"] .modal-content { background: #fff; border-color: rgba(0,0,0,0.1); }
+    body[data-theme="light"] .modal-header, body[data-theme="light"] .modal-footer { border-color: rgba(0,0,0,0.05); }
+  </style>
 </head>
 <body>
   <div class="dashboard-wrapper">
@@ -17,30 +110,39 @@
       <div id="customer-header-placeholder"></div>
 
       <div class="dashboard-content">
-        <h1>My Products</h1>
-        <div class="card">
-          <!-- Future Supabase Product Data -->
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Product Name</th>
-                <th>Model</th>
-                <th>Installation Date</th>
-                <th>AMC Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="4">Loading products...</td>
-              </tr>
-            </tbody>
-          </table>
+        <h1 style="margin-top: 0; margin-bottom: 2rem;">My Installed Products</h1>
+        
+        <div id="products-grid" class="product-grid">
+          <!-- Loading State -->
+          <div style="grid-column: 1 / -1; padding: 4rem; text-align: center; color: var(--text-muted);">
+            Loading your security hardware...
+          </div>
         </div>
       </div>
     </main>
   </div>
 
+  <!-- PRODUCT DETAILS MODAL -->
+  <div class="modal-overlay" id="view-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Hardware Profile</h2>
+        <button class="modal-close" onclick="closeModal('view-modal')">&times;</button>
+      </div>
+      <div class="modal-body" id="view-modal-body">
+        <!-- Injected via JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('view-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
   <script src="/js/component-loader.js"></script>
-  <script src="/js/dashboard.js"></script>
+  <script type="module" src="/js/customer-products.js"></script>
+  
+  <script>
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+  </script>
 </body>
 </html>

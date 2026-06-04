@@ -15,44 +15,88 @@
       <div id="admin-header-placeholder"></div>
       
       <div class="dashboard-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
-          <h1 style="margin: 0;">Product Catalog</h1>
-          
-          <div style="display:flex; gap:1rem; align-items:center;">
-            <!-- Search & Filters -->
-            <input type="text" id="search-input" class="form-control" placeholder="Search by name, brand..." style="width: 250px; margin-top: 0;">
-            <select id="featured-filter" class="form-control" style="width: 150px; margin-top: 0;">
-              <option value="all">All Products</option>
-              <option value="featured">Featured Only</option>
-            </select>
-            <!-- Add Button -->
-            <button class="btn btn-primary" id="btn-add-product" style="white-space: nowrap;">+ Add Product</button>
+        <h1 style="margin-top: 0;">Product Management</h1>
+        
+        <!-- TABS -->
+        <div class="admin-tabs">
+          <button class="admin-tab active" onclick="switchTab('catalog-tab', this)">Product Catalog</button>
+          <button class="admin-tab" onclick="switchTab('installed-tab', this)">Installed Products</button>
+        </div>
+
+        <!-- TAB 1: PRODUCT CATALOG -->
+        <div id="catalog-tab" class="tab-pane active">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+            <h2 style="margin: 0; font-size:1.5rem;">Catalog Items</h2>
+            <div style="display:flex; gap:1rem; align-items:center;">
+              <input type="text" id="search-input" class="form-control" placeholder="Search by name, brand..." style="width: 250px; margin-top: 0;">
+              <select id="featured-filter" class="form-control" style="width: 150px; margin-top: 0;">
+                <option value="all">All Products</option>
+                <option value="featured">Featured Only</option>
+              </select>
+              <button class="btn btn-primary" id="btn-add-product" style="white-space: nowrap;">+ Add Product</button>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="overflow-x: auto;">
+              <table class="data-table" id="products-table">
+                <thead>
+                  <tr>
+                    <th style="width: 70px;">Image</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Featured</th>
+                    <th style="width: 120px; text-align: center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="products-tbody">
+                  <tr><td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading products...</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        <!-- Table Card -->
-        <div class="card" style="padding: 0; overflow: hidden;">
-          <div style="overflow-x: auto;">
-            <table class="data-table" id="products-table">
-              <thead>
-                <tr>
-                  <th style="width: 70px;">Image</th>
-                  <th>Product Name</th>
-                  <th>Category</th>
-                  <th>Brand</th>
-                  <th>Model</th>
-                  <th>Featured</th>
-                  <th style="width: 120px; text-align: center;">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="products-tbody">
-                <tr>
-                  <td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">
-                    Loading products...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <!-- TAB 2: INSTALLED PRODUCTS -->
+        <div id="installed-tab" class="tab-pane">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+            <h2 style="margin: 0; font-size:1.5rem;">Customer Installations</h2>
+            <div style="display:flex; gap:1rem; align-items:center;">
+              <input type="text" id="installed-search" class="form-control" placeholder="Search customer, product..." style="width: 250px; margin-top: 0;">
+              <select id="installed-filter" class="form-control" style="width: 180px; margin-top: 0;">
+                <option value="all">All Statuses</option>
+                <option value="amc_active">AMC Active</option>
+                <option value="amc_inactive">AMC Inactive</option>
+                <option value="warranty_active">Warranty Active</option>
+                <option value="warranty_expired">Warranty Expired</option>
+              </select>
+              <button class="btn btn-primary" id="btn-assign-product" style="white-space: nowrap;">+ Assign Product</button>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="overflow-x: auto;">
+              <table class="data-table" id="installed-table">
+                <thead>
+                  <tr>
+                    <th>Customer Name</th>
+                    <th>Product Name</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Qty</th>
+                    <th>Install Date</th>
+                    <th>Warranty Expiry</th>
+                    <th>AMC Status</th>
+                    <th style="width: 80px; text-align: center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="installed-tbody">
+                  <tr><td colspan="9" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading installed products...</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -60,7 +104,7 @@
     </main>
   </div>
 
-  <!-- ADD / EDIT PRODUCT MODAL -->
+  <!-- ADD / EDIT CATALOG PRODUCT MODAL -->
   <div class="modal-overlay" id="product-modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -71,7 +115,6 @@
         <form id="product-form">
           <input type="hidden" id="product_id" name="id">
           
-          <!-- Image Upload & Preview -->
           <div class="image-preview-container" id="image-preview-box">
             <span style="color: var(--text-muted); font-size: 0.9rem;" id="image-preview-text">No image selected</span>
             <img id="image-preview-img" style="display:none;" />
@@ -87,7 +130,7 @@
             </div>
             <div>
               <label>Category</label>
-              <input type="text" id="category" name="category" class="form-control" placeholder="e.g. CCTV">
+              <input type="text" id="category" name="category" class="form-control">
             </div>
             <div>
               <label>Brand</label>
@@ -99,7 +142,7 @@
             </div>
             <div>
               <label>Price</label>
-              <input type="text" id="price" name="price" class="form-control" placeholder="e.g. 15,000 INR">
+              <input type="text" id="price" name="price" class="form-control">
             </div>
             <div>
               <label style="display:flex; align-items:center; height: 100%; padding-top: 1.5rem; gap: 0.5rem; cursor:pointer;">
@@ -111,17 +154,91 @@
 
           <label style="margin-top: 1rem;">Short Description</label>
           <input type="text" id="short_description" name="short_description" class="form-control" maxlength="255">
-
           <label>Full Description</label>
           <textarea id="full_description" name="full_description" class="form-control" rows="3"></textarea>
-
-          <label>Specifications (Key-Value pairs or list)</label>
+          <label>Specifications</label>
           <textarea id="specifications" name="specifications" class="form-control" rows="3"></textarea>
         </form>
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline" onclick="closeModal('product-modal')">Cancel</button>
         <button class="btn btn-primary" id="btn-save-product">Save Product</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSIGN INSTALLED PRODUCT MODAL -->
+  <div class="modal-overlay" id="assign-modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h2 id="assign-modal-title">Assign Product to Customer</h2>
+        <button class="modal-close" onclick="closeModal('assign-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="assign-form">
+          <input type="hidden" id="assign_id" name="id">
+          
+          <div class="grid-2" style="gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div>
+              <label>Select Customer *</label>
+              <select id="assign_customer_id" class="form-control" required></select>
+            </div>
+            <div>
+              <label>Select Catalog Item (Optional Auto-fill)</label>
+              <select id="assign_catalog_id" class="form-control">
+                <option value="">-- Custom Product --</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Product Details Block -->
+          <div style="background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: var(--border-radius); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 1.5rem;">
+            <h4 style="margin-top: 0; margin-bottom: 1rem; color: var(--text-main);">Hardware Details</h4>
+            <div class="grid-2" style="gap: 1rem;">
+              <div><label>Product Name *</label><input type="text" id="assign_product_name" class="form-control" required></div>
+              <div><label>Brand</label><input type="text" id="assign_brand" class="form-control"></div>
+              <div><label>Model Number</label><input type="text" id="assign_model_number" class="form-control"></div>
+              <div><label>Quantity</label><input type="number" id="assign_quantity" class="form-control" value="1" min="1"></div>
+            </div>
+            <input type="hidden" id="assign_image_url">
+          </div>
+
+          <!-- Dates Block -->
+          <div class="grid-2" style="gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div>
+              <h4 style="margin-top: 0; margin-bottom: 1rem; color: var(--text-main);">Installation & Warranty</h4>
+              <div style="margin-bottom: 1rem;">
+                <label>Installation Date</label>
+                <input type="date" id="assign_install_date" class="form-control">
+              </div>
+              <div class="grid-2" style="gap: 1rem;">
+                <div><label>Warranty Start</label><input type="date" id="assign_warranty_start" class="form-control"></div>
+                <div><label>Warranty Expiry</label><input type="date" id="assign_warranty_expiry" class="form-control"></div>
+              </div>
+            </div>
+            <div>
+              <h4 style="margin-top: 0; margin-bottom: 1rem; color: var(--text-main);">AMC Contract</h4>
+              <div style="margin-bottom: 1rem;">
+                <label>AMC Status</label>
+                <select id="assign_amc_status" class="form-control">
+                  <option value="Inactive">Inactive</option>
+                  <option value="Active">Active</option>
+                </select>
+              </div>
+              <div class="grid-2" style="gap: 1rem;">
+                <div><label>AMC Start</label><input type="date" id="assign_amc_start" class="form-control"></div>
+                <div><label>AMC Expiry</label><input type="date" id="assign_amc_expiry" class="form-control"></div>
+              </div>
+            </div>
+          </div>
+
+          <label>Admin Notes</label>
+          <textarea id="assign_notes" class="form-control" rows="2" placeholder="Internal notes (hidden from customer)"></textarea>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('assign-modal')">Cancel</button>
+        <button class="btn btn-primary" id="btn-save-assignment">Save Assignment</button>
       </div>
     </div>
   </div>
@@ -133,9 +250,7 @@
         <h2>Product Details</h2>
         <button class="modal-close" onclick="closeModal('view-modal')">&times;</button>
       </div>
-      <div class="modal-body" id="view-modal-body" style="color: var(--text-muted); line-height: 1.6;">
-        <!-- Injected via JS -->
-      </div>
+      <div class="modal-body" id="view-modal-body" style="color: var(--text-muted); line-height: 1.6;"></div>
       <div class="modal-footer">
         <button class="btn btn-outline" onclick="closeModal('view-modal')">Close</button>
       </div>
@@ -150,27 +265,32 @@
         <button class="modal-close" onclick="closeModal('delete-modal')">&times;</button>
       </div>
       <div class="modal-body text-center">
-        <p style="color: var(--text-muted);">Are you sure you want to delete this product? This action cannot be undone.</p>
-        <input type="hidden" id="delete_product_id">
+        <p style="color: var(--text-muted);">Are you sure you want to delete this record? This action cannot be undone.</p>
+        <input type="hidden" id="delete_target_id">
+        <input type="hidden" id="delete_target_type">
         <input type="hidden" id="delete_image_url">
       </div>
       <div class="modal-footer" style="justify-content: center;">
         <button class="btn btn-outline" onclick="closeModal('delete-modal')">Cancel</button>
-        <button class="btn btn-primary" id="btn-confirm-delete" style="background: #ef4444; border-color: #ef4444;">Delete Product</button>
+        <button class="btn btn-primary" id="btn-confirm-delete" style="background: #ef4444; border-color: #ef4444;">Delete Record</button>
       </div>
     </div>
   </div>
 
   <script src="/js/component-loader.js"></script>
+  <!-- Load both scripts -->
   <script type="module" src="/js/admin-products.js"></script>
+  <script type="module" src="/js/admin-installed-products.js"></script>
   
-  <!-- Global Modal UI Helpers -->
+  <!-- Global Tab & Modal UI Helpers -->
   <script>
-    function openModal(id) {
-      document.getElementById(id).classList.add('active');
-    }
-    function closeModal(id) {
-      document.getElementById(id).classList.remove('active');
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
     }
   </script>
 </body>

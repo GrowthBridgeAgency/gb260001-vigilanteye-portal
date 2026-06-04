@@ -335,13 +335,17 @@ async function handleSaveProduct(e) {
 // ==========================================
 
 window.openDeleteModal = function(id, imageUrl) {
-  document.getElementById('delete_product_id').value = id;
+  document.getElementById('delete_target_id').value = id;
+  document.getElementById('delete_target_type').value = 'catalog';
   document.getElementById('delete_image_url').value = imageUrl;
   window.openModal('delete-modal');
 };
 
 async function executeDelete() {
-  const id = document.getElementById('delete_product_id').value;
+  const targetType = document.getElementById('delete_target_type').value;
+  if (targetType === 'assigned') return; // Handled by admin-installed-products.js
+
+  const id = document.getElementById('delete_target_id').value;
   const imageUrl = document.getElementById('delete_image_url').value;
   
   btnConfirmDelete.disabled = true;

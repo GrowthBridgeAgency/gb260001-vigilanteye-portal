@@ -199,3 +199,40 @@ body[data-theme="light"] .image-preview-container { border-color: rgba(0,0,0,0.1
 body[data-theme="light"] .action-btn { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.1); color: #64748b; }
 body[data-theme="light"] .action-btn:hover { background: rgba(0,0,0,0.05); color: #0f172a; }
 body[data-theme="light"] .table-img { border-color: rgba(0,0,0,0.1); }
+
+/* ==========================================================================
+   Tab Navigation
+   ========================================================================== */
+.admin-tabs {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 1.5rem;
+}
+.admin-tab {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-size: 1rem;
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.admin-tab:hover {
+  color: var(--text-main);
+}
+.admin-tab.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+.tab-pane {
+  display: none;
+}
+.tab-pane.active {
+  display: block;
+}
+
+body[data-theme="light"] .admin-tabs { border-color: rgba(0,0,0,0.05); }
