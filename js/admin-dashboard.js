@@ -382,7 +382,9 @@ function buildActivityFeed() {
 // --- CHARTING ---
 
 Chart.defaults.color = '#9ca3af';
-Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)';
+Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.04)';
+Chart.defaults.font.family = "'Inter', 'system-ui', sans-serif";
+Chart.defaults.font.size = 12;
 
 function renderCharts() {
   renderRevChart();
@@ -392,7 +394,7 @@ function renderCharts() {
 }
 
 function renderRevChart() {
-  const ctx = document.getElementById('chart-revenue');
+  const canvas = document.getElementById('chart-revenue');
   if (charts.rev) charts.rev.destroy();
 
   // Group by month
@@ -410,7 +412,15 @@ function renderRevChart() {
     }
   });
 
-  charts.rev = new Chart(ctx, {
+  let gradient = null;
+  if(canvas && canvas.getContext) {
+    const ctx2d = canvas.getContext('2d');
+    gradient = ctx2d.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(74, 222, 128, 0.4)');
+    gradient.addColorStop(1, 'rgba(74, 222, 128, 0.0)');
+  }
+
+  charts.rev = new Chart(canvas, {
     type: 'line',
     data: {
       labels: Object.keys(months).map(m => m.substring(5)),
@@ -418,12 +428,37 @@ function renderRevChart() {
         label: 'Revenue',
         data: Object.values(months),
         borderColor: '#4ade80',
-        backgroundColor: 'rgba(74, 222, 128, 0.1)',
+        backgroundColor: gradient || 'rgba(74, 222, 128, 0.1)',
         tension: 0.4,
+        borderWidth: 3,
+        pointBackgroundColor: '#fff',
+        pointBorderColor: '#4ade80',
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6,
         fill: true
       }]
     },
-    options: { responsive: true, maintainAspectRatio: false, plugins:{legend:{display:false}} }
+    options: { 
+      responsive: true, maintainAspectRatio: false, 
+      animation: { duration: 2000, easing: 'easeOutQuart' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(0,0,0,0.8)',
+          titleColor: '#fff',
+          bodyColor: '#4ade80',
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: false
+        }
+      },
+      scales: {
+        y: { border: { display: false }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        x: { border: { display: false }, grid: { display: false } }
+      }
+    }
   });
 }
 
@@ -442,14 +477,23 @@ function renderCompChart() {
   charts.comp = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Open', 'Assigned', 'In Progress', 'Resolved'],
+      labels: ['Open', 'Assigned', 'In Prog', 'Resolved'],
       datasets: [{
         data: [o, a, p, r],
-        backgroundColor: ['#fca5a5', '#93c5fd', '#fcd34d', '#86efac'],
-        borderWidth: 0
+        backgroundColor: ['#f87171', '#60a5fa', '#fcd34d', '#4ade80'],
+        borderWidth: 2,
+        borderColor: '#050505',
+        hoverOffset: 8
       }]
     },
-    options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins:{legend:{position:'right'}} }
+    options: { 
+      responsive: true, maintainAspectRatio: false, cutout: '75%', 
+      animation: { animateScale: true, animateRotate: true, duration: 1500, easing: 'easeOutCirc' },
+      plugins: {
+        legend: { position: 'right', labels: { color: 'rgba(255,255,255,0.7)', padding: 15, font: { size: 11 } } },
+        tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, padding: 10 }
+      }
+    }
   });
 }
 
@@ -468,23 +512,33 @@ function renderFunnelChart() {
   charts.funnel = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['New', 'Contacted', 'Qualified', 'Converted'],
+      labels: ['New', 'Contact', 'Qual.', 'Won'],
       datasets: [{
         label: 'Leads',
         data: [n, c, q, cv],
-        backgroundColor: ['#9ca3af', '#93c5fd', '#fcd34d', '#22c55e']
+        backgroundColor: ['rgba(156,163,175,0.8)', 'rgba(96,165,250,0.8)', 'rgba(252,211,77,0.8)', 'rgba(74,222,128,0.8)'],
+        borderRadius: 4,
+        barPercentage: 0.6
       }]
     },
     options: { 
       responsive: true, maintainAspectRatio: false, 
       indexAxis: 'y',
-      plugins:{legend:{display:false}}
+      animation: { duration: 1500, easing: 'easeOutQuart' },
+      plugins: {
+        legend: { display: false },
+        tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, padding: 10 }
+      },
+      scales: {
+        x: { border: { display: false }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y: { border: { display: false }, grid: { display: false } }
+      }
     }
   });
 }
 
 function renderServChart() {
-  const ctx = document.getElementById('chart-services');
+  const canvas = document.getElementById('chart-services');
   if (charts.serv) charts.serv.destroy();
 
   const months = {};
@@ -499,17 +553,39 @@ function renderServChart() {
     if (months[k] !== undefined) months[k]++;
   });
 
-  charts.serv = new Chart(ctx, {
+  charts.serv = new Chart(canvas, {
     type: 'bar',
     data: {
       labels: Object.keys(months).map(m => m.substring(5)),
       datasets: [{
-        label: 'Visits',
+        label: 'Service Visits',
         data: Object.values(months),
-        backgroundColor: '#a855f7',
-        borderRadius: 4
+        backgroundColor: 'rgba(168, 85, 247, 0.7)',
+        borderColor: '#a855f7',
+        borderWidth: 1,
+        borderRadius: 6,
+        hoverBackgroundColor: 'rgba(168, 85, 247, 1)'
       }]
     },
-    options: { responsive: true, maintainAspectRatio: false, plugins:{legend:{display:false}} }
+    options: { 
+      responsive: true, maintainAspectRatio: false, 
+      animation: { duration: 1500, easing: 'easeOutQuart' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(0,0,0,0.85)',
+          titleColor: '#fff',
+          bodyColor: '#a855f7',
+          borderColor: 'rgba(168,85,247,0.3)',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: false
+        }
+      },
+      scales: {
+        y: { border: { display: false }, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { precision: 0 } },
+        x: { border: { display: false }, grid: { display: false } }
+      }
+    }
   });
 }
