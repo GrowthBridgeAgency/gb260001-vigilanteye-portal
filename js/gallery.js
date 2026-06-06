@@ -103,23 +103,27 @@ function renderGalleryGrid(projects) {
     return;
   }
 
-  // Generate random heights for masonry effect
-  const heights = [250, 300, 350, 400, 450];
-  
-  container.innerHTML = projects.map(p => {
-    const h = heights[Math.floor(Math.random() * heights.length)];
+  container.innerHTML = projects.map((p, index) => {
     const imgHtml = p.image_url 
-      ? `<img src="${p.image_url}" alt="${p.project_name}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">`
-      : `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); color: var(--text-muted);">No Image</div>`;
+      ? `<img src="${p.image_url}" alt="${p.project_name}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">`
+      : `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); color: var(--text-muted); position:absolute;">No Image</div>`;
+
+    // Make the grid asymmetric
+    let spanClass = '';
+    if (index % 5 === 0) {
+      spanClass = 'col-span-2 row-span-2';
+    }
 
     return `
-      <div class="masonry-item">
-        <div style="height: ${h}px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2);">
+      <div class="bento-item ${spanClass}">
+        <div class="overlay-card" style="cursor: pointer;" onmouseover="this.querySelector('img').style.transform='scale(1.05)'" onmouseout="this.querySelector('img').style.transform='scale(1)'">
           ${imgHtml}
-        </div>
-        <div class="masonry-overlay">
-          <h4 style="color: #fff; margin: 0 0 0.5rem 0; font-size: 1.3rem;">${p.project_name}</h4>
-          <p style="color: var(--accent-color); font-size: 0.9rem; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;">${p.client_name}</p>
+          <div class="overlay-card-content" style="padding: 2rem;">
+            <h3 style="font-size: 1.5rem;">${p.project_name}</h3>
+            <p style="color: var(--accent-color); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;">
+              ${p.location ? p.location + ' | ' : ''}${p.category || 'Surveillance'}
+            </p>
+          </div>
         </div>
       </div>
     `;

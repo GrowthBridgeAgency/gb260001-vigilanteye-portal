@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products | Shree Sawariya CCTV Security Services</title>
+  <meta name="description" content="Explore our catalog of top-tier security equipment, including CCTV, Biometrics, and Access Control systems.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Products Page Specific Styles */
+    .products-layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 3rem;
+      margin-top: 2rem;
+    }
+
+    .products-sidebar {
+      background: var(--surface-light);
+      padding: 2rem;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+
+    .sidebar-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .filter-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .filter-list li {
+      margin-bottom: 0.75rem;
+    }
+
+    .filter-list button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1rem;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    .filter-list button:hover, .filter-list button.active {
+      background: rgba(255,255,255,0.05);
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      background: var(--surface-light);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .product-image-container {
+      height: 250px;
+      background: rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-image-container img {
+      transform: scale(1.05);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: var(--primary-color);
+      color: var(--bg-main);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .product-info {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .product-brand {
+      color: var(--accent-color);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .product-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      margin-top: auto;
+    }
+
+    @media (max-width: 768px) {
+      .products-layout {
+        grid-template-columns: 1fr;
+      }
+      .products-sidebar {
+        position: relative;
+        top: 0;
+      }
+    }
+  </style>
+</head>
+<body class="dark-theme">
+
+  <!-- NAVBAR -->
+  <div id="navbar-placeholder"></div>
+
+  <main>
+    <section class="py-5 bg-alt" style="padding-top: 8rem !important; padding-bottom: 6rem !important;">
+      <div class="container text-center" style="margin-bottom: 2rem;">
+        <h1 style="font-size: 3.5rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 1rem;">Our Products</h1>
+        <p style="margin: 0 auto; font-size: 1.1rem; color: var(--text-muted); max-width: 600px;">Browse our extensive catalog of professional security equipment and systems.</p>
+      </div>
+
+      <div class="container">
+        <div class="products-layout">
+          <!-- Sidebar -->
+          <aside class="products-sidebar">
+            <h3 class="sidebar-title">Categories</h3>
+            <ul class="filter-list" id="category-filters">
+              <li><button class="active" data-filter="all">All Products</button></li>
+              <li><button data-filter="CCTV Camera">CCTV Camera</button></li>
+              <li><button data-filter="DVR">DVR</button></li>
+              <li><button data-filter="NVR">NVR</button></li>
+              <li><button data-filter="Biometric System">Biometric System</button></li>
+              <li><button data-filter="Video Door Phone">Video Door Phone</button></li>
+              <li><button data-filter="Access Control System">Access Control System</button></li>
+              <li><button data-filter="Smart Door Lock">Smart Door Lock</button></li>
+              <li><button data-filter="Networking Equipment">Networking Equipment</button></li>
+              <li><button data-filter="Storage Device">Storage Device</button></li>
+              <li><button data-filter="Security Alarm System">Security Alarm System</button></li>
+              <li><button data-filter="Fire Alarm System">Fire Alarm System</button></li>
+              <li><button data-filter="Intercom System">Intercom System</button></li>
+              <li><button data-filter="Power Supply & Accessories">Power Supply & Accessories</button></li>
+              <li><button data-filter="Security Package">Security Package</button></li>
+              <li><button data-filter="Other">Other</button></li>
+            </ul>
+          </aside>
+
+          <!-- Main Grid -->
+          <div class="products-grid" id="products-grid-container">
+            <div style="grid-column: 1/-1; text-align: center; padding: 4rem;">Loading products...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Details Modal -->
+    <div id="product-modal" class="modal-overlay">
+      <div class="modal-content glass-showcase-modal">
+        <span class="close-modal" onclick="window.closeModal('product-modal')">&times;</span>
+        
+        <div class="showcase-modal-split">
+          <div class="showcase-modal-left">
+            <div class="image-glow-ring"></div>
+            <img id="modal-prod-img" src="" alt="Product Showcase" class="prod-modal-img-style">
+          </div>
+          
+          <div class="showcase-modal-right">
+            <div class="showcase-brand-category">
+              <span id="modal-prod-brand"></span>
+            </div>
+            <h2 id="modal-prod-title"></h2>
+            
+            <div id="modal-prod-badge-container"></div>
+            
+            <div class="showcase-section">
+              <h4 class="showcase-label">MODEL</h4>
+              <div id="modal-prod-model" class="showcase-value"></div>
+            </div>
+            
+            <div class="showcase-section">
+              <h4 class="showcase-label">DESCRIPTION</h4>
+              <div id="modal-prod-desc" class="showcase-value-small"></div>
+            </div>
+            
+            <div class="showcase-section" id="modal-prod-specs-container">
+              <h4 class="showcase-label">SPECIFICATIONS</h4>
+              <div id="modal-prod-specs" class="showcase-value-small"></div>
+            </div>
+            
+            <div class="showcase-footer">
+              <div>
+                <h4 class="showcase-label">PRICE</h4>
+                <div id="modal-prod-price" class="showcase-price"></div>
+              </div>
+              <button class="btn showcase-cta" onclick="window.location.href='contact.html'">Request Quote</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <div id="footer-placeholder"></div>
+
+  <script src="js/component-loader.js"></script>
+  <script type="module" src="js/products.js"></script>
+</body>
+</html>

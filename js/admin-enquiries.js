@@ -299,7 +299,7 @@ window.viewLead = function(id) {
   `;
 
   // Quick Actions
-  let waMessage = encodeURIComponent(`Hello ${r.name},\n\nThank you for contacting VigilantEye Surveillance.\nWe received your enquiry regarding ${r.requirement_type}.\n\nOur team will contact you shortly.`);
+  let waMessage = encodeURIComponent(`Hello ${r.name},\n\nThank you for contacting SafeVision Surveillance Surveillance.\nWe received your enquiry regarding ${r.requirement_type}.\n\nOur team will contact you shortly.`);
   
   // Clean mobile for wa.me
   let cleanMobile = r.mobile ? r.mobile.replace(/[^0-9]/g, '') : '';

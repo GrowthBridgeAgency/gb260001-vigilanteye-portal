@@ -101,7 +101,7 @@ function renderProducts(grid) {
         </div>
         <div class="product-content">
           <h3 class="product-title">${p.product_name}</h3>
-          <span class="product-brand">${p.brand || 'VigilantEye Solutions'} • ${p.model_number || 'Standard Model'}</span>
+          <span class="product-brand">${p.brand || 'SafeVision Surveillance'} • ${p.model_number || 'Standard Model'}</span>
           <div style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
             Quantity: <strong>${p.quantity}</strong><br>
             Installed: <strong>${p.installation_date || 'Pending'}</strong>

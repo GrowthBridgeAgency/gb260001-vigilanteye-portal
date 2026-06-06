@@ -44,8 +44,10 @@ async function loadComponent(elementId, componentPath) {
 // Dynamically load core modules sequentially:
 // 1. auth.js (Route protection)
 // 2. user-context.js (Populate globals like window.currentUser)
+// 3. scroll-animations.js (Fallback for storytelling animations)
 import(basePath + '/js/auth.js')
   .then(() => import(basePath + '/js/user-context.js'))
+  .then(() => import(basePath + '/js/scroll-animations.js'))
   .catch(err => console.error("Failed to load core modules:", err));
 
 // Global File Input Clear Utility
@@ -138,3 +140,112 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// Custom Select Initialization Logic
+window.initCustomSelects = function(root = document) {
+  const selects = root.querySelectorAll('select:not(.custom-select-initialized)');
+  selects.forEach(select => {
+    select.classList.add('custom-select-initialized');
+    
+    // Create wrapper
+    const wrapper = document.createElement('div');
+    wrapper.className = 'custom-select-wrapper';
+    
+    // Insert wrapper before select, move select inside
+    select.parentNode.insertBefore(wrapper, select);
+    wrapper.appendChild(select);
+    
+    // Create trigger
+    const trigger = document.createElement('div');
+    trigger.className = 'custom-select-trigger';
+    
+    const textNode = document.createElement('span');
+    textNode.textContent = select.options[select.selectedIndex]?.text || 'Select an option';
+    trigger.appendChild(textNode);
+    
+    // Add SVG arrow
+    trigger.insertAdjacentHTML('beforeend', '<svg class="arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>');
+    wrapper.appendChild(trigger);
+    
+    // Create options container
+    const optionsContainer = document.createElement('div');
+    optionsContainer.className = 'custom-select-options';
+    wrapper.appendChild(optionsContainer);
+    
+    // Function to render options
+    const renderOptions = () => {
+      optionsContainer.innerHTML = '';
+      Array.from(select.options).forEach((option, index) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'custom-select-option';
+        if (select.selectedIndex === index) optDiv.classList.add('selected');
+        optDiv.textContent = option.text;
+        
+        optDiv.addEventListener('click', (e) => {
+          e.stopPropagation();
+          select.selectedIndex = index;
+          textNode.textContent = option.text;
+          
+          // Trigger change event on original select
+          select.dispatchEvent(new Event('change'));
+          
+          // Update selected classes
+          optionsContainer.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
+          optDiv.classList.add('selected');
+          
+          wrapper.classList.remove('open');
+        });
+        
+        optionsContainer.appendChild(optDiv);
+      });
+    };
+    
+    renderOptions();
+    
+    // Toggle dropdown
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Close all other selects
+      document.querySelectorAll('.custom-select-wrapper.open').forEach(w => {
+        if (w !== wrapper) w.classList.remove('open');
+      });
+      wrapper.classList.toggle('open');
+    });
+    
+    // Re-render if select options change dynamically (mutation observer)
+    const observer = new MutationObserver(() => {
+      renderOptions();
+      textNode.textContent = select.options[select.selectedIndex]?.text || 'Select an option';
+    });
+    observer.observe(select, { childList: true, subtree: true });
+    
+    // Also listen to direct value changes on select via JS if it triggers 'change'
+    select.addEventListener('change', () => {
+      textNode.textContent = select.options[select.selectedIndex]?.text || 'Select an option';
+      optionsContainer.querySelectorAll('.custom-select-option').forEach((el, index) => {
+        el.classList.toggle('selected', select.selectedIndex === index);
+      });
+    });
+  });
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  window.initCustomSelects();
+  
+  // Re-run init when content is dynamically loaded via component-loader
+  const observer = new MutationObserver((mutations) => {
+    let shouldInit = false;
+    for (let mutation of mutations) {
+      if (mutation.addedNodes.length > 0) {
+        shouldInit = true;
+        break;
+      }
+    }
+    if (shouldInit) window.initCustomSelects();
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+});
+
+// Close all custom selects when clicking outside
+document.addEventListener('click', () => {
+  document.querySelectorAll('.custom-select-wrapper.open').forEach(w => w.classList.remove('open'));
+});

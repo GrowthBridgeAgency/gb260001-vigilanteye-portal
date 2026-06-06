@@ -298,7 +298,7 @@ window.viewComplaint = async function(id) {
     let phone = c.profiles.phone.replace(/[^0-9]/g, '');
     if (phone.length === 10) phone = '91' + phone;
     
-    const msg = `Hello ${c.profiles.name},\n\nThis is regarding your VigilantEye Ticket ${c.ticket_number}.\nIssue: ${c.issue_type}\nStatus: ${c.status}\n\n`;
+    const msg = `Hello ${c.profiles.name},\n\nThis is regarding your SafeVision Surveillance Ticket ${c.ticket_number}.\nIssue: ${c.issue_type}\nStatus: ${c.status}\n\n`;
     waBtn.href = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
     waBtn.style.display = 'inline-flex';
   } else {
