@@ -96,6 +96,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (insertError) throw insertError;
 
       // 3. Success state
+      if (window.notificationService) {
+        window.notificationService.notifyAdmins(
+          'New Enquiry',
+          `A new enquiry has been submitted by ${name}.`,
+          'enquiry',
+          '/dashboard/admin/enquiries.html'
+        );
+      }
+
       showToast('Thank you. Our team will contact you shortly.', 'success');
       form.reset();
 

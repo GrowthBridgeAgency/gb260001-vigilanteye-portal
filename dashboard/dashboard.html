@@ -175,94 +175,55 @@
 
       <div class="dashboard-content">
         
-        <!-- Welcome Hero Banner -->
-        <div class="welcome-hero-card">
+        <!-- Compact Header -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
           <div>
-            <h1 style="margin: 0; font-size: 2.2rem; font-weight: 500; letter-spacing: -0.02em;">Dashboard Overview</h1>
-            <p style="margin: 0.5rem 0 1rem 0; color: var(--text-muted); font-size: 1rem; max-width: 500px; line-height: 1.5;">Welcome back! Monitor your system status, verify AMC coverage, and view recent visits.</p>
+            <h1 id="welcome-greeting" style="margin: 0; font-size: 1.75rem; font-weight: 500; letter-spacing: -0.02em;">Dashboard Overview</h1>
             <div id="health-score-container">
-              <div class="skeleton" style="width: 160px; height: 32px; border-radius: 20px; margin-top: 0.5rem;"></div>
+              <div class="skeleton" style="width: 160px; height: 32px; border-radius: 20px; margin-top: 0.75rem;"></div>
             </div>
           </div>
-          
-          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            <a href="../dashboard/complaints.html" class="btn btn-primary" style="font-size:0.8rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-family: var(--font-family); text-transform: none; letter-spacing: 0;">Raise Complaint</a>
-            <a href="../dashboard/products.html" class="btn btn-outline" style="font-size:0.8rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-family: var(--font-family); text-transform: none; letter-spacing: 0;">View Products</a>
-            <a href="../dashboard/invoices.html" class="btn btn-outline" style="font-size:0.8rem; padding: 0.75rem 1.5rem; border-radius: 12px; font-family: var(--font-family); text-transform: none; letter-spacing: 0;">Pay Invoices</a>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <a href="../dashboard/complaints.html" class="btn btn-primary" style="font-size:0.75rem; padding: 0.6rem 1.25rem; border-radius: 8px;">Request Support</a>
+            <a href="../dashboard/products.html" class="btn btn-outline" style="font-size:0.75rem; padding: 0.6rem 1.25rem; border-radius: 8px;">My Hardware</a>
           </div>
         </div>
 
-        <!-- Review Reminder (Hidden by default) -->
-        <div id="review-reminder" class="card" style="display:none; background: linear-gradient(90deg, rgba(56, 189, 248, 0.05), rgba(74, 222, 128, 0.05)); border-color: rgba(56, 189, 248, 0.2); margin-bottom: 2.5rem; border-radius: 16px; padding: 2rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 1.5rem;">
-            <div>
-              <h3 style="margin:0 0 0.5rem 0; color:#fff; font-size: 1.2rem; font-weight: 500;">Share Your Experience!</h3>
-              <p style="margin:0; color:var(--text-muted); font-size:0.9rem;">Your feedback helps us provide outstanding surveillance solutions.</p>
-            </div>
-            <a href="../dashboard/reviews.html" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.75rem 1.5rem; border-radius: 10px; font-family: var(--font-family); text-transform: none; letter-spacing: 0;">Go To Reviews</a>
-          </div>
-        </div>
-
-        <!-- Customer Snapshot Strip -->
-        <div class="card snapshot-card">
-          <h3 style="margin:0 0 1.25rem 0; font-size:0.9rem; color:var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">Customer Snapshot</h3>
-          <div class="snapshot-grid" id="snapshot-grid">
-            <div>
-              <div class="skeleton" style="width: 50%; height: 14px; margin-bottom: 0.5rem;"></div>
-              <div class="skeleton" style="width: 80%; height: 24px;"></div>
-            </div>
-            <div>
-              <div class="skeleton" style="width: 50%; height: 14px; margin-bottom: 0.5rem;"></div>
-              <div class="skeleton" style="width: 80%; height: 24px;"></div>
-            </div>
-            <div>
-              <div class="skeleton" style="width: 50%; height: 14px; margin-bottom: 0.5rem;"></div>
-              <div class="skeleton" style="width: 80%; height: 24px;"></div>
-            </div>
-            <div>
-              <div class="skeleton" style="width: 50%; height: 14px; margin-bottom: 0.5rem;"></div>
-              <div class="skeleton" style="width: 80%; height: 24px;"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 8 KPI Cards Grid -->
-        <div class="kpi-grid" id="kpi-container">
-          <!-- Skeletons x 8 -->
-          <div class="metric-card"><div class="skeleton" style="height:12px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
-          <div class="metric-card"><div class="skeleton" style="height:12px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
-          <div class="metric-card"><div class="skeleton" style="height:12px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
-          <div class="metric-card"><div class="skeleton" style="height:12px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
-          <div class="metric-card"><div class="skeleton" style="height:12px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
-          <div class="metric-card"><div class="skeleton" style="height:12px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
-          <div class="metric-card"><div class="skeleton" style="height:12px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
-          <div class="metric-card"><div class="skeleton" style="height:12px; width:60%; margin-bottom:1rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
+        <!-- Metrics Grid (No wrapper) -->
+        <div class="kpi-grid" id="kpi-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+          <!-- Skeletons x 5 -->
+          <div style="flex: 1;"><div class="skeleton" style="height:12px; width:60%; margin-bottom:0.5rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
+          <div style="flex: 1;"><div class="skeleton" style="height:12px; width:60%; margin-bottom:0.5rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
+          <div style="flex: 1;"><div class="skeleton" style="height:12px; width:60%; margin-bottom:0.5rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
+          <div style="flex: 1;"><div class="skeleton" style="height:12px; width:60%; margin-bottom:0.5rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
+          <div style="flex: 1;"><div class="skeleton" style="height:12px; width:60%; margin-bottom:0.5rem;"></div><div class="skeleton" style="height:28px; width:40%;"></div></div>
         </div>
 
         <div class="grid-2" style="align-items: start; margin-top: 1rem;">
           <!-- Left Column -->
-          <div>
+          <div style="display: flex; flex-direction: column; gap: 2.5rem;">
             <!-- AMC & Warranty Alerts -->
-            <div class="card" style="margin-bottom: 2rem; padding: 2rem; border-radius: 20px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-                <h3 style="margin:0; font-size:1.15rem; font-weight: 500;">Action Required: Expirations</h3>
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
+                <h3 style="margin:0; font-size:1.15rem; font-weight: 500; display:flex; align-items:center; gap:0.5rem;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-orange"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                  Contract Alerts
+                </h3>
                 <a href="../dashboard/amc.html" style="font-size:0.8rem; color:var(--accent-color); font-weight: 500;">View All</a>
               </div>
               <div id="alerts-container">
                 <div class="skeleton" style="height:54px; width:100%; margin-bottom:0.5rem;"></div>
-                <div class="skeleton" style="height:54px; width:100%;"></div>
               </div>
             </div>
 
             <!-- Products Preview -->
-            <div class="card" style="padding: 2rem; border-radius: 20px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-                <h3 style="margin:0; font-size:1.15rem; font-weight: 500;">My Hardware Overview</h3>
-                <a href="../dashboard/products.html" style="font-size:0.8rem; color:var(--accent-color); font-weight: 500;">View Details</a>
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
+                <h3 style="margin:0; font-size:1.15rem; font-weight: 500;">Hardware Overview</h3>
+                <a href="../dashboard/products.html" style="font-size:0.8rem; color:var(--accent-color); font-weight: 500;">View Directory</a>
               </div>
               <div id="products-preview-container">
                 <div class="skeleton" style="height:76px; width:100%; margin-bottom:0.5rem;"></div>
-                <div class="skeleton" style="height:76px; width:100%;"></div>
               </div>
             </div>
           </div>
@@ -270,13 +231,15 @@
           <!-- Right Column -->
           <div>
             <!-- Recent Activity Timeline -->
-            <div class="card" style="padding: 2rem; border-radius: 20px;">
-              <h3 style="margin:0 0 1.5rem 0; font-size:1.15rem; font-weight: 500;">Recent Activity Feed</h3>
-              <div id="activity-container">
-                <div class="skeleton" style="height:48px; width:100%; margin-bottom:0.5rem;"></div>
-                <div class="skeleton" style="height:48px; width:100%; margin-bottom:0.5rem;"></div>
-                <div class="skeleton" style="height:48px; width:100%; margin-bottom:0.5rem;"></div>
-                <div class="skeleton" style="height:48px; width:100%; margin-bottom:0.5rem;"></div>
+            <div style="background: rgba(255, 255, 255, 0.015); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 20px; padding: 2rem;">
+              <h3 style="margin:0 0 1.5rem 0; font-size:1.15rem; font-weight: 500; display:flex; align-items:center; gap:0.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                Recent Activity
+              </h3>
+              <div id="activity-container" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <div class="skeleton" style="height:48px; width:100%;"></div>
+                <div class="skeleton" style="height:48px; width:100%;"></div>
+                <div class="skeleton" style="height:48px; width:100%;"></div>
               </div>
             </div>
           </div>

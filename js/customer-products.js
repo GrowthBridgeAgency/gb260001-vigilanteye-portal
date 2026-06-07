@@ -59,9 +59,9 @@ function calculateDaysRemaining(expiryDateStr) {
 function renderProducts(grid) {
   if (myProducts.length === 0) {
     grid.innerHTML = `
-      <div style="grid-column: 1 / -1; padding: 6rem 2rem; text-align: center; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: var(--border-radius);">
+      <div style="grid-column: 1 / -1; padding: 6rem 2rem; text-align: center; background: rgba(255,255,255,0.015); border: 1px dashed rgba(255,255,255,0.05); border-radius: 20px;">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color:var(--text-muted); margin-bottom:1rem; opacity:0.5;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-        <h3 style="margin-top: 0; color: var(--text-main);">No Products Assigned</h3>
+        <h3 style="margin-top: 0; color: var(--text-main);">No Hardware Found</h3>
         <p style="color: var(--text-muted); margin-bottom: 0;">You currently have no security hardware registered to your account.</p>
       </div>
     `;

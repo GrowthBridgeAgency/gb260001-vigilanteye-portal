@@ -199,6 +199,16 @@ async function handleReviewSubmit(e) {
 
     if (error) throw error;
 
+    // Notification
+    if (window.notificationService) {
+      window.notificationService.notifyAdmins(
+        'New Review',
+        `A new ${ratingInput.value}-star review was submitted and is pending approval.`,
+        'review',
+        '/dashboard/admin/reviews.html'
+      );
+    }
+
     showToast('Review submitted successfully! Pending admin approval.', 'success');
     
     // Reset form

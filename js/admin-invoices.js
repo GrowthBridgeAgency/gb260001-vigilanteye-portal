@@ -360,6 +360,17 @@ async function handleSave(e) {
       showToast('Invoice created, but failed to save items.', 'error');
     } else {
       showToast(`Invoice ${invNumber} generated successfully.`, 'success');
+      
+      // Notification
+      if (window.notificationService && customerSelect.value) {
+        window.notificationService.createNotification(
+          customerSelect.value,
+          'New Invoice Available',
+          `A new invoice (₹${amount.toLocaleString('en-IN')}) has been generated for you.`,
+          'invoice',
+          `/dashboard/invoices.html` // Since there's no ?id parsing in customer invoices yet, just link to page
+        );
+      }
     }
 
     window.closeModal('create-modal');

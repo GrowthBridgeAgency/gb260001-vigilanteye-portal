@@ -135,38 +135,33 @@ async function fetchComplaints() {
 
 function renderComplaints() {
   if (myComplaints.length === 0) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="7" style="text-align:center; padding:4rem 1rem;">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color:var(--text-muted); margin-bottom:1rem; opacity:0.5;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-          <p style="color:var(--text-muted); margin:0;">No complaints raised yet.</p>
-        </td>
-      </tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:4rem; color:var(--text-muted);">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin-bottom:1rem; opacity:0.5;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      <div>No support requests found. You're all caught up!</div>
+    </td></tr>`;
     return;
   }
 
-  const today = new Date().toISOString().split('T')[0];
-
   tbody.innerHTML = myComplaints.map(c => {
-    const p = c.products || {};
+    let pName = c.products ? c.products.product_name : 'Unknown';
+    let amcStatus = 'N/A';
     
-    // Warranty / AMC String
-    let wStatus = 'Warranty Expired';
-    if (p.warranty_expiry && p.warranty_expiry >= today) wStatus = 'Warranty Active';
-    
-    let aStatus = p.amc_status === 'Active' ? 'AMC Active' : 'AMC Inactive';
+    if (c.products && c.products.amc_expiry) {
+      const now = new Date();
+      amcStatus = new Date(c.products.amc_expiry) > now ? '<span style="color:#4ade80;">Covered</span>' : '<span style="color:#f87171;">Expired</span>';
+    }
+
+    const priorityClass = `priority-${c.priority?.toLowerCase()}`;
+    const statusClass = `status-${c.status?.toLowerCase().replace(' ', '-')}`;
 
     return `
-      <tr style="cursor:pointer;" onclick="window.viewComplaint(${c.id})">
-        <td style="font-weight:600; color:var(--primary-color);">${c.ticket_number}</td>
-        <td>${p.product_name || '-'}</td>
+      <tr onclick="window.viewComplaint(${c.id})" style="cursor:pointer;">
+        <td style="font-family: monospace; color:var(--accent-color); font-weight:600;">${c.ticket_number}</td>
+        <td style="font-weight: 500;">${pName}</td>
         <td>${c.issue_type}</td>
-        <td class="priority-${c.priority?.toLowerCase()}">${c.priority}</td>
-        <td><span class="status-badge ${getBadgeClass(c.status)}">${c.status}</span></td>
-        <td style="font-size:0.8rem; color:var(--text-muted);">
-          <div style="margin-bottom:0.2rem;">${wStatus}</div>
-          <div>${aStatus}</div>
-        </td>
+        <td class="${priorityClass}">${c.priority || 'Normal'}</td>
+        <td><span class="status-badge ${statusClass}">${c.status}</span></td>
+        <td>${amcStatus}</td>
         <td style="color:var(--text-muted);">${formatDate(c.created_at)}</td>
       </tr>
     `;
@@ -283,6 +278,16 @@ async function handleRaiseComplaint(e) {
       showToast('Complaint saved, but failed to log timeline.', 'error');
     } else {
       console.log("[Complaint Submit] Successfully inserted timeline update.");
+    }
+
+    // Notification
+    if (window.notificationService) {
+      window.notificationService.notifyAdmins(
+        'New Complaint',
+        `A new complaint (${ticketNumber}) has been submitted by a customer.`,
+        'complaint',
+        `/dashboard/admin/complaints.html`
+      );
     }
 
     showToast(`Ticket ${ticketNumber} raised successfully!`, 'success');

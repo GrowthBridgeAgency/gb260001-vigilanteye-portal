@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
   loadComponent("footer-placeholder", basePath + "/components/footer.html");
   loadComponent("customer-sidebar-placeholder", basePath + "/components/customer-sidebar.html");
   loadComponent("admin-sidebar-placeholder", basePath + "/components/admin-sidebar.html");
+  loadComponent("customer-header-placeholder", basePath + "/components/customer-header.html");
+  loadComponent("admin-header-placeholder", basePath + "/components/admin-header.html");
 });
 
 async function loadComponent(elementId, componentPath) {
@@ -35,19 +37,44 @@ async function loadComponent(elementId, componentPath) {
     if (elementId === 'navbar-placeholder' && window.updateNavigationUI) {
       window.updateNavigationUI();
     }
+    
+    highlightActiveLinks(element);
   } catch (error) {
     console.error(`Error loading component ${componentPath}:`, error);
     element.innerHTML = `<p>Error loading component.</p>`;
   }
 }
 
+function highlightActiveLinks(container) {
+  const currentPath = window.location.pathname;
+  // Get all links in the loaded container
+  const links = container.querySelectorAll('a');
+  links.forEach(link => {
+    // If the link href matches the current path (or we're at root and it points to index)
+    const linkPath = new URL(link.href, window.location.origin).pathname;
+    
+    if (currentPath === linkPath || (currentPath.endsWith('/') && linkPath.endsWith('index.html'))) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+}
+
 // Dynamically load core modules sequentially:
 // 1. auth.js (Route protection)
 // 2. user-context.js (Populate globals like window.currentUser)
 // 3. scroll-animations.js (Fallback for storytelling animations)
+// 4. notification-service.js (Global notification polling)
 import(basePath + '/js/auth.js')
   .then(() => import(basePath + '/js/user-context.js'))
   .then(() => import(basePath + '/js/scroll-animations.js'))
+  .then(() => import(basePath + '/js/notification-service.js'))
+  .then((module) => {
+    if (module && module.initNotificationPolling) {
+      module.initNotificationPolling();
+    }
+  })
   .catch(err => console.error("Failed to load core modules:", err));
 
 // Global File Input Clear Utility

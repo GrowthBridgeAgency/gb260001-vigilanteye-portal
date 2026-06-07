@@ -285,10 +285,32 @@ async function handleSaveAssignment(e) {
       const { error } = await supabase.from('products').update(payload).eq('id', id);
       if (error) throw error;
       showToast('Assignment updated successfully.', 'success');
+      
+      // Notification
+      if (window.notificationService) {
+        window.notificationService.createNotification(
+          customerId,
+          'AMC Contract Updated',
+          'Your product AMC details have been updated.',
+          'amc',
+          '/dashboard/products.html'
+        );
+      }
     } else {
       const { error } = await supabase.from('products').insert([payload]);
       if (error) throw error;
       showToast('Product assigned successfully.', 'success');
+      
+      // Notification
+      if (window.notificationService) {
+        window.notificationService.createNotification(
+          customerId,
+          'New Product Assigned',
+          `A new product (${productName}) has been added to your account.`,
+          'product',
+          '/dashboard/products.html'
+        );
+      }
     }
 
     window.closeModal('assign-modal');

@@ -161,6 +161,17 @@ window.toggleApproval = async function(id, isApproved) {
     const review = allReviews.find(r => String(r.id) === String(id));
     if (review) review.approved = isApproved;
     
+    // Notification
+    if (isApproved && window.notificationService && review?.customer_id) {
+      window.notificationService.createNotification(
+        review.customer_id,
+        'Review Approved',
+        `Thank you! Your ${review.rating}-star review is now live.`,
+        'review',
+        '/dashboard/reviews.html'
+      );
+    }
+    
     updateMetrics();
   } catch (error) {
     console.error('Toggle error:', error);

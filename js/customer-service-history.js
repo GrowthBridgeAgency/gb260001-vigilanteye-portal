@@ -8,7 +8,7 @@ import { loadCurrentUser } from './user-context.js';
 import { showToast } from './toast.js';
 
 let currentUser = null;
-let myRecords = [];
+let services = [];
 
 const tbody = document.getElementById('services-tbody');
 
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   currentUser = user;
 
-  fetchMyRecords();
+  fetchServiceHistory();
 });
 
 // Extractor helper
@@ -44,32 +44,37 @@ function getOutcomeClass(outcome) {
   return map[outcome] || 'outcome-completed';
 }
 
-async function fetchMyRecords() {
-  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:3rem; color:var(--text-muted);">Loading history...</td></tr>';
+async function fetchServiceHistory() {
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:3rem; color:var(--text-muted);">Fetching your service logs...</td></tr>';
   
   try {
     const { data, error } = await supabase
       .from('service_history')
-      .select('*, products:product_id(product_name)')
+      .select('*, products(product_name)')
       .eq('customer_id', currentUser.id)
       .order('service_date', { ascending: false });
 
     if (error) throw error;
-    myRecords = data || [];
+    
+    services = data;
     renderTable();
   } catch (err) {
     console.error('Error fetching service history:', err);
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:3rem; color:#fca5a5;">Failed to load history.</td></tr>';
+    showToast('Failed to load service history.', 'error');
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:3rem; color:#fca5a5;">Error loading service data.</td></tr>';
   }
 }
 
 function renderTable() {
-  if (myRecords.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:3rem; color:var(--text-muted);">No service history available.</td></tr>';
+  if (services.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:4rem; color:var(--text-muted);">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin-bottom:1rem; opacity:0.5;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      <div>You have no service history on record.</div>
+    </td></tr>`;
     return;
   }
 
-  tbody.innerHTML = myRecords.map(r => {
+  tbody.innerHTML = services.map(r => {
     const parsed = parseServiceDetails(r.service_details);
     const badgeClass = getOutcomeClass(parsed.outcome);
     const date = new Date(r.service_date).toLocaleDateString('en-IN');
@@ -93,7 +98,7 @@ function renderTable() {
 }
 
 window.viewReport = function(id) {
-  const r = myRecords.find(x => String(x.id) === String(id));
+  const r = services.find(x => String(x.id) === String(id));
   if (!r) return;
 
   const parsed = parseServiceDetails(r.service_details);

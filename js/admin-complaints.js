@@ -253,6 +253,35 @@ async function handleSaveManagement(e) {
     window.closeModal('manage-modal');
     fetchData(); // Refresh
 
+    // Notifications
+    if (window.notificationService && originalComplaint.customer_id) {
+      if (originalComplaint.technician_id != newTechId && newTechId) {
+        window.notificationService.createNotification(
+          originalComplaint.customer_id,
+          'Technician Assigned',
+          'A technician has been assigned to your complaint and will assist you shortly.',
+          'complaint',
+          `/dashboard/complaints.html?id=${id}`
+        );
+      } else if (originalComplaint.status !== 'Resolved' && newStatus === 'Resolved') {
+        window.notificationService.createNotification(
+          originalComplaint.customer_id,
+          'Complaint Resolved',
+          `Your complaint (Ref: ${originalComplaint.ticket_number}) has been resolved.`,
+          'complaint',
+          `/dashboard/complaints.html?id=${id}`
+        );
+      } else if (originalComplaint.status !== newStatus) {
+        window.notificationService.createNotification(
+          originalComplaint.customer_id,
+          'Complaint Updated',
+          `Your complaint (Ref: ${originalComplaint.ticket_number}) status was updated to ${newStatus}.`,
+          'complaint',
+          `/dashboard/complaints.html?id=${id}`
+        );
+      }
+    }
+
     // AUTO-INSERT SERVICE RECORD
     if (originalComplaint.status !== 'Resolved' && newStatus === 'Resolved') {
       try {

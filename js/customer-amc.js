@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function fetchAMCRecords() {
-  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:3rem; color:var(--text-muted);">Loading your AMC records...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:3rem; color:var(--text-muted);">Fetching your contract details...</td></tr>';
   
   try {
     const { data, error } = await supabase
@@ -46,13 +46,16 @@ async function fetchAMCRecords() {
   } catch (err) {
     console.error('Error fetching AMC records:', err);
     showToast('Failed to load AMC tracking.', 'error');
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:3rem; color:var(--text-muted);">Error loading data.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:3rem; color:#fca5a5;">Error loading contract data.</td></tr>';
   }
 }
 
 function renderTable() {
   if (amcRecords.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:3rem; color:var(--text-muted);">You currently have no products under an active or trackable AMC.</td></tr>';
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:4rem; color:var(--text-muted);">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin-bottom:1rem; opacity:0.5;"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+      <div>You currently have no products under an active or trackable AMC.</div>
+    </td></tr>`;
     return;
   }
 

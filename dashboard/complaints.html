@@ -58,22 +58,22 @@
           <button class="btn btn-primary" onclick="openModal('raise-modal')" style="white-space: nowrap;">Raise New Complaint</button>
         </div>
         
-        <div class="card" style="padding:0; overflow:hidden;">
+        <div class="table-container" style="padding:0; overflow:hidden; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px;">
           <div style="overflow-x:auto;">
             <table class="data-table" id="complaints-table">
               <thead>
                 <tr>
-                  <th>Ticket No.</th>
+                  <th>Support Ref</th>
                   <th>Product</th>
-                  <th>Issue Type</th>
+                  <th>Issue Details</th>
                   <th>Priority</th>
                   <th>Status</th>
-                  <th>Warranty/AMC</th>
-                  <th>Created Date</th>
+                  <th>Coverage</th>
+                  <th>Logged Date</th>
                 </tr>
               </thead>
               <tbody id="complaints-tbody">
-                <tr><td colspan="7" style="text-align:center; padding:3rem; color:var(--text-muted);">Loading complaints...</td></tr>
+                <tr><td colspan="7" style="text-align:center; padding:3rem; color:var(--text-muted);">Fetching your support history...</td></tr>
               </tbody>
             </table>
           </div>
