@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadCurrentUser();
   if (!isAdmin()) {
     showToast('Unauthorized access. Redirecting...', 'error');
-    setTimeout(() => window.location.href = '/dashboard/dashboard.html', 1500);
+    const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : ''); setTimeout(() => window.location.href = basePath + '/dashboard/dashboard.html', 1500);
     return;
   }
 
@@ -299,7 +299,7 @@ window.viewLead = function(id) {
   `;
 
   // Quick Actions
-  let waMessage = encodeURIComponent(`Hello ${r.name},\n\nThank you for contacting VigilantEye Surveillance.\nWe received your enquiry regarding ${r.requirement_type}.\n\nOur team will contact you shortly.`);
+  let waMessage = encodeURIComponent(`Hello ${r.name},\n\nThank you for contacting SafeVision Surveillance Surveillance.\nWe received your enquiry regarding ${r.requirement_type}.\n\nOur team will contact you shortly.`);
   
   // Clean mobile for wa.me
   let cleanMobile = r.mobile ? r.mobile.replace(/[^0-9]/g, '') : '';

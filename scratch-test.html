@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Supabase RLS Diagnostics</title>
+</head>
+<body>
+  <h1>Supabase RLS Diagnostics</h1>
+  <div id="results" style="font-family: monospace; white-space: pre-wrap; background: #222; color: #fff; padding: 1.5rem; border-radius: 8px;">
+    Running diagnostics...
+  </div>
+
+  <script type="module">
+    import { supabase } from './js/supabase.js';
+
+    async function runDiagnostics() {
+      const results = document.getElementById('results');
+      let output = '';
+
+      // Test 1: Fetch from product_catalog
+      try {
+        output += '--- Test 1: Fetching from product_catalog ---\n';
+        const { data, error } = await supabase
+          .from('product_catalog')
+          .select('*')
+          .eq('featured', true)
+          .limit(6);
+        if (error) {
+          output += `Error: ${JSON.stringify(error, null, 2)}\n`;
+        } else {
+          output += `Success! Found ${data.length} featured products.\n`;
+        }
+      } catch (err) {
+        output += `Exceptions: ${err.message}\n`;
+      }
+
+      // Test 2: Fetch from reviews with join
+      try {
+        output += '\n--- Test 2: Fetching from reviews with profile join ---\n';
+        const { data, error } = await supabase
+          .from('reviews')
+          .select('*, profiles:customer_id(name)')
+          .eq('approved', true);
+        if (error) {
+          output += `Error: ${JSON.stringify(error, null, 2)}\n`;
+        } else {
+          output += `Success! Found ${data.length} reviews.\n`;
+        }
+      } catch (err) {
+        output += `Exception: ${err.message}\n`;
+      }
+
+      // Test 3: Fetch from reviews without join
+      try {
+        output += '\n--- Test 3: Fetching from reviews without join ---\n';
+        const { data, error } = await supabase
+          .from('reviews')
+          .select('*')
+          .eq('approved', true);
+        if (error) {
+          output += `Error: ${JSON.stringify(error, null, 2)}\n`;
+        } else {
+          output += `Success! Found ${data.length} reviews without join.\n`;
+        }
+      } catch (err) {
+        output += `Exception: ${err.message}\n`;
+      }
+
+      // Test 4: Fetch from client_showcase
+      try {
+        output += '\n--- Test 4: Fetching from client_showcase ---\n';
+        const { data, error } = await supabase
+          .from('client_showcase')
+          .select('*')
+          .eq('featured', true);
+        if (error) {
+          output += `Error: ${JSON.stringify(error, null, 2)}\n`;
+        } else {
+          output += `Success! Found ${data.length} client showcase entries.\n`;
+        }
+      } catch (err) {
+        output += `Exception: ${err.message}\n`;
+      }
+
+      results.textContent = output;
+    }
+
+    runDiagnostics();
+  </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 /**
  * supabase.js
- * Centralized Supabase client configuration for VigilantEye Portal.
+ * Centralized Supabase client configuration for SafeVision Surveillance Portal.
  */
 
 // Use the official Supabase CDN via ES Modules

@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadCurrentUser();
   if (!isAdmin()) {
     showToast('Unauthorized access. Redirecting...', 'error');
-    setTimeout(() => window.location.href = '/dashboard/dashboard.html', 1500);
+    const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : ''); setTimeout(() => window.location.href = basePath + '/dashboard/dashboard.html', 1500);
     return;
   }
 
@@ -160,6 +160,17 @@ window.toggleApproval = async function(id, isApproved) {
     // Update local state without fetching again to prevent jumping
     const review = allReviews.find(r => String(r.id) === String(id));
     if (review) review.approved = isApproved;
+    
+    // Notification
+    if (isApproved && window.notificationService && review?.customer_id) {
+      window.notificationService.createNotification(
+        review.customer_id,
+        'Review Approved',
+        `Thank you! Your ${review.rating}-star review is now live.`,
+        'review',
+        '/dashboard/reviews.html'
+      );
+    }
     
     updateMetrics();
   } catch (error) {

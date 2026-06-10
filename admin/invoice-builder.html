@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice Builder | Admin | SafeVision</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    body {
+      background: #0f172a;
+      overflow-x: hidden;
+    }
+
+    .builder-container {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .builder-sidebar {
+      width: 450px;
+      background: var(--bg-card);
+      border-right: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .builder-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      position: sticky;
+      top: 0;
+      background: rgba(30, 41, 59, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .builder-form {
+      padding: 1.5rem;
+      flex: 1;
+    }
+
+    .preview-pane {
+      flex: 1;
+      background: #e2e8f0; /* Light gray background to contrast the A4 paper */
+      overflow-y: auto;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Form Styles Overrides */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-control {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      border-radius: 8px !important;
+      padding: 0.75rem 1rem !important;
+      color: #fff !important;
+      transition: all 0.2s;
+    }
+    .form-control:focus {
+      border-color: var(--primary-color) !important;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+      outline: none;
+    }
+    .form-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    #custom_select_list li {
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.2s;
+    }
+    #custom_select_list li:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .item-row {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .btn-remove-item {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-remove-item:hover { background: #ef4444; color: #fff; }
+
+    /* The embedded preview styles (mimicking invoice-view.html) */
+    .inv-preview-wrapper {
+      width: 100%;
+      max-width: 800px;
+      background: #ffffff;
+      color: #333;
+      border-radius: 4px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      padding: 3rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Preview CSS Variables */
+    :root {
+      --inv-primary: #38bdf8;
+      --inv-text: #333333;
+      --inv-text-muted: #666666;
+      --inv-border: #e2e8f0;
+    }
+
+    .inv-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; }
+    .inv-company-logo { height: 50px; margin-bottom: 1rem; }
+    .inv-company-info { font-size: 0.85rem; color: var(--inv-text-muted); line-height: 1.5; }
+    .inv-title-section { text-align: right; }
+    .inv-title { font-size: 2.5rem; font-weight: 700; letter-spacing: 0.1em; color: var(--inv-primary); margin: 0 0 1rem 0; }
+    .inv-meta-grid { display: grid; grid-template-columns: auto auto; gap: 0.5rem 2rem; text-align: right; font-size: 0.9rem; }
+    .inv-meta-label { color: var(--inv-text-muted); font-weight: 500; }
+    .inv-meta-value { font-weight: 600; color: var(--inv-text); }
+    .inv-billing { margin-bottom: 3rem; }
+    .inv-bill-title { font-size: 0.8rem; font-weight: 700; color: var(--inv-text-muted); text-transform: uppercase; border-bottom: 2px solid var(--inv-primary); display: inline-block; padding-bottom: 0.25rem; margin-bottom: 0.5rem; }
+    .inv-bill-info { font-size: 0.95rem; line-height: 1.6; }
+    .inv-bill-name { font-size: 1.1rem; font-weight: 600; color: var(--inv-text); margin-bottom: 0.25rem; }
+    .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+    .inv-table th { background: #f8fafc; color: var(--inv-text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; padding: 0.75rem 1rem; text-align: left; border-bottom: 2px solid var(--inv-border); }
+    .inv-table td { padding: 1rem; border-bottom: 1px solid var(--inv-border); font-size: 0.9rem; }
+    .inv-table th:last-child, .inv-table td:last-child { text-align: right; }
+    .inv-table th:nth-child(2), .inv-table td:nth-child(2), .inv-table th:nth-child(3), .inv-table td:nth-child(3) { text-align: center; }
+    .inv-summary-container { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; }
+    .inv-notes { flex: 1; padding-right: 2rem; font-size: 0.85rem; color: var(--inv-text-muted); line-height: 1.6; }
+    .inv-notes-title { font-weight: 600; color: var(--inv-text); margin-bottom: 0.5rem; }
+    .inv-summary { width: 300px; background: #f8fafc; border-radius: 8px; padding: 1.5rem; }
+    .inv-summary-row { display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--inv-text-muted); }
+    .inv-summary-total { display: flex; justify-content: space-between; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--inv-border); font-size: 1.25rem; font-weight: 700; color: var(--inv-primary); }
+    .inv-footer { text-align: center; font-size: 0.85rem; color: var(--inv-text-muted); border-top: 1px solid var(--inv-border); padding-top: 1.5rem; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+
+  <div class="builder-container">
+    
+    <!-- LEFT PANEL: BUILDER FORM -->
+    <div class="builder-sidebar">
+      <div class="builder-header">
+        <div>
+          <h2 style="margin:0; font-size:1.2rem;">Invoice Builder</h2>
+          <a href="invoices.html" style="font-size:0.8rem; color:var(--text-muted); text-decoration:none;">&larr; Back to Invoices</a>
+        </div>
+        <button class="btn btn-primary" id="btn-save" style="padding:0.5rem 1rem;">Save</button>
+      </div>
+
+      <form class="builder-form" id="invoice-form">
+        <h3 style="margin-top:0; font-size:0.9rem; text-transform:uppercase; color:var(--text-muted);">Invoice Details</h3>
+        
+        <div class="form-group" style="position:relative;">
+          <label>Customer</label>
+          <input type="hidden" id="f_customer" required>
+          <div id="custom_select_btn" class="form-control" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+            <span id="custom_select_text">Select Customer...</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+          <div id="custom_select_dropdown" style="display:none; position:absolute; top:100%; left:0; width:100%; background:#1e293b; border:1px solid rgba(255,255,255,0.1); border-radius:8px; z-index:50; max-height:300px; overflow-y:auto; box-shadow:0 10px 25px rgba(0,0,0,0.5); margin-top:0.25rem;">
+            <div style="padding:0.5rem; position:sticky; top:0; background:#1e293b; border-bottom:1px solid rgba(255,255,255,0.05);">
+              <input type="text" id="custom_select_search" placeholder="Search customer..." class="form-control" style="padding:0.5rem !important; font-size:0.85rem !important;">
+            </div>
+            <ul id="custom_select_list" style="list-style:none; margin:0; padding:0;">
+              <!-- Li injected here -->
+            </ul>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:1rem;">
+          <div class="form-group" style="flex:1;">
+            <label>Invoice Date</label>
+            <input type="date" id="f_date" class="form-control" required>
+          </div>
+          <div class="form-group" style="flex:1;">
+            <label>Due Date</label>
+            <input type="date" id="f_due_date" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+          <select id="f_status" class="form-control" required>
+            <option value="Pending">Pending</option>
+            <option value="Paid">Paid</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+
+        <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin:2rem 0;">
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <h3 style="margin:0; font-size:0.9rem; text-transform:uppercase; color:var(--text-muted);">Line Items</h3>
+          <button type="button" class="btn btn-outline" id="btn-add-item" style="padding:0.25rem 0.75rem; font-size:0.8rem;">+ Add Item</button>
+        </div>
+
+        <div id="items-container">
+          <!-- Item rows injected here -->
+        </div>
+
+        <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin:2rem 0;">
+
+        <h3 style="margin-top:0; font-size:0.9rem; text-transform:uppercase; color:var(--text-muted);">Totals & Taxes</h3>
+
+        <div style="display:flex; gap:1rem;">
+          <div class="form-group" style="flex:1;">
+            <label>Tax (%)</label>
+            <input type="number" id="f_tax" class="form-control" value="0" min="0" step="0.1">
+          </div>
+          <div class="form-group" style="flex:1;">
+            <label>Discount (₹)</label>
+            <input type="number" id="f_discount" class="form-control" value="0" min="0" step="0.01">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Notes / Terms</label>
+          <textarea id="f_notes" class="form-control" rows="3">Thank you for your business!</textarea>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- RIGHT PANEL: PREVIEW -->
+    <div class="preview-pane">
+      <div class="inv-preview-wrapper" id="preview-capture">
+        
+        <div class="inv-header">
+          <div>
+            <img src="../assets/invoicelogo.png" alt="Company Logo" class="inv-company-logo">
+            <div class="inv-company-info">
+              <strong>Shree Sawariya CCTV Security Service</strong><br>
+              In Front of Galaxy Library, Near MJD Restaurant Lane<br>
+              Borkheda, Kota, Rajasthan, India<br>
+              +91 96496 45559<br>
+              shreesawariyacctv@gmail.com
+            </div>
+          </div>
+          <div class="inv-title-section">
+            <h1 class="inv-title">INVOICE</h1>
+            <div class="inv-meta-grid">
+              <div class="inv-meta-label">Invoice No:</div>
+              <div class="inv-meta-value" id="p_inv_num">DRAFT</div>
+              <div class="inv-meta-label">Date:</div>
+              <div class="inv-meta-value" id="p_date">-</div>
+              <div class="inv-meta-label">Due Date:</div>
+              <div class="inv-meta-value" id="p_due_date">-</div>
+              <div class="inv-meta-label">Status:</div>
+              <div class="inv-meta-value" id="p_status" style="color: #f59e0b;">Pending</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="inv-billing">
+          <div class="inv-bill-title">BILL TO</div>
+          <div class="inv-bill-info">
+            <div class="inv-bill-name" id="p_cust_name">Select a Customer</div>
+            <div id="p_cust_phone"></div>
+            <div id="p_cust_email"></div>
+            <div id="p_cust_address"></div>
+          </div>
+        </div>
+
+        <table class="inv-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Qty</th>
+              <th>Unit Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="p_items">
+            <!-- Live injected -->
+          </tbody>
+        </table>
+
+        <div class="inv-summary-container">
+          <div class="inv-notes">
+            <div class="inv-notes-title">Notes / Payment Terms</div>
+            <div id="p_notes" style="white-space: pre-wrap;">Thank you for your business!</div>
+          </div>
+          <div class="inv-summary">
+            <div class="inv-summary-row">
+              <span>Subtotal</span>
+              <span id="p_subtotal">₹0.00</span>
+            </div>
+            <div class="inv-summary-row">
+              <span>Discount</span>
+              <span id="p_discount">₹0.00</span>
+            </div>
+            <div class="inv-summary-row">
+              <span>Tax Amount</span>
+              <span id="p_tax_amount">₹0.00</span>
+            </div>
+            <div class="inv-summary-total">
+              <span>Grand Total</span>
+              <span id="p_grand_total">₹0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="inv-footer">
+          This is a computer generated invoice and does not require a physical signature.
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script type="module" src="../js/invoice-builder.js"></script>
+</body>
+</html>

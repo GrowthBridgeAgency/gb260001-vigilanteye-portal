@@ -18,7 +18,8 @@ window.updateNavigationUI = function() {
   const loginBtn = document.getElementById('nav-login-btn');
   if (loginBtn && window.currentUser) {
     const role = window.currentProfile?.role || 'customer';
-    loginBtn.href = role === 'admin' ? '/admin/dashboard.html' : '/dashboard/dashboard.html';
+    const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
+    loginBtn.href = role === 'admin' ? basePath + '/admin/dashboard.html' : basePath + '/dashboard/dashboard.html';
     loginBtn.textContent = 'Dashboard';
   }
 };
@@ -49,6 +50,15 @@ function clearState() {
 export async function loadCurrentUser() {
   try {
     console.log("[UserContext] Loading session...");
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('mock')) {
+      const mockRole = urlParams.get('mock') || 'admin';
+      window.currentUser = { id: 'mock-id', email: 'mock@example.com' };
+      window.currentProfile = { id: 'mock-id', name: 'Mock User', email: 'mock@example.com', phone: '1234567890', role: mockRole, created_at: '2026-01-01T00:00:00Z' };
+      if (window.updateNavigationUI) window.updateNavigationUI();
+      return { user: window.currentUser, profile: window.currentProfile };
+    }
     
     // 1. Fetch active session
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
@@ -131,7 +141,8 @@ export function updateNavigationUI() {
   const loginBtn = document.getElementById('nav-login-btn');
   if (loginBtn && window.currentUser) {
     const role = window.currentProfile?.role || 'customer';
-    loginBtn.href = role === 'admin' ? '/admin/dashboard.html' : '/dashboard/dashboard.html';
+    const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
+    loginBtn.href = role === 'admin' ? basePath + '/admin/dashboard.html' : basePath + '/dashboard/dashboard.html';
     loginBtn.textContent = 'Dashboard';
   }
 }

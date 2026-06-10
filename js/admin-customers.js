@@ -15,7 +15,8 @@ let allInvoices = [];
 document.addEventListener('DOMContentLoaded', async () => {
   await loadCurrentUser();
   if (!isAdmin()) {
-    window.location.href = '/login.html';
+    const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
+    window.location.href = basePath + '/login.html';
     return;
   }
   
@@ -208,15 +209,15 @@ function renderCRMRevenue(invoices) {
   document.getElementById('crm-revenue').innerHTML = `
     <div style="background:rgba(255,255,255,0.02); padding:1rem; border:1px solid rgba(255,255,255,0.05); border-radius:8px; text-align:center;">
       <div style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase;">Total Billed</div>
-      <div style="font-size:1.5rem; font-weight:bold; color:#fff;">$${total.toFixed(2)}</div>
+      <div style="font-size:1.5rem; font-weight:bold; color:#fff;">₹${total.toFixed(2)}</div>
     </div>
     <div style="background:rgba(255,255,255,0.02); padding:1rem; border:1px solid rgba(255,255,255,0.05); border-radius:8px; text-align:center;">
       <div style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase;">Revenue Collected</div>
-      <div style="font-size:1.5rem; font-weight:bold; color:#4ade80;">$${paid.toFixed(2)}</div>
+      <div style="font-size:1.5rem; font-weight:bold; color:#4ade80;">₹${paid.toFixed(2)}</div>
     </div>
     <div style="background:rgba(255,255,255,0.02); padding:1rem; border:1px solid rgba(255,255,255,0.05); border-radius:8px; text-align:center;">
       <div style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase;">Pending Revenue</div>
-      <div style="font-size:1.5rem; font-weight:bold; color:#f87171;">$${pending.toFixed(2)}</div>
+      <div style="font-size:1.5rem; font-weight:bold; color:#f87171;">₹${pending.toFixed(2)}</div>
     </div>
   `;
 }
@@ -341,7 +342,7 @@ function renderCRMTimeline(complaints, services, invoices, reviews) {
   invoices.forEach(i => {
     events.push({
       title: `Invoice Generated: ${i.invoice_number}`,
-      desc: `Status: ${i.status} - $${i.amount}`,
+      desc: `Status: ${i.status} - ₹${i.amount}`,
       date: new Date(i.created_at)
     });
   });
@@ -376,10 +377,11 @@ function renderCRMTimeline(complaints, services, invoices, reviews) {
 
 function renderCRMQuickActions(customerId) {
   // Pass customer ID as URL param so other modules could theoretically filter by it if implemented.
+  const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
   document.getElementById('crm-quick-actions').innerHTML = `
-    <a href="/admin/products.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Hardware Inventory</a>
-    <a href="/admin/complaints.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Support Tickets</a>
-    <a href="/admin/invoices.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Billing History</a>
-    <a href="/admin/service-history.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Service Records</a>
+    <a href="${basePath}/admin/products.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Hardware Inventory</a>
+    <a href="${basePath}/admin/complaints.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Support Tickets</a>
+    <a href="${basePath}/admin/invoices.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Billing History</a>
+    <a href="${basePath}/admin/service-history.html?customer=${customerId}" class="btn btn-outline" style="text-align:left; font-size:0.85rem;">Service Records</a>
   `;
 }

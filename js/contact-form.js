@@ -12,6 +12,28 @@ document.addEventListener('DOMContentLoaded', () => {
   
   if (!form) return;
 
+  // Pre-fill from URL query params (e.g. ?product=DS-2CD1043G0)
+  const urlParams = new URLSearchParams(window.location.search);
+  const productEnquiry = urlParams.get('product');
+  if (productEnquiry) {
+    const requirementType = document.getElementById('requirement_type');
+    const messageField = document.getElementById('message');
+    
+    if (requirementType) {
+      // Let's set it to 'Other' since it's a specific product enquiry
+      requirementType.value = 'Other';
+    }
+    
+    if (messageField) {
+      messageField.value = `I would like to enquire about the following product: ${productEnquiry}\n\nPlease provide more details regarding pricing and availability.`;
+    }
+    
+    // Auto-scroll to form so user sees it right away
+    setTimeout(() => {
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 500);
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
@@ -96,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (insertError) throw insertError;
 
       // 3. Success state
+
       showToast('Thank you. Our team will contact you shortly.', 'success');
       form.reset();
 

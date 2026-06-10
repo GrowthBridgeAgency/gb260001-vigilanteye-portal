@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!isLoggedIn()) {
     showToast('Unauthorized access. Redirecting...', 'error');
     setTimeout(() => {
-      window.location.href = '/login.html';
+      const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
+      window.location.href = basePath + '/login.html';
     }, 1500);
     return;
   }
@@ -58,9 +59,9 @@ function calculateDaysRemaining(expiryDateStr) {
 function renderProducts(grid) {
   if (myProducts.length === 0) {
     grid.innerHTML = `
-      <div style="grid-column: 1 / -1; padding: 6rem 2rem; text-align: center; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: var(--border-radius);">
+      <div style="grid-column: 1 / -1; padding: 6rem 2rem; text-align: center; background: rgba(255,255,255,0.015); border: 1px dashed rgba(255,255,255,0.05); border-radius: 20px;">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color:var(--text-muted); margin-bottom:1rem; opacity:0.5;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-        <h3 style="margin-top: 0; color: var(--text-main);">No Products Assigned</h3>
+        <h3 style="margin-top: 0; color: var(--text-main);">No Hardware Found</h3>
         <p style="color: var(--text-muted); margin-bottom: 0;">You currently have no security hardware registered to your account.</p>
       </div>
     `;
@@ -100,7 +101,7 @@ function renderProducts(grid) {
         </div>
         <div class="product-content">
           <h3 class="product-title">${p.product_name}</h3>
-          <span class="product-brand">${p.brand || 'VigilantEye Solutions'} • ${p.model_number || 'Standard Model'}</span>
+          <span class="product-brand">${p.brand || 'SafeVision Surveillance'} • ${p.model_number || 'Standard Model'}</span>
           <div style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
             Quantity: <strong>${p.quantity}</strong><br>
             Installed: <strong>${p.installation_date || 'Pending'}</strong>
@@ -203,7 +204,7 @@ window.viewProductDetails = async function(id) {
             </div>
           </div>
           <div style="margin-top:1rem; text-align:right;">
-            <a href="/dashboard/service-history.html" class="btn btn-outline" style="padding:0.25rem 0.75rem; font-size:0.8rem;">View Full Logbook</a>
+            <a href="${window.basePath || ''}/dashboard/service-history.html" class="btn btn-outline" style="padding:0.25rem 0.75rem; font-size:0.8rem;">View Full Logbook</a>
           </div>
         </div>
       `;

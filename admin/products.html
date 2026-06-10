@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Product Catalog | VigilantEye Admin</title>
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/css/dashboard.css">
-  <link rel="stylesheet" href="/css/admin.css">
+  <title>Manage Product Catalog | SafeVision Surveillance Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/admin.css">
   <meta name="view-transition" content="same-origin">
 </head>
 <body>
@@ -38,7 +38,7 @@
             </div>
           </div>
 
-          <div class="card" style="padding: 0; overflow: hidden;">
+          <div class="table-container" style="padding: 0; overflow: hidden;">
             <div style="overflow-x: auto;">
               <table class="data-table" id="products-table">
                 <thead>
@@ -77,7 +77,7 @@
             </div>
           </div>
 
-          <div class="card" style="padding: 0; overflow: hidden;">
+          <div class="table-container" style="padding: 0; overflow: hidden;">
             <div style="overflow-x: auto;">
               <table class="data-table" id="installed-table">
                 <thead>
@@ -131,7 +131,24 @@
             </div>
             <div>
               <label>Category</label>
-              <input type="text" id="category" name="category" class="form-control">
+              <select id="category" name="category" class="form-control" required>
+                <option value="" disabled selected>Select Category</option>
+                <option value="CCTV Camera">CCTV Camera</option>
+                <option value="DVR">DVR</option>
+                <option value="NVR">NVR</option>
+                <option value="Biometric System">Biometric System</option>
+                <option value="Video Door Phone">Video Door Phone</option>
+                <option value="Access Control System">Access Control System</option>
+                <option value="Smart Door Lock">Smart Door Lock</option>
+                <option value="Networking Equipment">Networking Equipment</option>
+                <option value="Storage Device">Storage Device</option>
+                <option value="Security Alarm System">Security Alarm System</option>
+                <option value="Fire Alarm System">Fire Alarm System</option>
+                <option value="Intercom System">Intercom System</option>
+                <option value="Power Supply & Accessories">Power Supply & Accessories</option>
+                <option value="Security Package">Security Package</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
             <div>
               <label>Brand</label>
@@ -278,10 +295,10 @@
     </div>
   </div>
 
-  <script src="/js/component-loader.js"></script>
+  <script src="../js/component-loader.js"></script>
   <!-- Load both scripts -->
-  <script type="module" src="/js/admin-products.js"></script>
-  <script type="module" src="/js/admin-installed-products.js"></script>
+  <script type="module" src="../js/admin-products.js"></script>
+  <script type="module" src="../js/admin-installed-products.js"></script>
   
   <!-- Global Tab & Modal UI Helpers -->
   <script>

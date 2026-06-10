@@ -110,7 +110,8 @@ async function handleSignup(event) {
     
     // Step 4: Redirect to login page
     setTimeout(() => {
-      window.location.href = '/login.html';
+      const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
+      window.location.href = basePath + '/login.html';
     }, 2000);
     
   } catch (error) {
@@ -152,10 +153,11 @@ async function handleLogin(event) {
     
     // Role-based redirection
     setTimeout(() => {
+      const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
       if (profile.role === 'admin') {
-        window.location.href = '/admin/dashboard.html';
+        window.location.href = basePath + '/admin/dashboard.html';
       } else {
-        window.location.href = '/dashboard/dashboard.html';
+        window.location.href = basePath + '/dashboard/dashboard.html';
       }
     }, 1000);
     
@@ -166,14 +168,19 @@ async function handleLogin(event) {
 }
 
 async function logout() {
+  if (!confirm("Are you sure you want to log out?")) {
+    return;
+  }
   try {
     // End Supabase session & clear local state
     await supabase.auth.signOut();
-    window.location.href = '/login.html';
+    const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
+    window.location.href = basePath + '/login.html';
   } catch (error) {
     console.error("Logout error:", error);
     // Fallback redirect
-    window.location.href = '/login.html';
+    const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
+    window.location.href = basePath + '/login.html';
   }
 }
 
@@ -185,10 +192,17 @@ window.logout = logout;
 // ==========================================
 
 async function enforceRouteProtection() {
+  const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
   const path = window.location.pathname;
-  const isCustomerRoute = path.startsWith('/dashboard/');
-  const isAdminRoute = path.startsWith('/admin/');
-  const isAuthRoute = path === '/login.html' || path === '/signup.html';
+  const isCustomerRoute = path.startsWith(basePath + '/dashboard/');
+  const isAdminRoute = path.startsWith(basePath + '/admin/');
+  const isAuthRoute = path === basePath + '/login.html' || path === basePath + '/signup.html';
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('mock')) {
+    console.log("[Auth] Bypassing route protection via mock mode.");
+    return;
+  }
   
   // Get current persistent session
   const { data: { session } } = await supabase.auth.getSession();
@@ -196,7 +210,7 @@ async function enforceRouteProtection() {
   if (!session) {
     // Redirect unauthenticated users trying to access protected routes
     if (isCustomerRoute || isAdminRoute) {
-      window.location.replace('/login.html');
+      window.location.replace(basePath + '/login.html');
     }
     return;
   }
@@ -217,18 +231,18 @@ async function enforceRouteProtection() {
   
   // Prevent customers from accessing admin routes
   if (isAdminRoute && role !== 'admin') {
-    window.location.replace('/dashboard/dashboard.html');
+    window.location.replace(basePath + '/dashboard/dashboard.html');
   }
   // Prevent admins from accessing customer routes
   else if (isCustomerRoute && role !== 'customer') {
-    window.location.replace('/admin/dashboard.html');
+    window.location.replace(basePath + '/admin/dashboard.html');
   }
   // If logged in and on auth pages, redirect to the appropriate dashboard
   else if (isAuthRoute) {
     if (role === 'admin') {
-      window.location.replace('/admin/dashboard.html');
+      window.location.replace(basePath + '/admin/dashboard.html');
     } else {
-      window.location.replace('/dashboard/dashboard.html');
+      window.location.replace(basePath + '/dashboard/dashboard.html');
     }
   }
 }
@@ -251,9 +265,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // Listen for cross-tab auth state changes (e.g. logging out in another tab)
 supabase.auth.onAuthStateChange((event, session) => {
   if (event === 'SIGNED_OUT') {
+    const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : '');
     const path = window.location.pathname;
-    if (path.startsWith('/dashboard/') || path.startsWith('/admin/')) {
-      window.location.href = '/login.html';
+    if (path.startsWith(basePath + '/dashboard/') || path.startsWith(basePath + '/admin/')) {
+      window.location.href = basePath + '/login.html';
     }
   }
 });

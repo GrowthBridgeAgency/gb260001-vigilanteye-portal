@@ -52,9 +52,7 @@ async function fetchProfileData() {
     renderBasicInfo();
     
     // Render Widgets
-    renderCompletionWidget();
-    renderPlatformSummary(customers || [], products || [], complaints || [], services || [], invoices || []);
-    renderActivityTimeline(complaints || [], services || [], invoices || [], reviews || [], enquiries || []);
+    // Widgets complete
     
   } catch (error) {
     console.error("Error loading admin profile data:", error);
@@ -71,37 +69,17 @@ function renderBasicInfo() {
   document.getElementById('read_email').textContent = currentProfile.email || 'N/A';
   document.getElementById('read_role').textContent = currentProfile.role || 'admin';
   
-  const createdDate = new Date(currentProfile.created_at);
+  const createdDate = currentProfile.created_at ? new Date(currentProfile.created_at) : new Date();
   const now = new Date();
   const diffTime = Math.abs(now - createdDate);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const diffDays = isNaN(createdDate.getTime()) ? 0 : Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  const displayDate = isNaN(createdDate.getTime()) ? 'N/A' : createdDate.toLocaleDateString('en-GB');
   
   document.getElementById('read_since').innerHTML = `
-    <div style="font-weight:600; color:#fff;">${createdDate.toLocaleDateString('en-GB')}</div>
-    <div style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">Member for ${diffDays} days</div>
+    <span>${displayDate}</span>
+    <span style="font-size:0.85em; font-weight:normal; background: rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 20px;">${diffDays} days</span>
   `;
-}
-
-function renderCompletionWidget() {
-  let score = 0;
-  if (currentProfile.name && currentProfile.name.trim() !== '') score += 50;
-  if (currentProfile.phone && currentProfile.phone.trim() !== '') score += 50;
-  
-  const bar = document.getElementById('completion-bar');
-  const text = document.getElementById('completion-text');
-  
-  if (bar && text) {
-    bar.style.width = `${score}%`;
-    text.textContent = `${score}%`;
-    
-    if (score === 100) {
-      bar.style.background = '#4ade80'; // green
-    } else if (score === 50) {
-      bar.style.background = '#fbbf24'; // yellow
-    } else {
-      bar.style.background = '#ef4444'; // red
-    }
-  }
 }
 
 function renderPlatformSummary(customers, products, complaints, services, invoices) {
@@ -129,7 +107,7 @@ function renderPlatformSummary(customers, products, complaints, services, invoic
       <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Service Visits</div>
     </div>
     <div style="background:rgba(255,255,255,0.02); padding:1rem; border:1px solid rgba(255,255,255,0.05); border-radius:8px; text-align:center; grid-column: 1 / -1;">
-      <div style="font-size:1.5rem; font-weight:bold; color:#4ade80;">$${totalRevenue.toFixed(2)}</div>
+      <div style="font-size:1.5rem; font-weight:bold; color:#4ade80;">₹${totalRevenue.toFixed(2)}</div>
       <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Total Platform Revenue</div>
     </div>
   `;
@@ -162,7 +140,7 @@ function renderActivityTimeline(complaints, services, invoices, reviews, enquiri
   invoices.forEach(i => {
     events.push({
       title: `Invoice Generated: ${i.invoice_number}`,
-      desc: `Amount: $${i.amount} - ${i.status}`,
+      desc: `Amount: ₹${i.amount} - ${i.status}`,
       date: new Date(i.created_at),
       icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>'
     });
@@ -235,9 +213,6 @@ async function handleProfileUpdate(e) {
     // Update local context
     currentProfile.name = name;
     currentProfile.phone = phone;
-    
-    // Rerender completion widget
-    renderCompletionWidget();
     
     showToast('success', 'Admin profile updated successfully!');
   } catch (error) {

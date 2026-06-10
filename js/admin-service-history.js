@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadCurrentUser();
   if (!isAdmin()) {
     showToast('Unauthorized access. Redirecting...', 'error');
-    setTimeout(() => window.location.href = '/dashboard/dashboard.html', 1500);
+    const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : ''); setTimeout(() => window.location.href = basePath + '/dashboard/dashboard.html', 1500);
     return;
   }
 
@@ -374,6 +374,16 @@ async function handleSaveRecord(e) {
 
     const { error } = await supabase.from('service_history').insert([payload]);
     if (error) throw error;
+
+    if (window.notificationService && customer_id) {
+      window.notificationService.createNotification(
+        customer_id,
+        'Service Record Added',
+        `A new service record (${service_type}) has been added for your product.`,
+        'service',
+        '/dashboard/service-history.html'
+      );
+    }
 
     showToast('Service record saved successfully', 'success');
     window.closeModal('create-modal');

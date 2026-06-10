@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Complaints | VigilantEye Admin</title>
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/css/dashboard.css">
-  <link rel="stylesheet" href="/css/admin.css">
+  <title>Manage Complaints | SafeVision Surveillance Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/admin.css">
   <style>
     /* WhatsApp Button Styles */
     .btn-whatsapp {
@@ -62,15 +62,15 @@
           </div>
         </div>
 
-        <div class="card" style="padding: 0; overflow: hidden;">
+        <div class="table-container" style="padding: 0; overflow: hidden;">
           <div style="overflow-x: auto;">
             <table class="data-table" id="complaints-table">
               <thead>
                 <tr>
                   <th>Ticket</th>
                   <th>Customer</th>
-                  <th>Product</th>
-                  <th>Issue Type</th>
+                  <th>Device / Product</th>
+                  <th>Category / Issue</th>
                   <th>Priority</th>
                   <th>Status</th>
                   <th>Assigned Tech</th>
@@ -146,8 +146,93 @@
           <button class="modal-close" onclick="closeModal('view-modal')">&times;</button>
         </div>
       </div>
-      <div class="modal-body" id="view-modal-body">
-        <!-- Injected via JS -->
+      <div class="modal-body">
+        
+        <div class="status-timeline" id="view-status-timeline">
+          <!-- Dynamically injected steps -->
+        </div>
+
+        <div class="grid-2" style="gap: 2rem;">
+          <div>
+            <h3 style="margin-top:0; font-size:0.9rem; text-transform:uppercase; color:var(--text-muted); border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:0.5rem; margin-bottom:1rem;">Device & Issue Info</h3>
+            
+            <div class="info-group">
+              <label>Device Type</label>
+              <div class="info-value" id="view-device-type">-</div>
+            </div>
+            
+            <div class="info-group">
+              <label>Problem Category</label>
+              <div class="info-value" id="view-category">-</div>
+            </div>
+
+            <div class="info-group">
+              <label>Specific Issue</label>
+              <div class="info-value" id="view-issue-type">-</div>
+            </div>
+
+            <div class="info-group">
+              <label>Priority</label>
+              <div class="info-value" id="view-priority">-</div>
+            </div>
+
+            <div class="info-group">
+              <label>Description</label>
+              <div class="info-value" id="view-description" style="white-space: pre-wrap;"></div>
+            </div>
+            
+            <div class="info-group">
+              <label>Related Product</label>
+              <div class="info-value" id="view-product-details">-</div>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="margin-top:0; font-size:0.9rem; text-transform:uppercase; color:var(--text-muted); border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:0.5rem; margin-bottom:1rem;">Contact & Scheduling</h3>
+            
+            <div class="info-group">
+              <label>Contact Person</label>
+              <div class="info-value" id="view-contact-name">-</div>
+            </div>
+
+            <div class="info-group">
+              <label>Mobile Number</label>
+              <div class="info-value" id="view-contact-mobile">-</div>
+            </div>
+
+            <div class="info-group">
+              <label>Site Address</label>
+              <div class="info-value" id="view-site-address">-</div>
+            </div>
+
+            <div class="info-group">
+              <label>Preferred Visit Time</label>
+              <div class="info-value" id="view-visit-time">-</div>
+            </div>
+
+            <h3 style="font-size:0.9rem; text-transform:uppercase; color:var(--text-muted); border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:0.5rem; margin-bottom:1rem; margin-top:2rem;">Resolution Info</h3>
+
+            <div class="info-group">
+              <label>Assigned Technician</label>
+              <div class="info-value" id="view-technician">-</div>
+            </div>
+
+            <div class="info-group" id="resolution-group" style="display:none;">
+              <label>Resolution Notes</label>
+              <div class="info-value" id="view-resolution-notes" style="white-space: pre-wrap; background: rgba(34, 197, 94, 0.05); padding: 1rem; border-radius: 8px; border-left: 4px solid #22c55e;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-media" style="margin-top: 1.5rem; display:none;">
+          <h3 style="font-size:0.9rem; text-transform:uppercase; color:var(--text-muted); border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:0.5rem; margin-bottom:1rem;">Attachments</h3>
+          <div style="display: flex; gap: 1rem;">
+            <div id="view-image-container" style="display:none;"></div>
+            <div id="view-video-container" style="display:none;"></div>
+          </div>
+        </div>
+
+      </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline" onclick="closeModal('view-modal')">Close</button>
@@ -155,8 +240,8 @@
     </div>
   </div>
 
-  <script src="/js/component-loader.js"></script>
-  <script type="module" src="/js/admin-complaints.js"></script>
+  <script src="../js/component-loader.js"></script>
+  <script type="module" src="../js/admin-complaints.js"></script>
   <script>
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }

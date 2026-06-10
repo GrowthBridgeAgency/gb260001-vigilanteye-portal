@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Test Supabase Connection</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="css/style.css">
   <style>
     .status-box {
       padding: 1.5rem;
@@ -52,7 +52,7 @@
 
   <!-- Load our Supabase JS configuration as an ES Module -->
   <script type="module">
-    import { checkSupabaseConnection } from '/js/supabase.js';
+    import { checkSupabaseConnection } from './js/supabase.js';
 
     document.addEventListener("DOMContentLoaded", async () => {
       const statusDisplay = document.getElementById("status-display");

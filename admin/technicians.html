@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Technicians | VigilantEye Admin</title>
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/css/dashboard.css">
-  <link rel="stylesheet" href="/css/admin.css">
+  <title>Manage Technicians | SafeVision Surveillance Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/admin.css">
   <style>
     /* Metric Cards */
     .metrics-grid {
@@ -132,7 +132,7 @@
           </div>
         </div>
 
-        <div class="card" style="padding: 0; overflow: hidden;">
+        <div class="table-container" style="padding: 0; overflow: hidden;">
           <div style="padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
             <input type="text" id="search-input" class="form-control" placeholder="Search name, mobile, email, specialization..." style="width: 350px; margin: 0;">
           </div>
@@ -221,8 +221,8 @@
     </div>
   </div>
 
-  <script src="/js/component-loader.js"></script>
-  <script type="module" src="/js/admin-technicians.js"></script>
+  <script src="../js/component-loader.js"></script>
+  <script type="module" src="../js/admin-technicians.js"></script>
   <script>
     window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
     window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }

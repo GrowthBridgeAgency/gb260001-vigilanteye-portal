@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Service History | VigilantEye</title>
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/css/dashboard.css">
+  <title>Service History | SafeVision Surveillance</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
   <style>
     .outcome-badge {
       display: inline-block;
@@ -32,7 +32,7 @@
       <div class="dashboard-content">
         <h1 style="margin-top:0; margin-bottom:1.5rem;">Service History</h1>
         
-        <div class="card" style="padding: 0; overflow: hidden;">
+        <div class="table-container" style="padding: 0; overflow: hidden;">
           <div style="overflow-x: auto;">
             <table class="data-table" id="services-table">
               <thead>
@@ -71,8 +71,8 @@
     </div>
   </div>
 
-  <script src="/js/component-loader.js"></script>
-  <script type="module" src="/js/customer-service-history.js"></script>
+  <script src="../js/component-loader.js"></script>
+  <script type="module" src="../js/customer-service-history.js"></script>
   <script>
     window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
     window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }

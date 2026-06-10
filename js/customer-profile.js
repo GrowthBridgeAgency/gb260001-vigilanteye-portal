@@ -25,35 +25,36 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('password-form').addEventListener('submit', handlePasswordUpdate);
   
   fetchProfileData();
+  
+  if (currentProfile && currentProfile.name) {
+    const greetingEl = document.getElementById('profile-greeting');
+    if (greetingEl) {
+      greetingEl.textContent = `Profile & Settings for ${currentProfile.name}`;
+    }
+  }
 });
 
 async function fetchProfileData() {
   try {
     const id = currentUser.id;
     
-    // Concurrent fetch for summary & timeline
+    // We only need products, complaints, and invoices for the health badge
     const [
       { data: products },
       { data: complaints },
-      { data: services },
-      { data: invoices },
-      { data: reviews }
+      { data: invoices }
     ] = await Promise.all([
-      supabase.from('products').select('*').eq('customer_id', id),
-      supabase.from('complaints').select('*').eq('customer_id', id),
-      supabase.from('service_history').select('*').eq('customer_id', id),
-      supabase.from('invoices').select('*').eq('customer_id', id),
-      supabase.from('reviews').select('*').eq('customer_id', id)
+      supabase.from('products').select('amc_expiry').eq('customer_id', id),
+      supabase.from('complaints').select('status').eq('customer_id', id),
+      supabase.from('invoices').select('status').eq('customer_id', id)
     ]);
     
     // Render Basic Info
     renderBasicInfo();
     
     // Render Widgets
-    renderCompletionWidget();
+    // Render Widgets
     renderHealthBadge(products || [], complaints || [], invoices || []);
-    renderAccountSummary(products || [], complaints || [], services || [], invoices || []);
-    renderActivityTimeline(complaints || [], services || [], invoices || [], reviews || []);
     
   } catch (error) {
     console.error("Error loading profile data:", error);
@@ -70,37 +71,17 @@ function renderBasicInfo() {
   document.getElementById('read_email').textContent = currentProfile.email || 'N/A';
   document.getElementById('read_role').textContent = currentProfile.role || 'customer';
   
-  const createdDate = new Date(currentProfile.created_at);
+  const createdDate = currentProfile.created_at ? new Date(currentProfile.created_at) : new Date();
   const now = new Date();
   const diffTime = Math.abs(now - createdDate);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const diffDays = isNaN(createdDate.getTime()) ? 0 : Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  const displayDate = isNaN(createdDate.getTime()) ? 'N/A' : createdDate.toLocaleDateString('en-GB');
   
   document.getElementById('read_since').innerHTML = `
-    <div style="font-weight:600; color:#fff;">${createdDate.toLocaleDateString('en-GB')}</div>
-    <div style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">Member for ${diffDays} days</div>
+    <span>${displayDate}</span>
+    <span style="font-size:0.85em; font-weight:normal; background: rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 20px;">${diffDays} days</span>
   `;
-}
-
-function renderCompletionWidget() {
-  let score = 0;
-  if (currentProfile.name && currentProfile.name.trim() !== '') score += 50;
-  if (currentProfile.phone && currentProfile.phone.trim() !== '') score += 50;
-  
-  const bar = document.getElementById('completion-bar');
-  const text = document.getElementById('completion-text');
-  
-  if (bar && text) {
-    bar.style.width = `${score}%`;
-    text.textContent = `${score}%`;
-    
-    if (score === 100) {
-      bar.style.background = '#4ade80'; // green
-    } else if (score === 50) {
-      bar.style.background = '#fbbf24'; // yellow
-    } else {
-      bar.style.background = '#ef4444'; // red
-    }
-  }
 }
 
 function renderHealthBadge(products, complaints, invoices) {
@@ -181,11 +162,11 @@ function renderActivityTimeline(complaints, services, invoices, reviews) {
     });
   });
 
-  invoices.forEach(i => {
-    events.push({
-      title: `Invoice Generated: ${i.invoice_number}`,
-      desc: `Amount: $${i.amount} - ${i.status}`,
-      date: new Date(i.created_at),
+    invoices.forEach(i => {
+      events.push({
+        title: `Invoice Generated: ${i.invoice_number}`,
+        desc: `Amount: ₹${i.amount} - ${i.status}`,
+        date: new Date(i.created_at),
       icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>'
     });
   });
@@ -248,9 +229,6 @@ async function handleProfileUpdate(e) {
     // Update local context
     currentProfile.name = name;
     currentProfile.phone = phone;
-    
-    // Rerender completion widget
-    renderCompletionWidget();
     
     showToast('success', 'Profile updated successfully!');
   } catch (error) {

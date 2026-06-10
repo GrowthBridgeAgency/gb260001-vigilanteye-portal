@@ -64,15 +64,16 @@ function renderFeaturedProducts(products) {
       names.add(p.product_name);
       uniqueProducts.push(p);
     }
-    if (uniqueProducts.length >= 6) break;
+    // Limit to 8 for horizontal scroll
+    if (uniqueProducts.length >= 8) break;
   }
 
   window.featuredProductsData = uniqueProducts;
 
   container.innerHTML = uniqueProducts.map((p, index) => {
     const imgHtml = p.image_url 
-      ? `<img src="${p.image_url}" alt="${p.product_name}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">`
-      : `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); color: var(--text-muted);">No Image</div>`;
+      ? `<img src="${p.image_url}" alt="${p.product_name}" loading="lazy">`
+      : `<div class="no-image">No Image</div>`;
 
     let displayPrice = 'Contact for price';
     if (p.price) {
@@ -81,21 +82,23 @@ function renderFeaturedProducts(products) {
     }
 
     return `
-    <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.3s ease;" onclick="window.openProductModal(${index})" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-      <div style="height: 250px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2);">
-        ${imgHtml}
-      </div>
-      <div style="padding: 2rem; flex: 1; display: flex; flex-direction: column;">
-        <div><span style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(255,255,255,0.1); color: var(--text-main); border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 1rem;">Featured</span></div>
-        <h3 style="margin: 0.5rem 0;">${p.product_name}</h3>
-        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.25rem;">Model: ${p.model_number || 'N/A'}</p>
-        <p style="color: var(--primary-color); font-weight: bold; font-size: 1.1rem; margin-bottom: 1rem;">${displayPrice}</p>
+    <div class="horizontal-scroll-item">
+      <div class="overlay-card" onclick="window.openProductModal(${index})">
+        ${p.image_url ? `<img src="${p.image_url}" alt="${p.product_name}" loading="lazy" style="object-fit:cover; width:100%; height:100%; position:absolute;">` : `<div style="background:var(--bg-alt);width:100%;height:100%;position:absolute;"></div>`}
+        <div class="overlay-card-content">
+          <h3>${p.product_name}</h3>
+          <p style="color:rgba(255,255,255,0.7); font-size:0.85rem;">Model: ${p.model_number || 'N/A'}</p>
+          <p style="color:var(--accent-color); font-weight:700; font-size:1.25rem; margin-top:0.5rem; text-shadow:0 1px 5px rgba(0,0,0,0.8);">${displayPrice}</p>
+        </div>
       </div>
     </div>
   `}).join('');
 }
 
+window.currentProductIndex = 0;
+
 window.openProductModal = function(index) {
+  window.currentProductIndex = index;
   const p = window.featuredProductsData[index];
   if (!p) return;
 
@@ -105,9 +108,9 @@ window.openProductModal = function(index) {
   const modalModel = document.getElementById('prod-modal-model');
   const modalPrice = document.getElementById('prod-modal-price');
   const modalCategory = document.getElementById('prod-modal-category');
-  const modalShortDesc = document.getElementById('prod-modal-short-desc');
-  const modalFullDesc = document.getElementById('prod-modal-full-desc');
+  const modalDesc = document.getElementById('prod-modal-desc');
   const modalSpecs = document.getElementById('prod-modal-specs');
+  const modalSpecsContainer = document.getElementById('prod-modal-specs-container');
 
   if (modalImg && modalTitle) {
     if (p.image_url) {
@@ -120,6 +123,7 @@ window.openProductModal = function(index) {
     modalTitle.textContent = p.product_name;
     modalBrand.textContent = p.brand || '-';
     modalModel.textContent = p.model_number || '-';
+    
     let modalDisplayPrice = 'Contact for price';
     if (p.price) {
       const num = parseFloat(p.price.toString().replace(/[^0-9.]/g, ''));
@@ -128,20 +132,94 @@ window.openProductModal = function(index) {
     modalPrice.textContent = modalDisplayPrice;
     modalCategory.textContent = p.category || '-';
     
-    modalShortDesc.textContent = p.short_description || '';
-    modalShortDesc.style.display = p.short_description ? 'block' : 'none';
-
-    modalFullDesc.innerHTML = p.full_description ? p.full_description.replace(/\\n/g, '<br>') : 'No detailed description available.';
+    const descriptionText = p.full_description || p.short_description || p.description || 'No description available.';
+    modalDesc.innerHTML = descriptionText.replace(/\n/g, '<br>');
     
     if (p.specifications) {
-      modalSpecs.innerHTML = p.specifications.replace(/\\n/g, '<br>');
-      document.getElementById('prod-modal-specs-container').style.display = 'block';
+      modalSpecs.innerHTML = p.specifications.replace(/\n/g, '<br>');
+      modalSpecsContainer.style.display = 'block';
     } else {
-      document.getElementById('prod-modal-specs-container').style.display = 'none';
+      modalSpecsContainer.style.display = 'none';
     }
 
     if (typeof window.openModal === 'function') {
-      window.openModal('product-modal');
+      const modal = document.getElementById('product-modal');
+      if (modal && !modal.classList.contains('active')) {
+        window.openModal('product-modal');
+      }
     }
   }
 };
+
+window.navigateProduct = function(direction) {
+  if (!window.featuredProductsData || window.featuredProductsData.length === 0) return;
+  let newIndex = window.currentProductIndex + direction;
+  
+  if (newIndex < 0) {
+    newIndex = window.featuredProductsData.length - 1;
+  } else if (newIndex >= window.featuredProductsData.length) {
+    newIndex = 0;
+  }
+  
+  window.openProductModal(newIndex);
+};
+
+// Dragging & Auto-scroll for featured products container
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('featured-products-container');
+  if (!container) return;
+
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+  let isAutoScrolling = true;
+  let scrollSpeed = 1;
+
+  container.addEventListener('mousedown', (e) => {
+    isDown = true;
+    isAutoScrolling = false;
+    container.style.cursor = 'grabbing';
+    container.style.scrollBehavior = 'auto'; // Disable smooth scroll while dragging
+    startX = e.pageX - container.offsetLeft;
+    scrollLeft = container.scrollLeft;
+  });
+
+  container.addEventListener('mouseleave', () => {
+    isDown = false;
+    container.style.cursor = 'grab';
+    isAutoScrolling = true;
+    container.style.scrollBehavior = 'smooth';
+  });
+
+  container.addEventListener('mouseup', () => {
+    isDown = false;
+    container.style.cursor = 'grab';
+    container.style.scrollBehavior = 'smooth';
+    setTimeout(() => isAutoScrolling = true, 2000); // Resume auto scroll after 2s
+  });
+
+  container.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - container.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll fast
+    container.scrollLeft = scrollLeft - walk;
+  });
+
+  // Auto-scroll loop
+  function autoScroll() {
+    if (isAutoScrolling && container && window.featuredProductsData && window.featuredProductsData.length > 0) {
+      container.style.scrollBehavior = 'auto';
+      container.scrollLeft += scrollSpeed;
+      if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 1) {
+        scrollSpeed = -1; // Reverse
+      } else if (container.scrollLeft <= 0) {
+        scrollSpeed = 1;
+      }
+    }
+    requestAnimationFrame(autoScroll);
+  }
+  
+  // Start auto scroll
+  requestAnimationFrame(autoScroll);
+});

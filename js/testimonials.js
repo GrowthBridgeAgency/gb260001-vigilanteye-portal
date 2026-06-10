@@ -42,27 +42,29 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div style="font-size: 1.1rem; color: #fff;">${avg} / 5 Average Rating</div>
     `;
 
-    // Limit to 6 for display
-    const displayReviews = reviews.slice(0, 6);
+    const displayReviews = [...reviews, ...reviews];
 
     container.innerHTML = displayReviews.map(r => {
       const customerName = r.profiles?.name || 'Valued Customer';
       const starString = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
       
-      // We don't have avatar URLs in this DB schema yet, using initials as fallback
       const initial = customerName.charAt(0).toUpperCase();
 
       return `
-        <div class="card">
-          <div style="color: #f59e0b; font-size: 1.5rem; margin-bottom: 1rem; letter-spacing: 2px;">${starString}</div>
-          <p style="font-style: italic; color: #fff; font-size: 1.05rem; line-height: 1.7;">"${r.review}"</p>
-          <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 1rem;">
-            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--text-muted); font-size: 1.2rem;">
-              ${initial}
+        <div class="marquee-item-sm">
+          <div class="overlay-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 2.5rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
+            <div>
+              <div style="color: #38bdf8; font-size: 1.25rem; margin-bottom: 1rem; letter-spacing: 2px;">${starString}</div>
+              <p style="font-style: italic; color: #fff; font-size: 1.05rem; line-height: 1.7; margin: 0;">"${r.review}"</p>
             </div>
-            <div style="text-align: left;">
-              <h4 style="margin: 0; font-size: 1rem; color: #fff;">${customerName}</h4>
-              <span style="color: var(--text-muted); font-size: 0.85rem;">Verified Customer</span>
+            <div style="margin-top: 2rem; display: flex; align-items: center; gap: 1rem;">
+              <div style="width: 45px; height: 45px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--accent-color); font-size: 1.2rem;">
+                ${initial}
+              </div>
+              <div style="text-align: left;">
+                <h4 style="margin: 0; font-size: 1.1rem; color: #fff;">${customerName}</h4>
+                <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Verified Customer</span>
+              </div>
             </div>
           </div>
         </div>

@@ -63,28 +63,57 @@ function renderProjects(projectsList) {
     return;
   }
 
-  container.innerHTML = projectsList.map((p, index) => {
-    const imgUrl = p.image_url || FALLBACK_IMAGE;
-    const badge = p.featured ? `<div class="badge-featured">FEATURED</div>` : '';
+  const isHomepage = container.id === 'featured-projects-container';
+
+  if (isHomepage) {
+    container.className = 'marquee-track';
+    // Duplicate for infinite scroll
+    const displayProjects = [...projectsList, ...projectsList, ...projectsList];
     
-    return `
-    <div class="showcase-card" onclick="window.openShowcaseModal(${index})">
-      ${badge}
-      <img src="${imgUrl}" alt="${p.project_name}" class="showcase-img" loading="lazy">
-      <div class="showcase-content">
-        <div class="showcase-client">${p.client_name}</div>
-        <h3 class="showcase-title">${p.project_name}</h3>
-        <div class="showcase-loc">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-          ${p.location}
+    container.innerHTML = displayProjects.map((p, index) => {
+      const imgUrl = p.image_url || FALLBACK_IMAGE;
+      const actualIndex = index % projectsList.length;
+      return `
+      <div class="marquee-item-lg">
+        <div class="overlay-card" onclick="window.openShowcaseModal(${actualIndex})">
+          <img src="${imgUrl}" alt="${p.project_name}" loading="lazy">
+          <div class="overlay-card-content">
+            <h3>${p.project_name}</h3>
+            <p style="margin-bottom: 0.5rem; color: var(--accent-color);">${p.client_name}</p>
+            <p style="display:flex; align-items:center; gap:0.25rem;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              ${p.location}
+            </p>
+          </div>
         </div>
-        <div class="showcase-desc">${p.short_description || ''}</div>
       </div>
-    </div>
-  `}).join('');
+      `;
+    }).join('');
+  } else {
+    container.className = 'bento-grid';
+    container.innerHTML = projectsList.map((p, index) => {
+      const imgUrl = p.image_url || FALLBACK_IMAGE;
+      return `
+      <div class="overlay-card" onclick="window.openShowcaseModal(${index})">
+        <img src="${imgUrl}" alt="${p.project_name}" loading="lazy">
+        <div class="overlay-card-content">
+          <h3>${p.project_name}</h3>
+          <p style="margin-bottom: 0.5rem; color: var(--accent-color);">${p.client_name}</p>
+          <p style="display:flex; align-items:center; gap:0.25rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            ${p.location}
+          </p>
+        </div>
+      </div>
+      `;
+    }).join('');
+  }
 }
 
+window.currentShowcaseIndex = 0;
+
 window.openShowcaseModal = function(index) {
+  window.currentShowcaseIndex = index;
   const p = allProjects[index];
   if (!p) return;
 
@@ -107,13 +136,29 @@ window.openShowcaseModal = function(index) {
     
     // Fallback simple modal open if the standard window.openModal doesn't exist (like on index.html if unlinked)
     if (typeof window.openModal === 'function') {
-      window.openModal('showcase-modal');
+      const modal = document.getElementById('showcase-modal');
+      if (modal && !modal.classList.contains('active')) {
+        window.openModal('showcase-modal');
+      }
     } else {
       const modal = document.getElementById('showcase-modal');
-      if (modal) {
-        modal.style.display = 'block';
+      if (modal && modal.style.display !== 'flex') {
+        modal.style.display = 'flex';
         setTimeout(() => modal.classList.add('show'), 10);
       }
     }
   }
+};
+
+window.navigateProject = function(direction) {
+  if (!allProjects || allProjects.length === 0) return;
+  let newIndex = window.currentShowcaseIndex + direction;
+  
+  if (newIndex < 0) {
+    newIndex = allProjects.length - 1;
+  } else if (newIndex >= allProjects.length) {
+    newIndex = 0;
+  }
+  
+  window.openShowcaseModal(newIndex);
 };

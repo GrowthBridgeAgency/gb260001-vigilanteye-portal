@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadCurrentUser();
   if (!isAdmin()) {
     showToast('Unauthorized access. Redirecting...', 'error');
-    setTimeout(() => window.location.href = '/dashboard/dashboard.html', 1500);
+    const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : ''); setTimeout(() => window.location.href = basePath + '/dashboard/dashboard.html', 1500);
     return;
   }
 
@@ -204,6 +204,16 @@ window.renewAMC = async function(id) {
 
     if (error) throw error;
     
+    if (window.notificationService && record.customer_id) {
+      window.notificationService.createNotification(
+        record.customer_id,
+        'AMC Renewed',
+        `Your AMC for ${record.product_name} has been renewed until ${newExpiry}.`,
+        'amc',
+        '/dashboard/my-products.html'
+      );
+    }
+
     showToast('AMC Renewed Successfully!', 'success');
     fetchAMCRecords();
   } catch (error) {

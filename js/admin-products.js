@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!isAdmin()) {
     showToast('Unauthorized access. Redirecting...', 'error');
     setTimeout(() => {
-      window.location.href = '/dashboard/dashboard.html';
+      const basePath = window.basePath || (window.location.pathname.includes('/gb260001-vigilanteye-portal') ? '/gb260001-vigilanteye-portal' : ''); window.location.href = basePath + '/dashboard/dashboard.html';
     }, 1500);
     return;
   }
