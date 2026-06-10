@@ -138,9 +138,18 @@ function renderTable() {
   tbody.innerHTML = filtered.map(c => `
     <tr>
       <td style="font-weight:600; color:var(--primary-color);">${c.ticket_number}</td>
-      <td>${c.profiles?.name || 'Unknown'}</td>
-      <td>${c.products?.product_name || '-'}</td>
-      <td>${c.issue_type}</td>
+      <td>
+        <div style="font-weight:500;">${c.contact_name || c.profiles?.name || 'Unknown'}</div>
+        <div style="font-size:0.8rem; color:var(--text-muted);">${c.contact_mobile || c.profiles?.phone || ''}</div>
+      </td>
+      <td>
+        <div style="font-weight:500;">${c.device_type || 'Unknown'}</div>
+        <div style="font-size:0.8rem; color:var(--text-muted);">${c.products?.product_name || 'No Specific Product'}</div>
+      </td>
+      <td>
+        <div style="font-size:0.8rem; color:var(--text-muted);">${c.category || ''}</div>
+        <div>${c.issue_type}</div>
+      </td>
       <td class="priority-${c.priority?.toLowerCase()}">${c.priority}</td>
       <td><span class="status-badge ${getBadgeClass(c.status)}">${c.status}</span></td>
       <td style="color:var(--text-muted);">${c.technicians?.technician_name || 'Unassigned'}</td>
@@ -318,83 +327,104 @@ window.viewComplaint = async function(id) {
   if (!c) return;
 
   document.getElementById('view-ticket-no').textContent = `Ticket: ${c.ticket_number}`;
-  const body = document.getElementById('view-modal-body');
   
   // Setup WhatsApp Button
   const waBtn = document.getElementById('whatsapp-btn');
-  if (c.profiles?.phone) {
-    // Format: 91XXXXXXXXXX
-    let phone = c.profiles.phone.replace(/[^0-9]/g, '');
+  let phoneStr = c.contact_mobile || c.profiles?.phone;
+  if (phoneStr) {
+    let phone = phoneStr.replace(/[^0-9]/g, '');
     if (phone.length === 10) phone = '91' + phone;
     
-    const msg = `Hello ${c.profiles.name},\n\nThis is regarding your SafeVision Surveillance Ticket ${c.ticket_number}.\nIssue: ${c.issue_type}\nStatus: ${c.status}\n\n`;
+    const msg = `Hello ${c.contact_name || c.profiles?.name || ''},\n\nThis is regarding your SafeVision Surveillance Ticket ${c.ticket_number}.\nIssue: ${c.issue_type}\nStatus: ${c.status}\n\n`;
     waBtn.href = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
     waBtn.style.display = 'inline-flex';
   } else {
     waBtn.style.display = 'none';
   }
 
-  body.innerHTML = '<div style="text-align:center; padding:2rem;">Loading timeline...</div>';
+  // Populate Fields
+  document.getElementById('view-device-type').textContent = c.device_type || 'N/A';
+  document.getElementById('view-category').textContent = c.category || 'N/A';
+  document.getElementById('view-issue-type').textContent = c.issue_type || 'N/A';
+  document.getElementById('view-priority').innerHTML = `<span class="priority-${c.priority?.toLowerCase()}">${c.priority || 'Normal'} Priority</span>`;
+  document.getElementById('view-description').textContent = c.description || 'N/A';
+  
+  document.getElementById('view-product-details').textContent = c.products?.product_name || 'Hardware';
+  document.getElementById('view-contact-name').textContent = c.contact_name || c.profiles?.name || 'N/A';
+  document.getElementById('view-contact-mobile').textContent = c.contact_mobile || c.profiles?.phone || 'N/A';
+  document.getElementById('view-site-address').textContent = c.site_address || 'N/A';
+  
+  let pTime = [];
+  if (c.preferred_visit_date) pTime.push(new Date(c.preferred_visit_date).toLocaleDateString('en-IN'));
+  if (c.preferred_visit_time) pTime.push(c.preferred_visit_time);
+  document.getElementById('view-visit-time').textContent = pTime.length ? pTime.join(' at ') : 'Anytime';
+
+  // Technician
+  const tech = c.technicians;
+  if (tech) {
+    document.getElementById('view-technician').innerHTML = `${tech.technician_name}`;
+  } else {
+    document.getElementById('view-technician').textContent = 'Unassigned';
+  }
+
+  // Resolution
+  if (c.resolution_notes || c.admin_notes) {
+    document.getElementById('resolution-group').style.display = 'block';
+    let content = '';
+    if (c.admin_notes) content += `<strong>Internal Admin Notes:</strong>\n${c.admin_notes}\n\n`;
+    if (c.resolution_notes) content += `<strong>Resolution to Customer:</strong>\n${c.resolution_notes}`;
+    document.getElementById('view-resolution-notes').innerHTML = content.trim();
+  } else {
+    document.getElementById('resolution-group').style.display = 'none';
+  }
+
+  // Media
+  const mediaCont = document.getElementById('view-media');
+  const imgCont = document.getElementById('view-image-container');
+  const vidCont = document.getElementById('view-video-container');
+  
+  if (c.image_url || c.video_url) {
+    mediaCont.style.display = 'block';
+    if (c.image_url) {
+      imgCont.style.display = 'block';
+      imgCont.innerHTML = `<a href="${c.image_url}" target="_blank" class="media-preview"><img src="${c.image_url}" alt="Attachment"></a>`;
+    } else {
+      imgCont.style.display = 'none';
+    }
+    if (c.video_url) {
+      vidCont.style.display = 'block';
+      vidCont.innerHTML = `<div class="media-preview"><video src="${c.video_url}" controls></video></div>`;
+    } else {
+      vidCont.style.display = 'none';
+    }
+  } else {
+    mediaCont.style.display = 'none';
+  }
+
   window.openModal('view-modal');
 
   // Fetch timeline
-  const { data: updates, error: upErr } = await supabase
+  const tlContainer = document.getElementById('view-status-timeline');
+  tlContainer.innerHTML = '<div style="text-align:center; padding:1rem;">Loading timeline...</div>';
+
+  const { data: updates } = await supabase
     .from('complaint_updates')
     .select('*')
     .eq('complaint_id', id)
     .order('created_at', { ascending: true });
 
-  const tech = c.technicians;
-  const techBlock = tech 
-    ? `<div style="background:rgba(255,255,255,0.02); padding:1rem; border-radius:4px; margin-bottom:1.5rem; border:1px solid rgba(255,255,255,0.05);">
-         <h4 style="margin:0 0 0.5rem 0; color:var(--text-main);">Assigned Technician</h4>
-         <p style="margin:0; font-size:0.9rem;"><strong>Name:</strong> ${tech.technician_name}</p>
-       </div>`
-    : `<div style="background:rgba(255,255,255,0.02); padding:1rem; border-radius:4px; margin-bottom:1.5rem; border:1px solid rgba(255,255,255,0.05); color:var(--text-muted); font-size:0.9rem;">
-         No technician assigned yet.
-       </div>`;
-
-  let mediaHtml = '';
-  if (c.image_url || c.video_url) {
-    mediaHtml = `<h4 style="margin:1.5rem 0 0.5rem 0; color:var(--text-main);">Attached Media</h4><div class="media-preview-container">`;
-    if (c.image_url) mediaHtml += `<a href="${c.image_url}" target="_blank" class="media-preview"><img src="${c.image_url}" alt="Attachment"></a>`;
-    if (c.video_url) mediaHtml += `<div class="media-preview"><video src="${c.video_url}" controls></video></div>`;
-    mediaHtml += `</div>`;
+  if (updates && updates.length > 0) {
+    tlContainer.innerHTML = '<div class="timeline">' + updates.map(u => `
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <span class="timeline-date">${formatDate(u.created_at)}</span>
+          <div class="timeline-status" style="color:var(--text-main); font-weight:600;">${u.status}</div>
+          <p class="timeline-note">${u.note || '-'}</p>
+        </div>
+      </div>
+    `).join('') + '</div>';
+  } else {
+    tlContainer.innerHTML = '<p>No timeline events recorded.</p>';
   }
-
-  const timelineHtml = (updates || []).map(u => `
-    <div class="timeline-item">
-      <div class="timeline-marker"></div>
-      <div class="timeline-content">
-        <span class="timeline-date">${formatDate(u.created_at)}</span>
-        <div class="timeline-status" style="color:var(--text-main);">${u.status}</div>
-        <p class="timeline-note">${u.note || '-'}</p>
-      </div>
-    </div>
-  `).join('');
-
-  body.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem;">
-      <div>
-        <h3 style="margin:0 0 0.25rem 0; color:var(--text-main);">${c.profiles?.name || 'Unknown Customer'}</h3>
-        <p style="margin:0; color:var(--primary-color);">${c.products?.product_name || 'Unknown Product'}</p>
-        <p style="margin:0.25rem 0 0 0; font-size:0.9rem; color:var(--text-muted);">${c.issue_type} • <span class="priority-${c.priority?.toLowerCase()}">${c.priority} Priority</span></p>
-      </div>
-      <span class="status-badge ${getBadgeClass(c.status)}">${c.status}</span>
-    </div>
-
-    ${techBlock}
-    
-    ${c.admin_notes ? `<div style="background:rgba(245, 158, 11, 0.1); border-left:3px solid #f59e0b; padding:1rem; margin-bottom:1.5rem; color:#fcd34d; border-radius:4px;"><h4 style="margin:0 0 0.5rem 0; color:#fff;">Admin Notes</h4><p style="margin:0; font-size:0.9rem;">${c.admin_notes}</p></div>` : ''}
-
-    <h4 style="margin:0 0 0.5rem 0; color:var(--text-main);">Customer Description</h4>
-    <p style="margin:0 0 1.5rem 0; white-space:pre-wrap;">${c.description}</p>
-    
-    ${mediaHtml}
-
-    <h4 style="margin:2rem 0 1rem 0; color:var(--text-main); border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:0.5rem;">Ticket Timeline</h4>
-    <div class="timeline">
-      ${timelineHtml || '<p>No timeline events recorded.</p>'}
-    </div>
-  `;
 };

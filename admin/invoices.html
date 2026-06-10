@@ -72,8 +72,14 @@
       
       <div class="dashboard-content">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
-          <h1 style="margin: 0;">Invoices</h1>
-          <button class="btn btn-primary" onclick="window.openCreateModal()">+ Create Invoice</button>
+          <div>
+            <h1 style="margin-top: 0; margin-bottom: 0.5rem;">Invoices</h1>
+            <p style="color: var(--text-muted); margin: 0;">Manage your billing and payments</p>
+          </div>
+          <button class="btn btn-primary" onclick="window.location.href='invoice-builder.html'" style="display:flex; align-items:center; gap:0.5rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Create Invoice
+          </button>
         </div>
 
         <!-- Dashboard Summary -->

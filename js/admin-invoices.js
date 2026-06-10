@@ -149,7 +149,11 @@ function renderTable() {
     const date = new Date(inv.invoice_date).toLocaleDateString('en-IN');
     const isPaid = inv.status === 'Paid';
     
-    const badge = `<span style="padding:0.25rem 0.5rem; border-radius:4px; font-size:0.75rem; font-weight:600; background: ${isPaid ? 'rgba(34,197,94,0.1); color:#86efac;' : 'rgba(239,68,68,0.1); color:#fca5a5;'}">${inv.status}</span>`;
+    const badge = `<select class="form-control" style="width: auto; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight:600; border-radius: 4px; background: ${isPaid ? 'rgba(34,197,94,0.1)' : (inv.status==='Cancelled' ? 'rgba(239,68,68,0.1)' : 'rgba(245,158,11,0.1)')}; color: ${isPaid ? '#86efac' : (inv.status==='Cancelled' ? '#fca5a5' : '#fcd34d')}; border: none; cursor: pointer; outline: none;" onchange="window.updateInvoiceStatus('${inv.id}', this.value)">
+      <option value="Pending" ${inv.status === 'Pending' ? 'selected' : ''} style="background: #1e293b; color: #fff;">Pending</option>
+      <option value="Paid" ${inv.status === 'Paid' ? 'selected' : ''} style="background: #1e293b; color: #fff;">Paid</option>
+      <option value="Cancelled" ${inv.status === 'Cancelled' ? 'selected' : ''} style="background: #1e293b; color: #fff;">Cancelled</option>
+    </select>`;
     
     let pdfBtn = inv.pdf_url 
       ? `<a href="${inv.pdf_url}" target="_blank" class="action-btn" title="View PDF" style="display:inline-flex; align-items:center; justify-content:center;">
@@ -167,8 +171,8 @@ function renderTable() {
       <td>
         <div class="actions-cell" style="justify-content:center;">
           ${pdfBtn}
-          <button class="action-btn" title="Details" onclick="window.openDetailsModal('${inv.id}')">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <button class="action-btn" title="View Template" onclick="window.location.href='../invoice-view.html?id=${inv.id}'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
           </button>
           <button class="action-btn delete" title="Delete" onclick="window.deleteInvoice('${inv.id}')">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
@@ -465,9 +469,6 @@ window.deleteInvoice = async function(id) {
   if (!confirm("Are you sure you want to delete this invoice? Related items will also be deleted.")) return;
   
   try {
-    // Note: If ON DELETE CASCADE is set on invoice_items, we only need to delete the invoice.
-    // If not, we should delete items first. Supabase usually cascades if configured properly.
-    // Let's explicitly delete items first just to be safe.
     await supabase.from('invoice_items').delete().eq('invoice_id', id);
     const { error } = await supabase.from('invoices').delete().eq('id', id);
     
@@ -476,5 +477,18 @@ window.deleteInvoice = async function(id) {
     fetchInvoices();
   } catch (err) {
     showToast(`Error deleting invoice: ${err.message}`, 'error');
+  }
+};
+
+// UPDATE STATUS
+window.updateInvoiceStatus = async function(id, newStatus) {
+  try {
+    const { error } = await supabase.from('invoices').update({ status: newStatus }).eq('id', id);
+    if (error) throw error;
+    showToast('Invoice status updated!', 'success');
+    // Fetch immediately to update metrics and UI
+    fetchInvoices();
+  } catch (err) {
+    showToast(`Error updating status: ${err.message}`, 'error');
   }
 };

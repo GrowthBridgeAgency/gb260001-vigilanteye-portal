@@ -1,4 +1,4 @@
-<div class="dashboard-utility-bar" style="display: flex; justify-content: flex-end; padding: 1.5rem 3rem 0 3rem; position: relative; z-index: 50;">
+<div class="dashboard-utility-bar" style="display: flex; justify-content: flex-end; padding: 1.5rem 3rem 0 3rem; position: relative; z-index: 50; gap: 1rem; align-items: flex-start;">
   <div class="floating-notification-widget">
   <div class="notification-bell-container" id="notification-bell" onclick="document.getElementById('notification-dropdown').classList.toggle('show')">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -11,7 +11,10 @@
   <div class="notification-dropdown" id="notification-dropdown">
     <div class="notification-header">
       <h3>Notifications</h3>
-      <button onclick="window.notificationService.markAllAsRead()">Mark all as read</button>
+      <div style="display: flex; gap: 0.5rem;">
+        <button onclick="window.notificationService.openSeeAll()">See all</button>
+        <button onclick="window.notificationService.markAllAsRead()">Mark all as read</button>
+      </div>
     </div>
     <div class="notification-list" id="notification-list">
       <!-- Loading Skeleton -->
@@ -26,5 +29,11 @@
       </div>
     </div>
   </div>
-</div>
+  </div>
+  <a href="/admin/profile.html" class="profile-icon-link" style="color: rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='rgba(255,255,255,0.7)';">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+      <circle cx="12" cy="7" r="4"></circle>
+    </svg>
+  </a>
 </div>

@@ -205,7 +205,7 @@ async function handleReviewSubmit(e) {
         'New Review',
         `A new ${ratingInput.value}-star review was submitted and is pending approval.`,
         'review',
-        '/dashboard/admin/reviews.html'
+        '/admin/reviews.html'
       );
     }
 

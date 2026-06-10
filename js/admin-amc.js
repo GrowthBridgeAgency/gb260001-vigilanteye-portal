@@ -204,6 +204,16 @@ window.renewAMC = async function(id) {
 
     if (error) throw error;
     
+    if (window.notificationService && record.customer_id) {
+      window.notificationService.createNotification(
+        record.customer_id,
+        'AMC Renewed',
+        `Your AMC for ${record.product_name} has been renewed until ${newExpiry}.`,
+        'amc',
+        '/dashboard/my-products.html'
+      );
+    }
+
     showToast('AMC Renewed Successfully!', 'success');
     fetchAMCRecords();
   } catch (error) {

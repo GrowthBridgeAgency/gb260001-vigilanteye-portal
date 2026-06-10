@@ -501,6 +501,8 @@ a:hover { opacity: 0.7; }
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   width: 100%;
+  min-height: 300px;
+  padding-bottom: 2rem;
 }
 
 /* --- Mobile Menu Responsiveness --- */

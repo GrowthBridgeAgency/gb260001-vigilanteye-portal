@@ -375,6 +375,16 @@ async function handleSaveRecord(e) {
     const { error } = await supabase.from('service_history').insert([payload]);
     if (error) throw error;
 
+    if (window.notificationService && customer_id) {
+      window.notificationService.createNotification(
+        customer_id,
+        'Service Record Added',
+        `A new service record (${service_type}) has been added for your product.`,
+        'service',
+        '/dashboard/service-history.html'
+      );
+    }
+
     showToast('Service record saved successfully', 'success');
     window.closeModal('create-modal');
     fetchRecords();

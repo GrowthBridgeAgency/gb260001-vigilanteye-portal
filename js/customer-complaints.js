@@ -4,34 +4,86 @@
  */
 
 import { supabase } from './supabase.js';
-import { loadCurrentUser, isLoggedIn } from './user-context.js';
+import { loadCurrentUser } from './user-context.js';
 import { showToast } from './toast.js';
 
 let currentUser = null;
-let myComplaints = [];
-let myProducts = [];
+let currentProfile = null;
 
-const BUCKET = 'complaints';
+let myProducts = [];
+let myComplaints = [];
 
 // DOM Elements
 const tbody = document.getElementById('complaints-tbody');
 const productSelect = document.getElementById('complaint_product');
 const btnSubmit = document.getElementById('btn-submit-complaint');
-const raiseForm = document.getElementById('raise-form');
+const formEl = document.getElementById('raise-form');
+
+const fName = document.getElementById('complaint_contact_name');
+const fMobile = document.getElementById('complaint_contact_mobile');
+const fAddress = document.getElementById('complaint_site_address');
+const fDevice = document.getElementById('complaint_device_type');
+const fCategory = document.getElementById('complaint_category');
+const fIssue = document.getElementById('complaint_issue_type');
+
+const issueCategories = {
+  "IP Camera Problem": [
+    "Camera Offline / Not Connected", "Live View Not Showing", "Network Connectivity Issue", "IP Address Conflict", "Camera Not Recording", "Poor Video Quality", "Camera Frequently Disconnecting", "Remote Viewing Not Working", "PoE Power Issue", "Camera Password/Login Issue"
+  ],
+  "HD Camera Problem": [
+    "No Video Signal", "Black Screen", "Blurred Image", "Night Vision Not Working", "Color Issue in Camera", "Camera Flickering", "Power Supply Failure", "DVR Channel Not Showing Camera", "Cable Damage Issue", "Water Damage in Camera"
+  ],
+  "NVR/DVR Issue": [
+    "NVR/DVR Not Starting", "Hard Disk Not Detected", "Recording Not Working", "Password Reset Required", "Remote Access Issue", "System Hanging", "Storage Full Warning"
+  ],
+  "Hard Disk & Recording": [
+    "No Recording Available", "HDD Failure", "HDD Not Detected", "Recording Playback Not Working", "Storage Capacity Issue"
+  ],
+  "Mobile App & Remote": [
+    "Mobile App Login Problem", "Device Offline", "Live View Not Opening", "Playback Not Working", "Notification Not Received"
+  ],
+  "Network & Internet": [
+    "Internet Not Available", "Router Configuration Issue", "Port Forwarding Issue", "Static IP Issue", "Wi-Fi Connectivity Problem"
+  ],
+  "Installation & Service": [
+    "New Camera Installation", "Camera Relocation", "Additional Camera Requirement", "Site Visit Request", "Annual Maintenance Service"
+  ]
+};
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const { user } = await loadCurrentUser();
-  if (!isLoggedIn()) {
-    showToast('Unauthorized access. Redirecting...', 'error');
-    setTimeout(() => window.location.href = '/login.html', 1500);
+  const context = await loadCurrentUser();
+  currentUser = context.user;
+  currentProfile = context.profile;
+  
+  if (!currentUser) {
+    window.location.href = '../login.html';
     return;
   }
-  currentUser = user;
 
-  fetchMyProducts();
-  fetchComplaints();
+  // Pre-fill profile data for the raise complaint form
+  if (currentProfile) {
+    fName.value = currentProfile.name || '';
+    fMobile.value = currentProfile.phone || '';
+    fAddress.value = currentProfile.address || '';
+  }
 
-  btnSubmit.addEventListener('click', handleRaiseComplaint);
+  fCategory.addEventListener('change', (e) => {
+    const cat = e.target.value;
+    fIssue.innerHTML = '<option value="" disabled selected>-- Select Specific Issue --</option>';
+    if (issueCategories[cat]) {
+      fIssue.disabled = false;
+      issueCategories[cat].forEach(iss => {
+        fIssue.innerHTML += `<option value="${iss}">${iss}</option>`;
+      });
+    } else {
+      fIssue.disabled = true;
+    }
+  });
+
+  await fetchMyProducts();
+  await fetchComplaints();
+
+  btnSubmit.addEventListener('click', submitComplaint);
 });
 
 // ==========================================
@@ -172,6 +224,8 @@ function renderComplaints() {
 // RAISE COMPLAINT LOGIC
 // ==========================================
 
+const BUCKET = 'complaints';
+
 async function uploadFile(file, folder) {
   if (!file) return null;
   const ext = file.name.split('.').pop();
@@ -187,16 +241,17 @@ async function uploadFile(file, folder) {
   return data.publicUrl;
 }
 
-async function handleRaiseComplaint(e) {
+
+async function submitComplaint(e) {
   e.preventDefault();
   
-  if (!raiseForm.checkValidity()) {
-    raiseForm.reportValidity();
+  if (!formEl.checkValidity()) {
+    formEl.reportValidity();
     return;
   }
 
-  const prodId = document.getElementById('complaint_product').value;
-  const issue = document.getElementById('complaint_issue_type').value;
+  const prodId = productSelect.value;
+  const issue = fIssue.value;
   const priority = document.getElementById('complaint_priority').value;
   const desc = document.getElementById('complaint_desc').value;
   
@@ -207,40 +262,35 @@ async function handleRaiseComplaint(e) {
   btnSubmit.textContent = 'Generating Ticket...';
 
   try {
-    console.log("[Complaint Submit] Starting submission...");
     const ticketNumber = await generateTicketNumber();
-    console.log("[Complaint Submit] Generated ticket number:", ticketNumber);
-    
     btnSubmit.textContent = 'Uploading Media...';
 
     let imageUrl = null;
     let videoUrl = null;
     
-    if (imgFile) {
-      console.log("[Complaint Submit] Uploading image:", imgFile.name);
-      imageUrl = await uploadFile(imgFile, 'images');
-    }
-    
-    if (vidFile) {
-      console.log("[Complaint Submit] Uploading video:", vidFile.name);
-      videoUrl = await uploadFile(vidFile, 'videos');
-    }
+    if (imgFile) imageUrl = await uploadFile(imgFile, 'images');
+    if (vidFile) videoUrl = await uploadFile(vidFile, 'videos');
 
     btnSubmit.textContent = 'Saving Complaint...';
 
     const payload = {
       customer_id: currentUser.id,
-      product_id: parseInt(prodId, 10),
+      product_id: prodId ? parseInt(prodId, 10) : null,
       ticket_number: ticketNumber,
+      device_type: fDevice.value,
+      category: fCategory.value,
       issue_type: issue,
+      contact_name: fName.value.trim(),
+      contact_mobile: fMobile.value.trim(),
+      site_address: fAddress.value.trim(),
+      preferred_visit_date: document.getElementById('complaint_visit_date').value || null,
+      preferred_visit_time: document.getElementById('complaint_visit_time').value || null,
       description: desc,
       priority: priority,
       status: 'Open',
       image_url: imageUrl,
       video_url: videoUrl
     };
-
-    console.log("[Complaint Submit] Insert Payload to complaints:", payload);
 
     // Insert Complaint
     const { data: newComplaint, error: compErr } = await supabase
@@ -286,13 +336,13 @@ async function handleRaiseComplaint(e) {
         'New Complaint',
         `A new complaint (${ticketNumber}) has been submitted by a customer.`,
         'complaint',
-        `/dashboard/admin/complaints.html`
+        `/admin/complaints.html`
       );
     }
 
     showToast(`Ticket ${ticketNumber} raised successfully!`, 'success');
     window.closeModal('raise-modal');
-    raiseForm.reset();
+    formEl.reset();
     fetchComplaints();
 
   } catch (err) {
@@ -313,120 +363,87 @@ window.viewComplaint = async function(id) {
   if (!c) return;
 
   document.getElementById('view-ticket-no').textContent = `Ticket: ${c.ticket_number}`;
-  const body = document.getElementById('view-modal-body');
   
-  body.innerHTML = '<div style="text-align:center; padding:2rem;">Loading timeline...</div>';
+  // Populate Fields
+  document.getElementById('view-device-type').textContent = c.device_type || 'N/A';
+  document.getElementById('view-category').textContent = c.category || 'N/A';
+  document.getElementById('view-issue-type').textContent = c.issue_type || 'N/A';
+  document.getElementById('view-priority').innerHTML = `<span class="priority-${c.priority?.toLowerCase()}">${c.priority || 'Normal'} Priority</span>`;
+  document.getElementById('view-description').textContent = c.description || 'N/A';
+  
+  document.getElementById('view-product-details').textContent = c.products?.product_name || 'Hardware';
+  document.getElementById('view-contact-name').textContent = c.contact_name || 'N/A';
+  document.getElementById('view-contact-mobile').textContent = c.contact_mobile || 'N/A';
+  document.getElementById('view-site-address').textContent = c.site_address || 'N/A';
+  
+  let pTime = [];
+  if (c.preferred_visit_date) pTime.push(new Date(c.preferred_visit_date).toLocaleDateString('en-IN'));
+  if (c.preferred_visit_time) pTime.push(c.preferred_visit_time);
+  document.getElementById('view-visit-time').textContent = pTime.length ? pTime.join(' at ') : 'Anytime';
+
+  // Technician
+  const tech = c.technicians;
+  if (tech) {
+    document.getElementById('view-technician').innerHTML = `${tech.technician_name} (${tech.mobile})`;
+  } else {
+    document.getElementById('view-technician').textContent = 'Unassigned';
+  }
+
+  // Resolution
+  if (c.resolution_notes) {
+    document.getElementById('resolution-group').style.display = 'block';
+    document.getElementById('view-resolution-notes').textContent = c.resolution_notes;
+  } else {
+    document.getElementById('resolution-group').style.display = 'none';
+  }
+
+  // Media
+  const mediaCont = document.getElementById('view-media');
+  const imgCont = document.getElementById('view-image-container');
+  const vidCont = document.getElementById('view-video-container');
+  
+  if (c.image_url || c.video_url) {
+    mediaCont.style.display = 'block';
+    if (c.image_url) {
+      imgCont.style.display = 'block';
+      imgCont.innerHTML = `<a href="${c.image_url}" target="_blank" class="media-preview"><img src="${c.image_url}" alt="Attachment"></a>`;
+    } else {
+      imgCont.style.display = 'none';
+    }
+    if (c.video_url) {
+      vidCont.style.display = 'block';
+      vidCont.innerHTML = `<div class="media-preview"><video src="${c.video_url}" controls></video></div>`;
+    } else {
+      vidCont.style.display = 'none';
+    }
+  } else {
+    mediaCont.style.display = 'none';
+  }
+
   window.openModal('view-modal');
 
   // Fetch timeline
-  const { data: updates, error: upErr } = await supabase
+  const tlContainer = document.getElementById('view-status-timeline');
+  tlContainer.innerHTML = '<div style="text-align:center; padding:1rem;">Loading timeline...</div>';
+
+  const { data: updates } = await supabase
     .from('complaint_updates')
     .select('*')
     .eq('complaint_id', id)
     .order('created_at', { ascending: true });
 
-  const tech = c.technicians;
-  const techBlock = tech 
-    ? `<div style="background:rgba(255,255,255,0.02); padding:1rem; border-radius:4px; margin-bottom:1.5rem; border:1px solid rgba(255,255,255,0.05);">
-         <h4 style="margin:0 0 0.5rem 0; color:var(--text-main);">Assigned Technician</h4>
-         <p style="margin:0; font-size:0.9rem;"><strong>Name:</strong> ${tech.technician_name}</p>
-         <p style="margin:0; font-size:0.9rem;"><strong>Mobile:</strong> ${tech.mobile}</p>
-         <p style="margin:0; font-size:0.9rem;"><strong>Specialization:</strong> ${tech.specialization}</p>
-       </div>`
-    : `<div style="background:rgba(255,255,255,0.02); padding:1rem; border-radius:4px; margin-bottom:1.5rem; border:1px solid rgba(255,255,255,0.05); color:var(--text-muted); font-size:0.9rem;">
-         No technician assigned yet.
-       </div>`;
-
-  let mediaHtml = '';
-  if (c.image_url || c.video_url) {
-    mediaHtml = `<h4 style="margin:1.5rem 0 0.5rem 0; color:var(--text-main);">Attached Media</h4><div class="media-preview-container">`;
-    if (c.image_url) mediaHtml += `<a href="${c.image_url}" target="_blank" class="media-preview"><img src="${c.image_url}" alt="Attachment"></a>`;
-    if (c.video_url) mediaHtml += `<div class="media-preview"><video src="${c.video_url}" controls></video></div>`;
-    mediaHtml += `</div>`;
-  }
-
-  const timelineHtml = (updates || []).map(u => `
-    <div class="timeline-item">
-      <div class="timeline-marker"></div>
-      <div class="timeline-content">
-        <span class="timeline-date">${formatDate(u.created_at)}</span>
-        <div class="timeline-status" style="color:var(--text-main);">${u.status}</div>
-        <p class="timeline-note">${u.note || '-'}</p>
-      </div>
-    </div>
-  `).join('');
-
-  const resolutionBlock = c.resolution_notes 
-    ? `<div style="background:rgba(34,197,94,0.1); border-left:3px solid #22c55e; padding:1rem; margin-bottom:1.5rem; color:#86efac; border-radius:4px;">
-         <h4 style="margin:0 0 0.5rem 0; color:#fff;">Resolution Notes</h4>
-         <p style="margin:0; font-size:0.9rem;">${c.resolution_notes}</p>
-       </div>` 
-    : '';
-
-  // Fetch linked service history
-  let serviceHtml = '';
-  try {
-    const { data: services, error: servErr } = await supabase
-      .from('service_history')
-      .select('*')
-      .eq('complaint_id', id)
-      .limit(1);
-    
-    if (services && services.length > 0) {
-      const s = services[0];
-      const match = (s.service_details || '').match(/^\\[OUTCOME:\s*(.+?)\\]\s*(.*)$/is);
-      const outcome = match ? match[1].trim() : 'Completed';
-      const notes = match ? match[2].trim() : (s.service_details || '');
-      
-      let bClass = 'outcome-completed';
-      if(outcome === 'Partially Resolved') bClass = 'outcome-partial';
-      if(outcome === 'Follow-up Required') bClass = 'outcome-followup';
-      if(outcome === 'Parts Replacement Needed') bClass = 'outcome-parts';
-      if(outcome === 'AMC Maintenance Completed') bClass = 'outcome-amc';
-
-      serviceHtml = `
-        <div style="background:rgba(255,255,255,0.02); padding:1rem; border-radius:4px; margin-bottom:1.5rem; border:1px solid rgba(255,255,255,0.05);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-            <h4 style="margin:0; color:var(--text-main);">Official Service Report</h4>
-            <span style="display:inline-block; padding:0.25rem 0.5rem; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase; ${
-              bClass === 'outcome-completed' ? 'background: rgba(34,197,94,0.1); color: #86efac;' : 
-              bClass === 'outcome-partial' ? 'background: rgba(245,158,11,0.1); color: #fcd34d;' :
-              bClass === 'outcome-followup' ? 'background: rgba(239,68,68,0.1); color: #fca5a5;' :
-              bClass === 'outcome-parts' ? 'background: rgba(168,85,247,0.1); color: #d8b4fe;' :
-              'background: rgba(56,189,248,0.1); color: #7dd3fc;'
-            }">${outcome}</span>
-          </div>
-          <p style="margin:0 0 0.5rem 0; font-size:0.9rem;"><strong>Date:</strong> ${new Date(s.service_date).toLocaleDateString('en-IN')}</p>
-          <p style="margin:0 0 0.5rem 0; font-size:0.9rem;"><strong>Technician:</strong> ${s.technician_name}</p>
-          <div style="background:var(--bg-main); padding:0.75rem; border-radius:4px; font-size:0.9rem; white-space:pre-wrap;">${notes}</div>
+  if (updates && updates.length > 0) {
+    tlContainer.innerHTML = '<div class="timeline">' + updates.map(u => `
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <span class="timeline-date">${formatDate(u.created_at)}</span>
+          <div class="timeline-status" style="color:var(--text-main); font-weight:600;">${u.status}</div>
+          <p class="timeline-note">${u.note || '-'}</p>
         </div>
-      `;
-    }
-  } catch(e) {
-    console.error("Error fetching service log:", e);
-  }
-
-  body.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem;">
-      <div>
-        <h3 style="margin:0 0 0.5rem 0; color:var(--text-main);">${c.products?.product_name || 'Hardware'}</h3>
-        <p style="margin:0; color:var(--primary-color);">${c.issue_type} • <span class="priority-${c.priority?.toLowerCase()}">${c.priority} Priority</span></p>
       </div>
-      <span class="status-badge ${getBadgeClass(c.status)}">${c.status}</span>
-    </div>
-
-    ${resolutionBlock}
-    ${serviceHtml}
-    ${techBlock}
-
-    <h4 style="margin:0 0 0.5rem 0; color:var(--text-main);">Description</h4>
-    <p style="margin:0 0 1.5rem 0; white-space:pre-wrap;">${c.description}</p>
-    
-    ${mediaHtml}
-
-    <h4 style="margin:2rem 0 1rem 0; color:var(--text-main); border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:0.5rem;">Ticket Timeline</h4>
-    <div class="timeline">
-      ${timelineHtml || '<p>No timeline events recorded.</p>'}
-    </div>
-  `;
+    `).join('') + '</div>';
+  } else {
+    tlContainer.innerHTML = '<p>No timeline events recorded.</p>';
+  }
 };
