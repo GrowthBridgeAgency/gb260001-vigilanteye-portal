@@ -15,7 +15,6 @@ let filterStatus = 'All';
 // DOM Elements
 const tbody = document.getElementById('invoices-tbody');
 const searchInput = document.getElementById('search-input');
-const filterSelect = document.getElementById('filter-status');
 
 // Metrics
 const elTotal = document.getElementById('metric-total');
@@ -46,15 +45,37 @@ document.addEventListener('DOMContentLoaded', async () => {
   fetchCustomers();
   fetchInvoices();
 
-  searchInput.addEventListener('input', (e) => {
-    searchTerm = e.target.value.toLowerCase().trim();
-    renderTable();
-  });
-  
-  filterSelect.addEventListener('change', (e) => {
-    filterStatus = e.target.value;
-    renderTable();
-  });
+  if(searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchTerm = e.target.value.toLowerCase().trim();
+      renderTable();
+    });
+  }
+
+  // Dropdown Popover Filter Logic
+  const filterToggleBtn = document.getElementById('filter-toggle-btn');
+  const filterDropdownMenu = document.getElementById('filter-dropdown-menu');
+  if (filterToggleBtn && filterDropdownMenu) {
+    filterToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isVisible = filterDropdownMenu.style.display === 'flex';
+      filterDropdownMenu.style.display = isVisible ? 'none' : 'flex';
+    });
+    document.addEventListener('click', (e) => {
+      if (!filterToggleBtn.contains(e.target) && !filterDropdownMenu.contains(e.target)) {
+        filterDropdownMenu.style.display = 'none';
+      }
+    });
+    filterDropdownMenu.addEventListener('click', (e) => e.stopPropagation());
+  }
+
+  const filterStatusSelect = document.getElementById('filter-status');
+  if (filterStatusSelect) {
+    filterStatusSelect.addEventListener('change', (e) => {
+      filterStatus = e.target.value;
+      renderTable();
+    });
+  }
 
   btnSave.addEventListener('click', handleSave);
 });

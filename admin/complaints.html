@@ -36,33 +36,59 @@
       <div id="admin-header-placeholder"></div>
       
       <div class="dashboard-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
-          <h1 style="margin: 0;">Manage Complaints</h1>
-          
-          <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
-            <input type="text" id="search-input" class="form-control" placeholder="Search ticket, customer, product..." style="width: 250px; margin-top: 0;">
-            <select id="filter-status" class="form-control" style="width: 150px; margin-top: 0;">
-              <option value="all">All Statuses</option>
-              <option value="Open">Open</option>
-              <option value="Assigned">Assigned</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
-              <option value="Closed">Closed</option>
-            </select>
-            <select id="filter-priority" class="form-control" style="width: 150px; margin-top: 0;">
-              <option value="all">All Priorities</option>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-            <select id="filter-technician" class="form-control" style="width: 180px; margin-top: 0;">
-              <option value="all">All Technicians</option>
-              <!-- Populated by JS -->
-            </select>
-          </div>
-        </div>
-
+        <h1 style="margin: 0 0 1.5rem 0;">Manage Complaints</h1>
+        
         <div class="table-container" style="padding: 0; overflow: hidden;">
+          <div style="padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 1rem; align-items: center; justify-content: space-between;">
+            
+            <div style="position: relative; flex: 1; max-width: 400px;">
+              <svg style="position: absolute; left: 14px; top: 12px; color: var(--text-muted);" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="search-input" class="form-control" placeholder="Search ticket, customer, product..." style="width: 100%; margin: 0; padding-left: 40px; border-radius: 20px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);">
+            </div>
+
+            <div class="filter-dropdown-container" style="position: relative;">
+              <button id="filter-toggle-btn" class="btn btn-outline" style="border-radius: 20px; padding: 0.5rem 1.25rem; display: flex; align-items: center; gap: 0.5rem; border: 1px solid rgba(255,255,255,0.2);">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                Filters
+              </button>
+              
+              <div id="filter-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; margin-top: 0.75rem; background: #0B1B32; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.5rem; width: 320px; box-shadow: 0 15px 50px rgba(0,0,0,0.6); z-index: 100; flex-direction: column; gap: 1.25rem;">
+                
+                <div>
+                  <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;">Status</label>
+                  <select id="filter-status" class="form-control" style="width: 100%; margin: 0; background: rgba(0,0,0,0.2);">
+                    <option value="all">All Statuses</option>
+                    <option value="Open">Open</option>
+                    <option value="Assigned">Assigned</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Closed">Closed</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;">Priority</label>
+                  <select id="filter-priority" class="form-control" style="width: 100%; margin: 0; background: rgba(0,0,0,0.2);">
+                    <option value="all">All Priorities</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Critical">Critical</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;">Assigned Tech</label>
+                  <select id="filter-technician" class="form-control" style="width: 100%; margin: 0; background: rgba(0,0,0,0.2);">
+                    <option value="all">All Technicians</option>
+                  </select>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+
           <div style="overflow-x: auto;">
             <table class="data-table" id="complaints-table">
               <thead>

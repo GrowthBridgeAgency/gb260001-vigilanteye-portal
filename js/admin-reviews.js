@@ -21,8 +21,6 @@ const elRating = document.getElementById('metric-rating');
 // Table Elements
 const tbody = document.getElementById('reviews-tbody');
 const searchInput = document.getElementById('search-input');
-const filterStatusSelect = document.getElementById('filter-status');
-const filterStarsSelect = document.getElementById('filter-stars');
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadCurrentUser();
@@ -34,20 +32,45 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   fetchReviews();
 
-  searchInput.addEventListener('input', (e) => {
-    searchTerm = e.target.value.toLowerCase().trim();
-    renderTable();
-  });
-  
-  filterStatusSelect.addEventListener('change', (e) => {
-    filterStatus = e.target.value;
-    renderTable();
-  });
+  if(searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchTerm = e.target.value.toLowerCase().trim();
+      renderTable();
+    });
+  }
 
-  filterStarsSelect.addEventListener('change', (e) => {
-    filterStars = e.target.value;
-    renderTable();
-  });
+  // Dropdown Popover Filter Logic
+  const filterToggleBtn = document.getElementById('filter-toggle-btn');
+  const filterDropdownMenu = document.getElementById('filter-dropdown-menu');
+  if (filterToggleBtn && filterDropdownMenu) {
+    filterToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isVisible = filterDropdownMenu.style.display === 'flex';
+      filterDropdownMenu.style.display = isVisible ? 'none' : 'flex';
+    });
+    document.addEventListener('click', (e) => {
+      if (!filterToggleBtn.contains(e.target) && !filterDropdownMenu.contains(e.target)) {
+        filterDropdownMenu.style.display = 'none';
+      }
+    });
+    filterDropdownMenu.addEventListener('click', (e) => e.stopPropagation());
+  }
+
+  const filterStatusSelect = document.getElementById('filter-status');
+  if (filterStatusSelect) {
+    filterStatusSelect.addEventListener('change', (e) => {
+      filterStatus = e.target.value;
+      renderTable();
+    });
+  }
+
+  const filterStarsSelect = document.getElementById('filter-stars');
+  if (filterStarsSelect) {
+    filterStarsSelect.addEventListener('change', (e) => {
+      filterStars = e.target.value;
+      renderTable();
+    });
+  }
 });
 
 async function fetchReviews() {

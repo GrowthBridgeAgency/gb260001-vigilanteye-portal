@@ -24,8 +24,6 @@ const elConversion = document.getElementById('metric-conversion');
 
 const tbody = document.getElementById('leads-tbody');
 const searchInput = document.getElementById('search-input');
-const filterStatusSelect = document.getElementById('filter-status');
-const filterTypeSelect = document.getElementById('filter-type');
 const modalBody = document.getElementById('lead-modal-body');
 const quickActionsContainer = document.getElementById('quick-actions-container');
 
@@ -39,20 +37,45 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   fetchLeads();
 
-  searchInput.addEventListener('input', (e) => {
-    searchTerm = e.target.value.toLowerCase().trim();
-    renderTable();
-  });
+  if(searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchTerm = e.target.value.toLowerCase().trim();
+      renderTable();
+    });
+  }
   
-  filterStatusSelect.addEventListener('change', (e) => {
-    filterStatus = e.target.value;
-    renderTable();
-  });
+  // Dropdown Popover Filter Logic
+  const filterToggleBtn = document.getElementById('filter-toggle-btn');
+  const filterDropdownMenu = document.getElementById('filter-dropdown-menu');
+  if (filterToggleBtn && filterDropdownMenu) {
+    filterToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isVisible = filterDropdownMenu.style.display === 'flex';
+      filterDropdownMenu.style.display = isVisible ? 'none' : 'flex';
+    });
+    document.addEventListener('click', (e) => {
+      if (!filterToggleBtn.contains(e.target) && !filterDropdownMenu.contains(e.target)) {
+        filterDropdownMenu.style.display = 'none';
+      }
+    });
+    filterDropdownMenu.addEventListener('click', (e) => e.stopPropagation());
+  }
 
-  filterTypeSelect.addEventListener('change', (e) => {
-    filterType = e.target.value;
-    renderTable();
-  });
+  const filterStatusSelect = document.getElementById('filter-status');
+  if (filterStatusSelect) {
+    filterStatusSelect.addEventListener('change', (e) => {
+      filterStatus = e.target.value;
+      renderTable();
+    });
+  }
+
+  const filterTypeSelect = document.getElementById('filter-type');
+  if (filterTypeSelect) {
+    filterTypeSelect.addEventListener('change', (e) => {
+      filterType = e.target.value;
+      renderTable();
+    });
+  }
 });
 
 async function fetchLeads() {

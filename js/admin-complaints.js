@@ -18,12 +18,16 @@ let searchTimeout = null;
 // DOM
 const tbody = document.getElementById('complaints-tbody');
 const searchInput = document.getElementById('search-input');
-const statusSelect = document.getElementById('filter-status');
-const prioritySelect = document.getElementById('filter-priority');
-const techSelect = document.getElementById('filter-technician');
-
 const manageForm = document.getElementById('manage-form');
 const btnSaveManage = document.getElementById('btn-save-management');
+
+// Filter UI
+const filterToggleBtn = document.getElementById('filter-toggle-btn');
+const filterDropdownMenu = document.getElementById('filter-dropdown-menu');
+const filterStatusSelect = document.getElementById('filter-status');
+const filterPrioritySelect = document.getElementById('filter-priority');
+const filterTechSelect = document.getElementById('filter-technician');
+const techSelect = document.getElementById('filter-technician'); // alias for below logic
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadCurrentUser();
@@ -35,18 +39,48 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   fetchData();
 
-  searchInput.addEventListener('input', (e) => {
-    searchTerm = e.target.value.toLowerCase().trim();
-    if (searchTimeout) clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(renderTable, 300);
-  });
+  if(searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchTerm = e.target.value.toLowerCase().trim();
+      if (searchTimeout) clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(renderTable, 300);
+    });
+  }
 
-  statusSelect.addEventListener('change', (e) => { statusFilter = e.target.value; renderTable(); });
-  prioritySelect.addEventListener('change', (e) => { priorityFilter = e.target.value; renderTable(); });
-  techSelect.addEventListener('change', (e) => { technicianFilter = e.target.value; renderTable(); });
+  // Toggle filter dropdown
+  if (filterToggleBtn && filterDropdownMenu) {
+    filterToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isVisible = filterDropdownMenu.style.display === 'flex';
+      filterDropdownMenu.style.display = isVisible ? 'none' : 'flex';
+    });
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!filterToggleBtn.contains(e.target) && !filterDropdownMenu.contains(e.target)) {
+        filterDropdownMenu.style.display = 'none';
+      }
+    });
+    // Prevent closing when clicking inside
+    filterDropdownMenu.addEventListener('click', (e) => e.stopPropagation());
+  }
 
-  btnSaveManage.addEventListener('click', handleSaveManagement);
+  // Filter selects change
+  const applyFilters = () => {
+    statusFilter = filterStatusSelect.value;
+    priorityFilter = filterPrioritySelect.value;
+    technicianFilter = filterTechSelect.value;
+    renderTable();
+  };
+
+  if(filterStatusSelect) filterStatusSelect.addEventListener('change', applyFilters);
+  if(filterPrioritySelect) filterPrioritySelect.addEventListener('change', applyFilters);
+  if(filterTechSelect) filterTechSelect.addEventListener('change', applyFilters);
+
+  if(btnSaveManage) {
+    btnSaveManage.addEventListener('click', handleSaveManagement);
+  }
 });
+
 
 // ==========================================
 // FETCH LOGIC

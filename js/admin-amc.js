@@ -13,10 +13,7 @@ let searchTerm = '';
 let filterStatus = 'All';
 
 const tbody = document.getElementById('amc-tbody');
-const renewalsTbody = document.getElementById('renewals-tbody');
-const renewalsPanel = document.getElementById('upcoming-renewals-panel');
 const searchInput = document.getElementById('search-input');
-const filterSelect = document.getElementById('filter-status');
 
 // Metrics
 const elActive = document.getElementById('metric-active');
@@ -34,15 +31,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   fetchAMCRecords();
 
-  searchInput.addEventListener('input', (e) => {
-    searchTerm = e.target.value.toLowerCase().trim();
-    renderTables();
-  });
+  if(searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchTerm = e.target.value.toLowerCase().trim();
+      renderTables();
+    });
+
+  // Dropdown Popover Filter Logic
+  const filterToggleBtn = document.getElementById('filter-toggle-btn');
+  const filterDropdownMenu = document.getElementById('filter-dropdown-menu');
+  if (filterToggleBtn && filterDropdownMenu) {
+    filterToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isVisible = filterDropdownMenu.style.display === 'flex';
+      filterDropdownMenu.style.display = isVisible ? 'none' : 'flex';
+    });
+    document.addEventListener('click', (e) => {
+      if (!filterToggleBtn.contains(e.target) && !filterDropdownMenu.contains(e.target)) {
+        filterDropdownMenu.style.display = 'none';
+      }
+    });
+    filterDropdownMenu.addEventListener('click', (e) => e.stopPropagation());
+  }
+
+  const filterStatusSelect = document.getElementById('filter-status');
+  if (filterStatusSelect) {
+    filterStatusSelect.addEventListener('change', (e) => {
+      filterStatus = e.target.value;
+      renderTables();
+    });
+  }
+
+  }
   
-  filterSelect.addEventListener('change', (e) => {
-    filterStatus = e.target.value;
-    renderTables();
-  });
+  
 });
 
 async function fetchAMCRecords() {
@@ -68,7 +90,6 @@ async function fetchAMCRecords() {
 
     updateMetrics();
     renderTables();
-    renderUpcomingRenewals();
 
   } catch (error) {
     console.error('Fetch error:', error);
@@ -99,33 +120,6 @@ function updateMetrics() {
   elRenewals.textContent = potentialsThisMonth;
 }
 
-function renderUpcomingRenewals() {
-  const upcoming = amcRecords.filter(r => r.daysLeft <= 30 && r.daysLeft >= -30);
-  
-  if (upcoming.length === 0) {
-    renewalsPanel.style.display = 'none';
-    return;
-  }
-  
-  renewalsPanel.style.display = 'block';
-  renewalsTbody.innerHTML = upcoming.map(r => {
-    const customer = r.profiles ? r.profiles.name : 'Unknown';
-    const expiryDate = r.amc_expiry ? new Date(r.amc_expiry).toLocaleDateString('en-IN') : 'N/A';
-    
-    return `
-    <tr>
-      <td style="font-weight:600;">${customer}</td>
-      <td>${r.product_name}</td>
-      <td>${expiryDate}</td>
-      <td><span style="color:${r.daysLeft < 0 ? '#fca5a5' : '#fcd34d'}; font-weight:bold;">${r.daysLeft} days</span></td>
-      <td style="text-align:center;">
-        <button class="btn btn-outline" style="padding:0.3rem 0.6rem; font-size:0.75rem; border-color:var(--primary-color); color:var(--primary-color);" onclick="window.renewAMC('${r.id}')">
-          Renew +1 Year
-        </button>
-      </td>
-    </tr>
-  `}).join('');
-}
 
 function renderTables() {
   let filtered = amcRecords.filter(r => {

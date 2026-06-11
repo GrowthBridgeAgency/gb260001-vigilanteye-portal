@@ -216,10 +216,14 @@ function initAudio() {
   if (!audioInitialized) {
     const audioPath = window.basePath ? window.basePath + '/Sound/notisound.mp3' : '/Sound/notisound.mp3';
     notificationAudio = new Audio(audioPath);
+    // Mute during initialization so the user doesn't hear the unlock 'beep'
+    notificationAudio.volume = 0;
+    
     // Play and immediately pause to unlock the audio element for this session
     notificationAudio.play().then(() => {
       notificationAudio.pause();
       notificationAudio.currentTime = 0;
+      notificationAudio.volume = 1; // Restore volume for actual notifications
       audioInitialized = true;
     }).catch(e => console.log('Audio init still blocked:', e));
     

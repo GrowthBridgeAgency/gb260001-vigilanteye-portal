@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="marquee-item-sm">
           <div class="overlay-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 2.5rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
             <div>
-              <div style="color: #38bdf8; font-size: 1.25rem; margin-bottom: 1rem; letter-spacing: 2px;">${starString}</div>
+              <div style="color: #FF6B00; font-size: 1.25rem; margin-bottom: 1rem; letter-spacing: 2px;">${starString}</div>
               <p style="font-style: italic; color: #fff; font-size: 1.05rem; line-height: 1.7; margin: 0;">"${r.review}"</p>
             </div>
             <div style="margin-top: 2rem; display: flex; align-items: center; gap: 1rem;">
