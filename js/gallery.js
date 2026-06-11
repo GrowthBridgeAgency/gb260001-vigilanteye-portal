@@ -115,7 +115,7 @@ function renderGalleryGrid(projects) {
     }
 
     return `
-      <div class="bento-item ${spanClass}">
+      <div class="bento-item ${spanClass} scroll-animate scroll-zoom-in hover-tilt" style="transition-delay: ${(index % 3) * 100}ms;">
         <div class="overlay-card" style="cursor: pointer;" onmouseover="this.querySelector('img').style.transform='scale(1.05)'" onmouseout="this.querySelector('img').style.transform='scale(1)'">
           ${imgHtml}
           <div class="overlay-card-content" style="padding: 2rem;">

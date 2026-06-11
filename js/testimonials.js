@@ -37,9 +37,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const avg = (sum / reviews.length).toFixed(1);
 
     // Display Average Rating
+    const percentage = (avg / 5) * 100;
     avgContainer.innerHTML = `
-      <div style="font-size: 1.5rem; letter-spacing: 2px;">★★★★★</div>
-      <div style="font-size: 1.1rem; color: #fff;">${avg} / 5 Average Rating</div>
+      <div style="position: relative; display: inline-block; font-size: 1.5rem; letter-spacing: 2px; color: rgba(255,255,255,0.2);">
+        ★★★★★
+        <div style="position: absolute; top: 0; left: 0; overflow: hidden; width: ${percentage}%; color: #FF6B00; white-space: nowrap;">
+          ★★★★★
+        </div>
+      </div>
+      <div style="font-size: 1.1rem; color: #fff; margin-top: 0.5rem;">${avg} / 5 Average Rating</div>
     `;
 
     const displayReviews = [...reviews, ...reviews];
@@ -54,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="marquee-item-sm">
           <div class="overlay-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 2.5rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
             <div>
-              <div style="color: #38bdf8; font-size: 1.25rem; margin-bottom: 1rem; letter-spacing: 2px;">${starString}</div>
+              <div style="color: #FF6B00; font-size: 1.25rem; margin-bottom: 1rem; letter-spacing: 2px;">${starString}</div>
               <p style="font-style: italic; color: #fff; font-size: 1.05rem; line-height: 1.7; margin: 0;">"${r.review}"</p>
             </div>
             <div style="margin-top: 2rem; display: flex; align-items: center; gap: 1rem;">

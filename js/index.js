@@ -70,10 +70,11 @@ function renderFeaturedProducts(products) {
 
   window.featuredProductsData = uniqueProducts;
 
-  container.innerHTML = uniqueProducts.map((p, index) => {
-    const imgHtml = p.image_url 
-      ? `<img src="${p.image_url}" alt="${p.product_name}" loading="lazy">`
-      : `<div class="no-image">No Image</div>`;
+  // Duplicate for infinite scroll
+  const displayProducts = [...uniqueProducts, ...uniqueProducts, ...uniqueProducts];
+
+  container.innerHTML = displayProducts.map((p, index) => {
+    const actualIndex = index % uniqueProducts.length;
 
     let displayPrice = 'Contact for price';
     if (p.price) {
@@ -82,8 +83,8 @@ function renderFeaturedProducts(products) {
     }
 
     return `
-    <div class="horizontal-scroll-item">
-      <div class="overlay-card" onclick="window.openProductModal(${index})">
+    <div class="marquee-item-lg">
+      <div class="overlay-card" onclick="window.openProductModal(${actualIndex})">
         ${p.image_url ? `<img src="${p.image_url}" alt="${p.product_name}" loading="lazy" style="object-fit:cover; width:100%; height:100%; position:absolute;">` : `<div style="background:var(--bg-alt);width:100%;height:100%;position:absolute;"></div>`}
         <div class="overlay-card-content">
           <h3>${p.product_name}</h3>
@@ -164,62 +165,4 @@ window.navigateProduct = function(direction) {
   window.openProductModal(newIndex);
 };
 
-// Dragging & Auto-scroll for featured products container
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('featured-products-container');
-  if (!container) return;
-
-  let isDown = false;
-  let startX;
-  let scrollLeft;
-  let isAutoScrolling = true;
-  let scrollSpeed = 1;
-
-  container.addEventListener('mousedown', (e) => {
-    isDown = true;
-    isAutoScrolling = false;
-    container.style.cursor = 'grabbing';
-    container.style.scrollBehavior = 'auto'; // Disable smooth scroll while dragging
-    startX = e.pageX - container.offsetLeft;
-    scrollLeft = container.scrollLeft;
-  });
-
-  container.addEventListener('mouseleave', () => {
-    isDown = false;
-    container.style.cursor = 'grab';
-    isAutoScrolling = true;
-    container.style.scrollBehavior = 'smooth';
-  });
-
-  container.addEventListener('mouseup', () => {
-    isDown = false;
-    container.style.cursor = 'grab';
-    container.style.scrollBehavior = 'smooth';
-    setTimeout(() => isAutoScrolling = true, 2000); // Resume auto scroll after 2s
-  });
-
-  container.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - container.offsetLeft;
-    const walk = (x - startX) * 2; // Scroll fast
-    container.scrollLeft = scrollLeft - walk;
-  });
-
-  // Auto-scroll loop
-  function autoScroll() {
-    if (isAutoScrolling && container && window.featuredProductsData && window.featuredProductsData.length > 0) {
-      container.style.scrollBehavior = 'auto';
-      container.scrollLeft += scrollSpeed;
-      if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 1) {
-        scrollSpeed = -1; // Reverse
-      } else if (container.scrollLeft <= 0) {
-        scrollSpeed = 1;
-      }
-    }
-    requestAnimationFrame(autoScroll);
-  }
-  
-  // Start auto scroll
-  requestAnimationFrame(autoScroll);
-});
+// Auto-scroll logic removed as it's now handled by CSS marquee

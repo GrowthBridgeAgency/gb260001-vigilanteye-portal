@@ -42,6 +42,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderTable();
   });
   
+  // Dropdown Popover Filter Logic
+  const filterToggleBtn = document.getElementById('filter-toggle-btn');
+  const filterDropdownMenu = document.getElementById('filter-dropdown-menu');
+  if (filterToggleBtn && filterDropdownMenu) {
+    filterToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isVisible = filterDropdownMenu.style.display === 'flex';
+      filterDropdownMenu.style.display = isVisible ? 'none' : 'flex';
+    });
+    document.addEventListener('click', (e) => {
+      if (!filterToggleBtn.contains(e.target) && !filterDropdownMenu.contains(e.target)) {
+        filterDropdownMenu.style.display = 'none';
+      }
+    });
+    filterDropdownMenu.addEventListener('click', (e) => e.stopPropagation());
+  }
+
   document.getElementById('filter-type').addEventListener('change', (e) => {
     filterType = e.target.value;
     renderTable();

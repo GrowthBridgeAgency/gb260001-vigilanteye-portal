@@ -11,7 +11,7 @@ replacements = {
     "+91 98765 43210": "+91 9649645559",
     "+919876543210": "+919649645559",
     "+91 87654 32109": "+91 9649645559",
-    "123 Security Avenue, Tech District, Mumbai, MH 400001": "In Front of Galaxy Library, Near MJD Restaurant Lane, Samridhi Nagar Special, Borkheda, Kota, Rajasthan, India"
+    "123 Security Avenue, Tech District, Mumbai, MH 400001": "In Front of Galav Library, Near MJD Restaurant Lane, Samridhi Nagar Special, Borkheda, Kota, Rajasthan, India"
 }
 
 def process_file(filepath):

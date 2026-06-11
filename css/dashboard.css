@@ -169,11 +169,11 @@
 }
 
 .notification-item.unread {
-  background: rgba(56, 189, 248, 0.03);
+  background: rgba(255, 107, 0, 0.03);
 }
 
 .notification-item.unread:hover {
-  background: rgba(56, 189, 248, 0.06);
+  background: rgba(255, 107, 0, 0.06);
 }
 
 .notification-content {

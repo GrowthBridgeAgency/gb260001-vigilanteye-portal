@@ -36,33 +36,59 @@
       <div id="admin-header-placeholder"></div>
       
       <div class="dashboard-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
-          <h1 style="margin: 0;">Manage Complaints</h1>
-          
-          <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
-            <input type="text" id="search-input" class="form-control" placeholder="Search ticket, customer, product..." style="width: 250px; margin-top: 0;">
-            <select id="filter-status" class="form-control" style="width: 150px; margin-top: 0;">
-              <option value="all">All Statuses</option>
-              <option value="Open">Open</option>
-              <option value="Assigned">Assigned</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
-              <option value="Closed">Closed</option>
-            </select>
-            <select id="filter-priority" class="form-control" style="width: 150px; margin-top: 0;">
-              <option value="all">All Priorities</option>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-            <select id="filter-technician" class="form-control" style="width: 180px; margin-top: 0;">
-              <option value="all">All Technicians</option>
-              <!-- Populated by JS -->
-            </select>
-          </div>
-        </div>
-
+        <h1 style="margin: 0 0 1.5rem 0;">Manage Complaints</h1>
+        
         <div class="table-container" style="padding: 0; overflow: hidden;">
+          <div style="padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 1rem; align-items: center; justify-content: space-between;">
+            
+            <div style="position: relative; flex: 1; max-width: 400px;">
+              <svg style="position: absolute; left: 14px; top: 12px; color: var(--text-muted);" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="search-input" class="form-control" placeholder="Search ticket, customer, product..." style="width: 100%; margin: 0; padding-left: 40px; border-radius: 20px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);">
+            </div>
+
+            <div class="filter-dropdown-container" style="position: relative;">
+              <button id="filter-toggle-btn" class="btn btn-outline" style="border-radius: 20px; padding: 0.5rem 1.25rem; display: flex; align-items: center; gap: 0.5rem; border: 1px solid rgba(255,255,255,0.2);">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                Filters
+              </button>
+              
+              <div id="filter-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; margin-top: 0.75rem; background: #0B1B32; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.5rem; width: 320px; box-shadow: 0 15px 50px rgba(0,0,0,0.6); z-index: 100; flex-direction: column; gap: 1.25rem;">
+                
+                <div>
+                  <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;">Status</label>
+                  <select id="filter-status" class="form-control" style="width: 100%; margin: 0; background: rgba(0,0,0,0.2);">
+                    <option value="all">All Statuses</option>
+                    <option value="Open">Open</option>
+                    <option value="Assigned">Assigned</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Closed">Closed</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;">Priority</label>
+                  <select id="filter-priority" class="form-control" style="width: 100%; margin: 0; background: rgba(0,0,0,0.2);">
+                    <option value="all">All Priorities</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Critical">Critical</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;">Assigned Tech</label>
+                  <select id="filter-technician" class="form-control" style="width: 100%; margin: 0; background: rgba(0,0,0,0.2);">
+                    <option value="all">All Technicians</option>
+                  </select>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+
           <div style="overflow-x: auto;">
             <table class="data-table" id="complaints-table">
               <thead>
@@ -236,6 +262,50 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline" onclick="closeModal('view-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- UNIFIED WHATSAPP MODAL -->
+  <div class="modal-overlay" id="whatsapp-modal">
+    <div class="modal-content" style="max-width: 550px;">
+      <div class="modal-header">
+        <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#25D366" stroke="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Message Center
+        </h2>
+        <button class="modal-close" onclick="closeModal('whatsapp-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="wa_complaint_id">
+        
+        <div class="grid-2" style="gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div>
+            <label>Message Recipient</label>
+            <select id="wa_target" class="form-control" onchange="window.updateWaTarget()">
+              <option value="customer">Customer</option>
+              <option value="technician">Technician</option>
+            </select>
+          </div>
+          <div>
+            <label>Select Template</label>
+            <select id="wa_template" class="form-control" onchange="window.updateWaTemplate()">
+              <!-- Options populated dynamically -->
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Message Preview / Edit</label>
+          <textarea id="wa_message" class="form-control" rows="8"></textarea>
+          <small style="color:var(--text-muted); margin-top:0.5rem; display:block;">This message will be sent to the selected recipient's mobile number via WhatsApp.</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('whatsapp-modal')">Cancel</button>
+        <button class="btn" onclick="window.sendWaMessage()" style="background:#25D366; color:#fff; border:none; display:flex; align-items:center; gap:0.5rem;">
+          Send via WhatsApp
+        </button>
       </div>
     </div>
   </div>

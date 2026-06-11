@@ -18,12 +18,18 @@ let searchTimeout = null;
 // DOM
 const tbody = document.getElementById('complaints-tbody');
 const searchInput = document.getElementById('search-input');
-const statusSelect = document.getElementById('filter-status');
-const prioritySelect = document.getElementById('filter-priority');
-const techSelect = document.getElementById('filter-technician');
-
 const manageForm = document.getElementById('manage-form');
 const btnSaveManage = document.getElementById('btn-save-management');
+
+let currentManageId = null;
+
+// Filter UI
+const filterToggleBtn = document.getElementById('filter-toggle-btn');
+const filterDropdownMenu = document.getElementById('filter-dropdown-menu');
+const filterStatusSelect = document.getElementById('filter-status');
+const filterPrioritySelect = document.getElementById('filter-priority');
+const filterTechSelect = document.getElementById('filter-technician');
+const techSelect = document.getElementById('filter-technician'); // alias for below logic
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadCurrentUser();
@@ -35,18 +41,48 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   fetchData();
 
-  searchInput.addEventListener('input', (e) => {
-    searchTerm = e.target.value.toLowerCase().trim();
-    if (searchTimeout) clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(renderTable, 300);
-  });
+  if(searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchTerm = e.target.value.toLowerCase().trim();
+      if (searchTimeout) clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(renderTable, 300);
+    });
+  }
 
-  statusSelect.addEventListener('change', (e) => { statusFilter = e.target.value; renderTable(); });
-  prioritySelect.addEventListener('change', (e) => { priorityFilter = e.target.value; renderTable(); });
-  techSelect.addEventListener('change', (e) => { technicianFilter = e.target.value; renderTable(); });
+  // Toggle filter dropdown
+  if (filterToggleBtn && filterDropdownMenu) {
+    filterToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isVisible = filterDropdownMenu.style.display === 'flex';
+      filterDropdownMenu.style.display = isVisible ? 'none' : 'flex';
+    });
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!filterToggleBtn.contains(e.target) && !filterDropdownMenu.contains(e.target)) {
+        filterDropdownMenu.style.display = 'none';
+      }
+    });
+    // Prevent closing when clicking inside
+    filterDropdownMenu.addEventListener('click', (e) => e.stopPropagation());
+  }
 
-  btnSaveManage.addEventListener('click', handleSaveManagement);
+  // Filter selects change
+  const applyFilters = () => {
+    statusFilter = filterStatusSelect.value;
+    priorityFilter = filterPrioritySelect.value;
+    technicianFilter = filterTechSelect.value;
+    renderTable();
+  };
+
+  if(filterStatusSelect) filterStatusSelect.addEventListener('change', applyFilters);
+  if(filterPrioritySelect) filterPrioritySelect.addEventListener('change', applyFilters);
+  if(filterTechSelect) filterTechSelect.addEventListener('change', applyFilters);
+
+  if(btnSaveManage) {
+    btnSaveManage.addEventListener('click', handleSaveManagement);
+  }
 });
+
 
 // ==========================================
 // FETCH LOGIC
@@ -78,7 +114,7 @@ async function fetchData() {
         *,
         profiles (name, phone),
         products (product_name, model_number),
-        technicians (technician_name)
+        technicians (technician_name, mobile)
       `)
       .order('created_at', { ascending: false });
 
@@ -156,11 +192,14 @@ function renderTable() {
       <td style="color:var(--text-muted);">${formatDate(c.created_at)}</td>
       <td>
         <div class="actions-cell" style="justify-content:center;">
-          <button class="action-btn" title="View" onclick="window.viewComplaint(${c.id})">
+          <button class="action-btn" title="View Details" onclick="window.viewComplaint(${c.id})">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
           </button>
-          <button class="action-btn" title="Manage" onclick="window.manageComplaint(${c.id})">
+          <button class="action-btn" title="Manage Ticket" onclick="window.manageComplaint(${c.id})">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </button>
+          <button class="action-btn" title="Message Center (WhatsApp)" onclick="window.openWaModal(${c.id})" style="color: #25D366; background: rgba(37,211,102,0.1);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
           </button>
         </div>
       </td>
@@ -177,6 +216,7 @@ window.manageComplaint = function(id) {
   if (!c) return;
 
   manageForm.reset();
+  currentManageId = id;
   document.getElementById('manage-ticket-title').textContent = `Manage Ticket: ${c.ticket_number}`;
   
   document.getElementById('manage_id').value = c.id;
@@ -191,7 +231,7 @@ window.manageComplaint = function(id) {
 async function handleSaveManagement(e) {
   e.preventDefault();
   
-  const id = document.getElementById('manage_id').value;
+  const id = currentManageId;
   const newStatus = document.getElementById('manage_status').value;
   const newTechId = document.getElementById('manage_technician').value || null;
   const adminNotes = document.getElementById('manage_admin_notes').value.trim() || null;
@@ -427,4 +467,139 @@ window.viewComplaint = async function(id) {
   } else {
     tlContainer.innerHTML = '<p>No timeline events recorded.</p>';
   }
+};
+
+// ==========================================
+// UNIFIED WHATSAPP MODAL
+// ==========================================
+
+window.openWaModal = function(id) {
+  const c = complaints.find(x => x.id === id);
+  if (!c) return;
+  
+  document.getElementById('wa_complaint_id').value = id;
+  const targetSelect = document.getElementById('wa_target');
+  
+  // Disable technician option if none assigned
+  if (c.technician_id && c.technicians?.mobile) {
+    targetSelect.querySelector('option[value="technician"]').disabled = false;
+  } else {
+    targetSelect.querySelector('option[value="technician"]').disabled = true;
+    targetSelect.value = 'customer';
+  }
+
+  window.updateWaTarget();
+  window.openModal('whatsapp-modal');
+};
+
+window.updateWaTarget = function() {
+  const target = document.getElementById('wa_target').value;
+  const templateSelect = document.getElementById('wa_template');
+  
+  if (target === 'customer') {
+    templateSelect.innerHTML = `
+      <option value="cust_received">Ticket Received</option>
+      <option value="cust_assigned">Technician Assigned</option>
+      <option value="cust_status">Status Update</option>
+      <option value="cust_resolved">Resolved</option>
+      <option value="custom">Custom Message</option>
+    `;
+  } else {
+    templateSelect.innerHTML = `
+      <option value="tech_dispatch">Dispatch Complaint details</option>
+      <option value="tech_status">Request Status Update</option>
+      <option value="custom">Custom Message</option>
+    `;
+  }
+  window.updateWaTemplate();
+};
+
+window.updateWaTemplate = function() {
+  const id = document.getElementById('wa_complaint_id').value;
+  const c = complaints.find(x => x.id == id);
+  if (!c) return;
+
+  const target = document.getElementById('wa_target').value;
+  const tpl = document.getElementById('wa_template').value;
+  const msgField = document.getElementById('wa_message');
+
+  const cName = c.contact_name || c.profiles?.name || 'Customer';
+
+  if (target === 'customer') {
+    if (tpl === 'cust_received') {
+      msgField.value = `Hello ${cName},\n\nWe have received your complaint (Ticket #${c.ticket_number}) regarding your ${c.device_type || 'device'}. Our team is looking into it and will assist you shortly.`;
+    } else if (tpl === 'cust_assigned') {
+      msgField.value = `Hello ${cName},\n\nA technician has been assigned to your ticket (#${c.ticket_number}) and will contact you shortly regarding the visit.`;
+    } else if (tpl === 'cust_status') {
+      msgField.value = `Hello ${cName},\n\nThe status of your ticket (#${c.ticket_number}) has been updated to *${c.status}*.`;
+    } else if (tpl === 'cust_resolved') {
+      msgField.value = `Hello ${cName},\n\nYour complaint (Ticket #${c.ticket_number}) has been successfully resolved! Please let us know if you face any further issues.\n\nThank you,\nShree Sawariya CCTV`;
+    } else {
+      msgField.value = '';
+    }
+  } else {
+    // Technician
+    if (tpl === 'tech_dispatch') {
+      let pTime = [];
+      if (c.preferred_visit_date) pTime.push(new Date(c.preferred_visit_date).toLocaleDateString('en-IN'));
+      if (c.preferred_visit_time) pTime.push(c.preferred_visit_time);
+      const prefTime = pTime.length ? pTime.join(' at ') : 'Anytime';
+      
+      const compDate = new Date(c.created_at).toLocaleDateString('en-IN');
+
+      msgField.value = `*NEW COMPLAINT ASSIGNMENT* 🛠️
+*Ticket:* ${c.ticket_number}
+*Date:* ${compDate}
+*Priority:* ${c.priority || 'Normal'}
+
+*Customer:* ${cName}
+*Contact:* ${c.contact_mobile || c.profiles?.phone || 'Unknown'}
+*Address:* ${c.site_address || 'Not Provided'}
+*Preferred Time:* ${prefTime}
+
+*Device:* ${c.products?.product_name || c.device_type || 'Unknown Device'}
+*Issue Category:* ${c.category || 'General'}
+*Specific Issue:* ${c.issue_type || 'Not Specified'}
+*Details:* ${c.description || 'No description provided.'}
+
+Please update the dashboard once resolved.`;
+
+    } else if (tpl === 'tech_status') {
+      msgField.value = `Hello, please provide a status update on ticket #${c.ticket_number} assigned to you.`;
+    } else {
+      msgField.value = '';
+    }
+  }
+};
+
+window.sendWaMessage = function() {
+  const id = document.getElementById('wa_complaint_id').value;
+  const c = complaints.find(x => x.id == id);
+  if (!c) return;
+
+  const target = document.getElementById('wa_target').value;
+  const msg = document.getElementById('wa_message').value.trim();
+
+  if (!msg) {
+    showToast('Message content cannot be empty.', 'error');
+    return;
+  }
+
+  let mobile = '';
+  if (target === 'customer') {
+    mobile = c.contact_mobile || c.profiles?.phone;
+  } else {
+    mobile = c.technicians?.mobile;
+  }
+
+  if (!mobile) {
+    showToast(`No mobile number found for the selected ${target}.`, 'error');
+    return;
+  }
+
+  let cleaned = mobile.replace(/\D/g, '');
+  if (cleaned.length === 10) cleaned = '91' + cleaned;
+
+  window.open(`https://wa.me/${cleaned}?text=${encodeURIComponent(msg)}`, '_blank');
+  window.closeModal('whatsapp-modal');
 };
