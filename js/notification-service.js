@@ -25,6 +25,15 @@ export async function loadNotifications() {
     ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
     const recentNotifications = data.filter(n => new Date(n.created_at) > ninetyDaysAgo);
 
+    const isNew = data.some(n => !n.is_read && (!window.lastNotificationTime || new Date(n.created_at) > window.lastNotificationTime));
+    if (isNew && window.lastNotificationTime) {
+      playNotificationSound();
+    }
+    
+    if (data.length > 0) {
+      window.lastNotificationTime = new Date(data[0].created_at);
+    }
+
     renderNotificationDropdown(recentNotifications);
     updateUnreadBadge(recentNotifications);
   } catch (error) {
@@ -141,6 +150,23 @@ export function getUnreadCount(notifications) {
   return notifications.filter(n => !n.is_read).length;
 }
 
+export async function markTypeAsRead(type) {
+  if (!window.currentUser) return;
+  try {
+    const { error } = await supabase
+      .from('notifications')
+      .update({ is_read: true })
+      .eq('user_id', window.currentUser.id)
+      .eq('is_read', false)
+      .eq('type', type);
+
+    if (error) throw error;
+    loadNotifications(); // Refresh all badges and lists
+  } catch (error) {
+    console.error(`Error marking type ${type} as read:`, error);
+  }
+}
+
 function updateUnreadBadge(notifications) {
   const badge = document.getElementById('notification-badge');
   if (!badge) return;
@@ -152,6 +178,44 @@ function updateUnreadBadge(notifications) {
   } else {
     badge.style.display = 'none';
   }
+  
+  updateSidebarBadges(notifications);
+}
+
+function updateSidebarBadges(notifications) {
+  // Count unread by type
+  const unreadByType = {};
+  notifications.forEach(n => {
+    if (!n.is_read) {
+      unreadByType[n.type] = (unreadByType[n.type] || 0) + 1;
+    }
+  });
+
+  // Allowed sidebar types matching element IDs nav-{type}
+  const types = ['complaint', 'invoice', 'product', 'review', 'amc', 'enquiry', 'service'];
+  
+  types.forEach(type => {
+    const navLink = document.getElementById(`nav-${type}`);
+    if (navLink) {
+      let badge = navLink.querySelector('.sidebar-badge');
+      const count = unreadByType[type] || 0;
+      
+      if (count > 0) {
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'sidebar-badge';
+          badge.style.cssText = 'background: #ef4444; color: white; font-size: 0.75rem; padding: 2px 6px; border-radius: 12px; margin-left: auto; font-weight: 600; line-height: 1; display: flex; align-items: center; justify-content: center;';
+          navLink.style.display = 'flex';
+          navLink.style.alignItems = 'center';
+          navLink.appendChild(badge);
+        }
+        badge.textContent = count > 99 ? '99+' : count;
+        badge.style.display = 'flex';
+      } else {
+        if (badge) badge.style.display = 'none';
+      }
+    }
+  });
 }
 
 function renderNotificationDropdown(notifications) {
@@ -209,51 +273,49 @@ export function deleteOldNotifications() {
   console.log("Cleanup deferred from V1.");
 }
 
-let audioInitialized = false;
 let notificationAudio = null;
-
-function initAudio() {
-  if (!audioInitialized) {
-    const audioPath = window.basePath ? window.basePath + '/Sound/notisound.mp3' : '/Sound/notisound.mp3';
-    notificationAudio = new Audio(audioPath);
-    // Mute during initialization so the user doesn't hear the unlock 'beep'
-    notificationAudio.volume = 0;
-    
-    // Play and immediately pause to unlock the audio element for this session
-    notificationAudio.play().then(() => {
-      notificationAudio.pause();
-      notificationAudio.currentTime = 0;
-      notificationAudio.volume = 1; // Restore volume for actual notifications
-      audioInitialized = true;
-    }).catch(e => console.log('Audio init still blocked:', e));
-    
-    // Remove the listener once attempted
-    document.removeEventListener('click', initAudio);
-  }
-}
-document.addEventListener('click', initAudio);
 
 function playNotificationSound() {
   try {
-    if (audioInitialized && notificationAudio) {
-      notificationAudio.currentTime = 0;
-      notificationAudio.play().catch(e => console.error('Audio play error:', e));
-    } else {
+    if (!notificationAudio) {
       const audioPath = window.basePath ? window.basePath + '/Sound/notisound.mp3' : '/Sound/notisound.mp3';
-      new Audio(audioPath).play().catch(e => console.error('Audio fallback play error:', e));
+      notificationAudio = new Audio(audioPath);
     }
-  } catch (e) {
-    console.error('Audio play exception:', e);
+    notificationAudio.currentTime = 0;
+    notificationAudio.play().catch(e => console.log('Audio play blocked (user must interact first):', e));
+  } catch (err) {
+    console.error('Error playing sound:', err);
   }
 }
 
 // Initialize realtime subscriptions
+let isPollingInitialized = false;
 export function initNotificationPolling() {
+  if (isPollingInitialized) return;
+  isPollingInitialized = true;
   const checkUser = setInterval(() => {
     if (window.currentUser) {
       clearInterval(checkUser);
       loadNotifications();
       injectSeeAllModal();
+      
+      // Auto-clear notifications based on page URL
+      const path = window.location.pathname;
+      const pathTypes = {
+        'complaints': 'complaint',
+        'invoices': 'invoice',
+        'products': 'product',
+        'reviews': 'review',
+        'amc': 'amc',
+        'enquiries': 'enquiry',
+        'service-history': 'service'
+      };
+      for (const [key, type] of Object.entries(pathTypes)) {
+        if (path.includes(key)) {
+          markTypeAsRead(type);
+          break;
+        }
+      }
       
       // Subscribe to real-time changes
       supabase
@@ -271,7 +333,6 @@ export function initNotificationPolling() {
             if (document.getElementById('all-notifications-modal')?.classList.contains('active')) {
                 loadAllNotifications();
             }
-            playNotificationSound();
           }
         )
         .subscribe();
@@ -358,6 +419,7 @@ window.notificationService = {
   notifyAdmins,
   markAsRead,
   markAllAsRead,
+  markTypeAsRead,
   loadNotifications,
   initNotificationPolling,
   loadAllNotifications,
