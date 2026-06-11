@@ -37,9 +37,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const avg = (sum / reviews.length).toFixed(1);
 
     // Display Average Rating
+    const percentage = (avg / 5) * 100;
     avgContainer.innerHTML = `
-      <div style="font-size: 1.5rem; letter-spacing: 2px;">★★★★★</div>
-      <div style="font-size: 1.1rem; color: #fff;">${avg} / 5 Average Rating</div>
+      <div style="position: relative; display: inline-block; font-size: 1.5rem; letter-spacing: 2px; color: rgba(255,255,255,0.2);">
+        ★★★★★
+        <div style="position: absolute; top: 0; left: 0; overflow: hidden; width: ${percentage}%; color: #FF6B00; white-space: nowrap;">
+          ★★★★★
+        </div>
+      </div>
+      <div style="font-size: 1.1rem; color: #fff; margin-top: 0.5rem;">${avg} / 5 Average Rating</div>
     `;
 
     const displayReviews = [...reviews, ...reviews];

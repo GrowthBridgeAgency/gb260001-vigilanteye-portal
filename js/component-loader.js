@@ -305,3 +305,48 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('click', () => {
   document.querySelectorAll('.custom-select-wrapper.open').forEach(w => w.classList.remove('open'));
 });
+
+// --- GLOBAL SCROLL ANIMATION OBSERVER ---
+document.addEventListener('DOMContentLoaded', () => {
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.15
+  };
+
+  const scrollObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+      } else {
+        // Keep repeating the animation when scrolling back up
+        entry.target.classList.remove('in-view');
+      }
+    });
+  }, observerOptions);
+
+  function observeScrollElements() {
+    const animatedElements = document.querySelectorAll('.scroll-animate:not(.scroll-observed)');
+    animatedElements.forEach(el => {
+      scrollObserver.observe(el);
+      el.classList.add('scroll-observed');
+    });
+  }
+
+  // Initial call
+  observeScrollElements();
+
+  // Also hook into the MutationObserver above to observe new elements injected dynamically
+  const dynamicObserver = new MutationObserver((mutations) => {
+    let shouldObserve = false;
+    for (let mutation of mutations) {
+      if (mutation.addedNodes.length > 0) {
+        shouldObserve = true;
+        break;
+      }
+    }
+    if (shouldObserve) observeScrollElements();
+  });
+  dynamicObserver.observe(document.body, { childList: true, subtree: true });
+});
+

@@ -84,7 +84,7 @@ function renderProductsGrid(products) {
       : `<div style="background:rgba(255,255,255,0.05);width:100%;height:100%;position:absolute;display:flex;align-items:center;justify-content:center;color:var(--text-muted);">No Image</div>`;
 
     return `
-      <div class="product-card" onclick="window.openProductModal(${index})" style="cursor: pointer;">
+      <div class="product-card scroll-animate scroll-fade-up hover-tilt" onclick="window.openProductModal(${index})" style="cursor: pointer; transition-delay: ${(index % 6) * 100}ms;">
         <div class="product-image-container">
           ${imgHtml}
         </div>

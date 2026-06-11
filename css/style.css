@@ -1465,3 +1465,63 @@ a:hover { opacity: 0.7; }
 }
 
 .nav-link.active { color: var(--accent-color); font-weight: 600; opacity: 1; }
+
+/* -------------------------------------
+   SCROLL ANIMATIONS (IntersectionObserver)
+------------------------------------- */
+.scroll-animate {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Fade Up */
+.scroll-fade-up {
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.scroll-fade-up.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slide Right */
+.scroll-slide-right {
+  transform: translateX(-50px);
+  transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.scroll-slide-right.in-view {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Zoom In */
+.scroll-zoom-in {
+  transform: scale(0.9);
+  transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.scroll-zoom-in.in-view {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Stagger Delays */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
+
+/* 3D Tilt Utilities */
+.hover-tilt {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.hover-tilt:hover {
+  transform: perspective(1000px) rotateX(5deg) rotateY(-5deg) scale(1.02);
+  z-index: 10;
+}
+
+@keyframes pulseIcon {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 1; }
+}
